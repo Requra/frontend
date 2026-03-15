@@ -1,73 +1,90 @@
-# React + TypeScript + Vite
+# Frontend Architecture Guidelines
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project uses a scalable, **Feature-Based Architecture**. The goal of this structure is to keep related code combined inside modular features, ensuring the project remains maintainable and clean as it grows.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🏗️ Folder Structure Breakdown
 
-## React Compiler
+### 1. `src/assets/`
+Contains global static assets like fonts, SVG icons, images, and global stylesheets (`.css` / `.scss`).
+- **Do not** put component-specific styles here.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 2. `src/components/ui/`
+Contains "Dumb", highly reusable, pure UI components.
+- Buttons, Inputs, Modals, Spinners, Cards.
+- These components should **never** import anything from `features/` or contain complex business logic/API calls.
+- **Example:** `<Button />`, `<Input />`
 
-## Expanding the ESLint configuration
+### 3. `src/features/`
+This is the **core** of the architecture. Instead of organizing files strictly by file-type (e.g., all APIs together, all hooks together), we group them by **domain** (e.g., `auth`, `users`, `products`).
+A single feature folder acts like a mini-application, containing everything it needs to function:
+- `api/`: API request declarations (e.g., `login.ts`).
+- `components/`: UI components specific to this feature (e.g., `<LoginForm />`).
+- `hooks/`: Custom hooks for this feature (e.g., `useAuth.ts`).
+- `routes/`: The page components for this feature (e.g., `Login.tsx`, `Register.tsx`).
+- `store/`: Local state management for the feature.
+- `types/`: TypeScript definitions related only to this domain.
+- `utils/`: Helper functions meant only for this feature.
+- `index.ts`: The **Public API**. Other features in the app are ONLY allowed to import things exported from this `index.ts` file.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 4. `src/hooks/`
+Global custom React hooks meant to be used anywhere.
+- **Examples:** `useDebounce`, `useLocalStorage`, `useWindowSize`.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 5. `src/layouts/`
+Layout components that wrap pages to provide structure.
+- **Examples:** `MainLayout` (Navbar + Sidebar + Content), `AuthLayout` (Centered card).
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 6. `src/routes/`
+The **Global Router configuration**. This is the glue that pulls the Pages out of the `features/` directory and assigns them to browser URL paths.
+- Does not contain actual UI/HTML, just the routing tree (e.g., using `react-router-dom`).
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 7. `src/services/`
+Global configuration for third-party tools, API clients, and infrastructure libraries.
+- **Examples:** `axios` instance setup, React Query client setup, Firebase initialization.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 8. `src/store/`
+Global state management that needs to be accessed broadly across different features.
+- **Examples:** Theme preference (Dark/Light mode), global notification system, user session state.
+- **Note:** Do not put state here if it only belongs to a single feature.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 9. `src/types/`
+Global TypeScript definitions, generic utility types, and interfaces meant to be used widely.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 10. `src/utils/`
+Pure functions (no React state or Side Effects) used globally to process data.
+- **Examples:** `formatDate`, `currencyFormatter`, `clsx` (for class merging).
+
+---
+
+## 📜 Best Practices & File Organization Rules
+
+### 1. Naming Conventions
+- **Components & Pages:** Must use **PascalCase** (e.g., `Button.tsx`, `LoginForm.tsx`).
+- **Hooks, Utils, and Logic files:** Must use **camelCase** (e.g., `useAuth.ts`, `api.ts`, `formatDate.ts`).
+- **Files exporting non-component objects:** Use lowercase or camelCase.
+
+### 2. The "Strict Boundary" Rule (Domain Driven)
+A feature (`features/users`) is allowed to import from global folders (`components/ui`, `utils`, `services`), but it should **never** import directly from the internals of another feature.
+- **Correct:** `import { UserProfile } from '@/features/users'`
+- **Incorrect:** `import { UserProfile } from '@/features/users/components/UserProfile'`
+
+### 3. Absolute Paths
+Use configured absolute paths (`@/*`) instead of deep relative paths for cleaner imports.
+- **Correct:** `import { Button } from '@/components/ui'`
+- **Incorrect:** `import { Button } from '../../../../components/ui'`
+
+### 4. Barrel Imports (`index.ts`)
+Each directory should have an `index.ts` file that exports its internal files. This keeps imports clean.
+- Example inside `src/components/ui/index.ts`: `export * from './Button'; export * from './Input';`
+
+### 5. Colocation
+Whenever possible, keep the logic, tests, and styles right next to the component they belong to.
+```text
+src/components/ui/Button/
+├── Button.tsx
+├── Button.test.tsx
+├── Button.module.css
+└── index.ts
 ```
