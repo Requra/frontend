@@ -72,4 +72,33 @@
   --color-danger-700: #941e04;
   --color-danger-800: #731703;
   --color-danger-900: #581202;
+
+  /* ================= GRADIENTS ================= */
+  --background-image-gradient-primary: linear-gradient(
+    to right,
+    #6633ee 7%,
+    #010314 96%
+  );
+  --background-image-gradient-steps: linear-gradient(
+    to right,
+    var(--color-primary-300) 13%,
+    var(--color-primary-700) 100%
+  );
+  --background-image-gradient-text: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 1) 30%,
+    rgba(255, 255, 255, 0.5) 85%
+  );
+}
+
+@utility text-gradient-primary {
+  @apply bg-gradient-primary bg-clip-text text-transparent;
+}
+
+@utility text-gradient-steps {
+  @apply bg-gradient-steps bg-clip-text text-transparent;
+}
+
+@utility text-gradient-radial {
+  @apply bg-gradient-text bg-clip-text text-transparent;
 }
