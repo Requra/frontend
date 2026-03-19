@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+@theme {
+  /* ================= PRIMARY ================= */
+  --color-primary-50: #f2eefb;
+  --color-primary-100: #d7cbf3;
+  --color-primary-200: #c4b1ee;
+  --color-primary-300: #a98ee6;
+  --color-primary-400: #9978e1;
+  --color-primary-500: #7f56d9;
+  --color-primary-600: #744ec5;
+  --color-primary-700: #5a3d9a;
+  --color-primary-800: #462f77;
+  --color-primary-900: #35245b;
+
+  /* ================= NEUTRAL ================= */
+  --color-neutral-50: #eeeeef;
+  --color-neutral-100: #c9c9cc;
+  --color-neutral-200: #afafb4;
+  --color-neutral-300: #8a8b92;
+  --color-neutral-400: #74757d;
+  --color-neutral-500: #51525c;
+  --color-neutral-600: #4a4b54;
+  --color-neutral-700: #3a3a41;
+  --color-neutral-800: #2d2d33;
+  --color-neutral-900: #222227;
+
+  /* ================= ACCENT ================= */
+  --color-accent-50: #effbff;
+  --color-accent-100: #baf1fa;
+  --color-accent-200: #99e7f7;
+  --color-accent-300: #6bd6e4;
+  --color-accent-400: #4ecad9;
+  --color-accent-500: #22c3d8;
+  --color-accent-600: #1fa6b8;
+  --color-accent-700: #1896a9;
+  --color-accent-800: #137483;
+  --color-accent-900: #0e5964;
+
+  /* ================= SUCCESS ================= */
+  --color-success-50: #ecf4e7;
+  --color-success-100: #c5deb4;
+  --color-success-200: #a9ce8f;
+  --color-success-300: #82b75c;
+  --color-success-400: #6aa93d;
+  --color-success-500: #45940c;
+  --color-success-600: #3f870b;
+  --color-success-700: #316909;
+  --color-success-800: #265107;
+  --color-success-900: #1d3e05;
+
+  /* ================= WARNING ================= */
+  --color-warning-50: #fef4e6;
+  --color-warning-100: #fdddb3;
+  --color-warning-200: #fbcc8e;
+  --color-warning-300: #fab55a;
+  --color-warning-400: #f9a63a;
+  --color-warning-500: #f79009;
+  --color-warning-600: #e18308;
+  --color-warning-700: #af6606;
+  --color-warning-800: #884f05;
+  --color-warning-900: #683c04;
+
+  /* ================= DANGER ================= */
+  --color-danger-50: #faeae6;
+  --color-danger-100: #f1bdb2;
+  --color-danger-200: #ea9d8c;
+  --color-danger-300: #e07058;
+  --color-danger-400: #da5537;
+  --color-danger-500: #d12a05;
+  --color-danger-600: #be2605;
+  --color-danger-700: #941e04;
+  --color-danger-800: #731703;
+  --color-danger-900: #581202;
+
+  /* ================= GRADIENTS ================= */
+  --background-image-gradient-primary: linear-gradient(
+    to right,
+    #6633ee 7%,
+    #010314 96%
+  );
+  --background-image-gradient-steps: linear-gradient(
+    to right,
+    var(--color-primary-300) 13%,
+    var(--color-primary-700) 100%
+  );
+  --background-image-gradient-text: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 1) 30%,
+    rgba(255, 255, 255, 0.5) 85%
+  );
+
+  /* ================= TYPOGRAPHY ================= */
+  --text--heading: 4.375rem; /* 70px */
+  --text--heading--line-height: 5rem; /* 80px */
+  
+  --text-display: 2.5rem; /* 40px */
+  --text-display--line-height: 3.125rem; /* 50px */
+
+  --text-page-title: 2rem; /* 32px */
+  --text-page-title--line-height: 2.5rem; /* 40px */
+
+  --text-heading-lg: 1.5rem; /* 24px */
+  --text-heading-lg--line-height: 2rem; /* 32px */
+
+  --text-heading-md: 1.25rem; /* 20px */
+  --text-heading-md--line-height: 1.75rem; /* 28px */
+
+  --text-body-lg: 1rem; /* 16px */
+  --text-body-lg--line-height: 1.5rem; /* 24px */
+
+  --text-body-md: 0.875rem; /* 14px */
+  --text-body-md--line-height: 1.25rem; /* 20px */
+
+  --text-caption: 0.75rem; /* 12px */
+  --text-caption--line-height: 1rem; /* 16px */
+
+  /* ================= RUNTIME RADII ================= */
+  --radius: 0.5rem; /* Base radius: 8px */
+  --radius-sm: calc(var(--radius) - 4px); /* 4px */
+  --radius-md: calc(var(--radius) - 2px); /* 6px */
+  --radius-lg: var(--radius); /* 8px */
+  --radius-xl: calc(var(--radius) + 4px); /* 12px */
+}
+
+@utility text-gradient-primary {
+  @apply bg-gradient-primary bg-clip-text text-transparent;
+}
+
+@utility text-gradient-steps {
+  @apply bg-gradient-steps bg-clip-text text-transparent;
+}
+
+@utility text-gradient-radial {
+  @apply bg-gradient-text bg-clip-text text-transparent;
+}
