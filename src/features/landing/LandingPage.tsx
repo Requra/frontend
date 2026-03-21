@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/Button/Button";
+import { paths } from "@/routes/paths";
 import { Link } from "react-router";
 
 export const LandingPage = () => {
@@ -19,7 +20,7 @@ export const LandingPage = () => {
             with the power of artificial intelligence.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Link to="/login">
+            <Link to={paths.auth.login}>
               <Button
                 size="lg"
                 className="rounded-full px-10 h-14 text-lg bg-primary-600 hover:bg-primary-700 text-white shadow-lg shadow-primary-600/20 border-none"
