@@ -1,4 +1,5 @@
 import { Logo } from "@/components/ui/Logo/Logo";
+import { Link } from "react-router";
 
 const navLinks = [
   { name: "Features", href: "#features" },
@@ -11,8 +12,10 @@ export const Header = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-200/50 bg-white/80 backdrop-blur-md">
       <div className="w-full px-[80px] h-20 flex items-center justify-between">
-        <Logo />
-        
+        <Link to="/">
+          <Logo />
+        </Link>
+
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-10">
           {navLinks.map((link) => (
