@@ -10,7 +10,7 @@ const navLinks = [
 export const Header = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-200/50 bg-white/80 backdrop-blur-md">
-      <div className="container mx-auto px-6 h-20 flex items-center justify-between max-w-[1400px]">
+      <div className="w-full px-[80px] h-20 flex items-center justify-between">
         <Logo />
         
         {/* Desktop Navigation */}
