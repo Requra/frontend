@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { useLogin } from "../api/useLogin";
 import { loginSchema, type LoginCredentials } from "../types";
 import { Button } from "@/components/ui/Button/Button";
@@ -23,14 +24,14 @@ export const LoginPage = () => {
     loginMutation.mutate(data, {
       onSuccess: (res) => {
         if (res.IsSuccess) {
+          toast.success("Login successful!");
           navigate(paths.app.dashboard);
         } else {
-          // In a real app we'd use toast
-          alert(res.Message);
+          toast.error(res.Message || "Login failed");
         }
       },
       onError: (err) => {
-        alert("An error occurred: " + err.message);
+        toast.error("An error occurred: " + err.message);
       }
     });
   };

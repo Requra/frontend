@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { useRegister } from "../api/useRegister";
 import { registerSchema, type RegisterCredentials } from "../types";
 import { Button } from "@/components/ui/Button/Button";
@@ -23,13 +24,14 @@ export const RegisterPage = () => {
     registerMutation.mutate(data, {
       onSuccess: (res) => {
         if (res.IsSuccess) {
+          toast.success("Account created successfully!");
           navigate(paths.app.dashboard);
         } else {
-          alert(res.Message);
+          toast.error(res.Message || "Registration failed");
         }
       },
       onError: (err) => {
-        alert("An error occurred: " + err.message);
+        toast.error("An error occurred: " + err.message);
       }
     });
   };
