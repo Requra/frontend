@@ -21,6 +21,8 @@ const buttonVariants = cva(
           "border-primary-200 bg-white text-primary-700 hover:bg-primary-100",
         destructive: "bg-danger-600 text-white hover:bg-danger-700",
         link: "text-primary-600 underline-offset-4 hover:underline",
+        gradient:
+          "relative w-full overflow-hidden bg-gradient-steps !text-white before:absolute before:inset-0 before:bg-gradient-steps-hover before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100 hover:!text-white",
       },
       size: {
         default:
