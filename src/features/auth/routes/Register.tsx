@@ -37,11 +37,12 @@ export const RegisterPage = () => {
   };
 
   return (
-    <div className="max-w-md w-full mx-auto p-6 bg-white rounded-2xl shadow-xl mt-20">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-neutral-900">Create an account</h1>
-        <p className="text-neutral-500 mt-2">Start your 14-day free trial</p>
-      </div>
+    <div className="w-full px-8 lg:px-[80px]">
+      <div className="max-w-[480px] mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-neutral-900">Create an account</h1>
+          <p className="text-neutral-500 mt-2">Start your 14-day free trial</p>
+        </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <Input
@@ -93,6 +94,7 @@ export const RegisterPage = () => {
           </Link>
         </div>
       </form>
+      </div>
     </div>
   );
 };

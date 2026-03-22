@@ -7,7 +7,6 @@ import { loginSchema, type LoginCredentials } from "../types";
 import { Button } from "@/components/ui/Button/Button";
 import { Input } from "@/components/ui/Input/Input";
 import { paths } from "@/routes/paths";
-import loginImg from "@/assets/images/Auth/Login.png";
 import { EyeIcon, MailIcon } from "lucide-react";
 import { Checkbox } from "@/components/ui/Checkbox/checkbox";
 
@@ -40,10 +39,9 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-center">
-        <div className="w-1/2 px-[80px]">
-          <div className="mb-8">
+    <div className="w-full px-8 lg:px-[80px]">
+      <div className="max-w-[480px] mx-auto">
+        <div className="mb-8">
             <h1 className="text-display leading-tight tracking-tight font-bold text-gradient-primary">
               Welcome Back to Requra.ai
             </h1>
@@ -189,18 +187,6 @@ export const LoginPage = () => {
               </Button>
             </div>
           </form>
-        </div>
-
-        <div className="relative w-1/2 hidden lg:flex items-center justify-center bg-primary-50/30 overflow-hidden h-[calc(100vh-81px)] ">
-          {/* Glow effect */}
-          <div className="absolute w-[500px] h-[500px] bg-primary-400/20 blur-[120px] rounded-full" />
-
-          <img
-            src={loginImg}
-            className="relative z-10 w-[420px] animate-float"
-            alt="login"
-          />
-        </div>
       </div>
     </div>
   );
