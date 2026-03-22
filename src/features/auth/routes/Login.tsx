@@ -63,7 +63,7 @@ export const LoginPage = () => {
         <Button
           type="submit"
           className="w-full h-12 text-lg rounded-xl"
-          disabled={loginMutation.isPending}
+          isLoading={loginMutation.isPending}
         >
           {loginMutation.isPending ? "Signing in..." : "Sign In"}
         </Button>

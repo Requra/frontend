@@ -78,7 +78,7 @@ export const RegisterPage = () => {
         <Button
           type="submit"
           className="w-full h-12 text-lg rounded-xl mt-2"
-          disabled={registerMutation.isPending}
+          isLoading={registerMutation.isPending}
         >
           {registerMutation.isPending ? "Creating account..." : "Sign Up"}
         </Button>
