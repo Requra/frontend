@@ -44,18 +44,19 @@ export const LoginPage = () => {
       <div className="max-w-[480px] mx-auto">
         <div className="mb-8">
           <h1 className="text-display leading-tight tracking-tight font-bold text-gradient-primary">
-            Welcome Back to Requra.ai
+            Welcome back to Requra.ai
           </h1>
           <p className="text-neutral-500 mt-3 text-body-md">
-            Sign in to access your AI-powered requirements workspace.
+            Sign in to access your automated requirements workspace.
           </p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <Input
-            label="Email Address"
+            label="Work Email"
             type="email"
-            placeholder="admin@requra.ai"
+            placeholder="jane@company.com"
+            autoFocus
             {...register("email")}
             error={errors.email?.message}
             startIcon={<MailIcon className="text-neutral-500" />}
@@ -72,9 +73,9 @@ export const LoginPage = () => {
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Checkbox id="remember-me" />
+              <Checkbox id="remember-me" defaultChecked={true} />
               <label htmlFor="remember-me" className="text-sm text-neutral-600">
-                Remember me
+                Keep me signed in
               </label>
             </div>
             <Link
@@ -93,12 +94,12 @@ export const LoginPage = () => {
             isLoading={loginMutation.isPending}
           >
             <span className="relative z-10 w-full flex justify-center items-center">
-              {loginMutation.isPending ? "Logging in..." : "Login"}
+              {loginMutation.isPending ? "Signing in..." : "Sign In"}
             </span>
           </Button>
 
           <div className="text-center text-sm text-neutral-600">
-            Don't have an account?{" "}
+            New to Requra?{" "}
             <Link
               to={paths.auth.register}
               className="text-primary-600 font-semibold hover:underline"
