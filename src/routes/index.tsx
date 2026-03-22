@@ -6,9 +6,8 @@ import { paths } from "./paths";
 
 // Feature Routes
 import { LandingPage } from "@/features/landing";
-import { LoginPage, RegisterPage } from "@/features/auth";
+import { LoginPage, RegisterPage, ForgotPasswordPage } from "@/features/auth";
 import { NotFound, ErrorPage } from "@/features/misc";
-import ForgotPasswordPage from "@/features/auth/routes/ForgotPass";
 
 export const router = createBrowserRouter([
   {
