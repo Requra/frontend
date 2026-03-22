@@ -35,7 +35,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             .join(" ") || undefined
         }
         className={cn(
-          "h-8 w-full min-w-0 rounded-lg border border-neutral-300 bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-neutral-900 placeholder:text-neutral-400 focus-visible:border-primary-500 focus-visible:ring-3 focus-visible:ring-primary-500/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-neutral-100 disabled:opacity-50 aria-invalid:border-danger-500 aria-invalid:ring-3 aria-invalid:ring-danger-500/20 md:text-sm",
+          "h-[48px] w-full min-w-0 rounded-lg border border-neutral-300 bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-neutral-900 placeholder:text-neutral-400 focus-visible:border-primary-500 focus-visible:ring-3 focus-visible:ring-primary-500/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-neutral-100 disabled:opacity-50 aria-invalid:border-danger-500 aria-invalid:ring-3 aria-invalid:ring-danger-500/20 md:text-sm",
           startIcon && "pl-8",
           endIcon && "pr-8",
           className
@@ -72,7 +72,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <label
             htmlFor={inputId}
             className={cn(
-              "text-sm font-medium leading-none",
+              "text-sm font-medium leading-none text-neutral-900",
               props.disabled && "cursor-not-allowed opacity-70",
               isInvalid && "text-danger-500"
             )}
