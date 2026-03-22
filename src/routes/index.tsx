@@ -8,6 +8,7 @@ import { paths } from "./paths";
 import { LandingPage } from "@/features/landing";
 import { LoginPage, RegisterPage } from "@/features/auth";
 import { NotFound, ErrorPage } from "@/features/misc";
+import ForgotPasswordPage from "@/features/auth/routes/ForgotPass";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
             element: <RegisterPage />,
           },
         ],
+      },
+      {
+        path: paths.auth.forgotPassword,
+        element: <ForgotPasswordPage />,
       },
       {
         path: paths.app.root,
