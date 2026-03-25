@@ -7,6 +7,7 @@ import { ProjectDetailsForm } from "../components/ProjectDetailsForm";
 import { createProjectApi } from "../api/createProject";
 import { paths } from "@/routes/paths";
 import type { CreateProjectFormData } from "../schemas/createProjectSchema";
+import Title from "../components/Title";
 
 const steps = [
   { title: "Project Details" },
@@ -46,12 +47,10 @@ export const CreateProjectPage = () => {
       </div>
 
       {/* Title */}
-      <h1 className="text-page-title font-bold text-neutral-900 mb-2">
-        Create New Project
-      </h1>
-      <p className="text-body-lg text-neutral-500 mb-10">
-        Set up your project details before adding sources
-      </p>
+      <Title
+        title="Create New Project"
+        description="Set up your project details before adding sources"
+      />
 
       {/* Form */}
       <ProjectDetailsForm
