@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Slot } from "@radix-ui/react-slot";
+import { Spinner } from "@/components/ui/Spinner/spinner";
 
 import { cn } from "@/lib/utils";
 
@@ -20,10 +21,12 @@ const buttonVariants = cva(
           "border-primary-200 bg-white text-primary-700 hover:bg-primary-100",
         destructive: "bg-danger-600 text-white hover:bg-danger-700",
         link: "text-primary-600 underline-offset-4 hover:underline",
+        gradient:
+          "relative w-full overflow-hidden bg-gradient-steps !text-white before:absolute before:inset-0 before:bg-gradient-steps-hover before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100 hover:!text-white",
       },
       size: {
         default:
-          "h-12 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
+          "h-[48px] gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 text-body-lg font-semibold",
         xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
         sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
         lg: "h-14 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3",
@@ -47,10 +50,13 @@ function Button({
   variant = "default",
   size = "default",
   asChild = false,
+  isLoading = false,
+  children,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
+    isLoading?: boolean;
   }) {
   const Comp = asChild ? Slot : "button";
 
@@ -59,9 +65,13 @@ function Button({
       data-slot="button"
       data-variant={variant}
       data-size={size}
+      disabled={isLoading || props.disabled}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
-    />
+    >
+      {isLoading && <Spinner className="shrink-0 size-5" />}
+      {children}
+    </Comp>
   );
 }
 

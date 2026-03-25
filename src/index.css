@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@layer base {
+  html,
+  body {
+    font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  }
+}
 @theme {
   /* ================= PRIMARY ================= */
   --color-primary-50: #f2eefb;
@@ -79,11 +85,19 @@
     #6633ee 7%,
     #010314 96%
   );
+
   --background-image-gradient-steps: linear-gradient(
     to right,
     var(--color-primary-300) 13%,
     var(--color-primary-700) 100%
   );
+
+  --background-image-gradient-steps-hover: linear-gradient(
+    to right,
+    var(--color-primary-500) 13%,
+    var(--color-primary-900) 100%
+  );
+
   --background-image-gradient-text: radial-gradient(
     circle,
     rgba(255, 255, 255, 1) 30%,
@@ -93,7 +107,7 @@
   /* ================= TYPOGRAPHY ================= */
   --text--heading: 4.375rem; /* 70px */
   --text--heading--line-height: 5rem; /* 80px */
-  
+
   --text-display: 2.5rem; /* 40px */
   --text-display--line-height: 3.125rem; /* 50px */
 
@@ -133,4 +147,14 @@
 
 @utility text-gradient-radial {
   @apply bg-gradient-text bg-clip-text text-transparent;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
 }
