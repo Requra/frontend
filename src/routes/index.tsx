@@ -8,6 +8,7 @@ import { paths } from "./paths";
 import { LandingPage } from "@/features/landing";
 import { LoginPage, RegisterPage, ForgotPasswordPage } from "@/features/auth";
 import { NotFound, ErrorPage } from "@/features/misc";
+import { CreateProjectPage } from "@/features/projects";
 
 export const router = createBrowserRouter([
   {
@@ -52,6 +53,20 @@ export const router = createBrowserRouter([
           {
             path: paths.app.dashboard,
             element: <div className="p-8">Protected Dashboard Area</div>,
+          },
+        ],
+      },
+      {
+        path: paths.project.root,
+        element: (
+          <ProtectedRoute>
+            <MainLayout />
+          </ProtectedRoute>
+        ),
+        children: [
+          {
+            path: paths.project.create,
+            element: <CreateProjectPage />,
           },
         ],
       },

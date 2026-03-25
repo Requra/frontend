@@ -9,4 +9,8 @@ export const paths = {
     root: "/app",
     dashboard: "/app/dashboard",
   },
+  project: {
+    root: "/projects",
+    create: "/projects/create",
+  },
 } as const;
