@@ -1,1 +1,1 @@
-export { CreateProject as CreateProjectPage } from "./components/CreateProject";
+export { CreateProjectPage } from "./routes/CreateProjectPage";
