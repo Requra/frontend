@@ -25,7 +25,7 @@ const circleVariants = cva(
         lg: "h-[66px] w-[66px] text-2xl font-bold border-[3px]",
       },
       state: {
-        completed: "border-transparent bg-gradient-steps text-white",
+        completed: "border-none bg-gradient-steps text-white",
         current: "border-primary-300 bg-primary-50 text-primary-600",
         upcoming: "border-neutral-200 bg-white text-neutral-400",
         error: "border-red-400 bg-red-50 text-red-500",
