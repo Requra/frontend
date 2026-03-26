@@ -1,6 +1,6 @@
 import { X, FileText, FileAudio, FileVideo } from "lucide-react";
 import type { UploadedFile } from "../api/uploadFiles";
-import { formatFileSize, getFileExtension } from "../api/uploadFiles";
+import { formatFileSize, getFileExtension } from "../utils/file";
 import { cn } from "@/lib/utils";
 
 interface UploadedFileCardProps {

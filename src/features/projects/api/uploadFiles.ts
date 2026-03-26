@@ -1,3 +1,4 @@
+import { ALLOWED_EXTENSIONS, MAX_FILE_SIZE } from "../constants";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -11,9 +12,6 @@ export interface UploadedFile {
   status: "uploading" | "completed" | "error";
   errorMessage?: string;
 }
-
-const ALLOWED_EXTENSIONS = ["pdf", "docx", "txt", "mp3", "mp4"];
-const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB
 
 export function validateFile(file: File): { valid: boolean; error?: string } {
   const extension = file.name.split(".").pop()?.toLowerCase() || "";
@@ -52,14 +50,4 @@ export async function uploadFileApi(
   }
 
   return { success: true };
-}
-
-export function formatFileSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes}B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)}KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)}MB`;
-}
-
-export function getFileExtension(name: string): string {
-  return name.split(".").pop()?.toLowerCase() || "";
 }

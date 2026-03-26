@@ -1,107 +1,28 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ArrowRight } from "lucide-react";
 
 import { Stepper } from "@/components/ui/Stepper/Stepper";
 import { Button } from "@/components/ui/Button/Button";
-import Title from "../components/Title";
+import { Title } from "../components/Title";
 import { FileUploadZone } from "../components/FileUploadZone";
 import { UploadedFileCard } from "../components/UploadedFileCard";
 import { AIInsightPanel } from "../components/AIInsightPanel";
-import {
-  validateFile,
-  uploadFileApi,
-  type UploadedFile,
-} from "../api/uploadFiles";
+import { useFileUpload } from "../hooks/useFileUpload";
+import { STEPPER_STEPS } from "../constants";
 import { paths } from "@/routes/paths";
-
-const steps = [
-  { title: "Project Details" },
-  { title: "Add Sources" },
-  { title: "AI Generate" },
-];
 
 export const AddSourcesPage = () => {
   const navigate = useNavigate();
-  const [files, setFiles] = React.useState<UploadedFile[]>([]);
-
-  const handleFilesSelected = async (selectedFiles: File[]) => {
-    for (const file of selectedFiles) {
-      const validation = validateFile(file);
-
-      if (!validation.valid) {
-        toast.error(validation.error);
-        continue;
-      }
-
-      // Check duplicate
-      if (files.some((f) => f.name === file.name && f.size === file.size)) {
-        toast.warning(`"${file.name}" is already added.`);
-        continue;
-      }
-
-      const id = crypto.randomUUID();
-      const newFile: UploadedFile = {
-        id,
-        file,
-        name: file.name,
-        size: file.size,
-        type: file.type,
-        progress: 0,
-        status: "uploading",
-      };
-
-      setFiles((prev) => [...prev, newFile]);
-
-      // Start upload
-      try {
-        const result = await uploadFileApi(file, (progress) => {
-          setFiles((prev) =>
-            prev.map((f) => (f.id === id ? { ...f, progress } : f)),
-          );
-        });
-
-        if (result.success) {
-          setFiles((prev) =>
-            prev.map((f) =>
-              f.id === id ? { ...f, status: "completed", progress: 100 } : f,
-            ),
-          );
-        } else {
-          setFiles((prev) =>
-            prev.map((f) =>
-              f.id === id
-                ? { ...f, status: "error", errorMessage: result.error }
-                : f,
-            ),
-          );
-        }
-      } catch {
-        setFiles((prev) =>
-          prev.map((f) =>
-            f.id === id
-              ? { ...f, status: "error", errorMessage: "Upload failed." }
-              : f,
-          ),
-        );
-      }
-    }
-  };
-
-  const handleRemove = (id: string) => {
-    setFiles((prev) => prev.filter((f) => f.id !== id));
-  };
-
-  const completedFiles = files.filter((f) => f.status === "completed");
-  const isUploading = files.some((f) => f.status === "uploading");
+  const { files, completedFiles, isUploading, handleFilesSelected, handleRemove } =
+    useFileUpload();
 
   return (
     <div className="flex flex-col items-center w-full py-8 border border-neutral-200 rounded-lg bg-white shadow-sm my-8 h-fit">
       {/* Stepper */}
       <div className="w-full max-w-[712px] mb-8">
         <Stepper
-          steps={steps}
+          steps={[...STEPPER_STEPS]}
           activeStep={1}
           orientation="horizontal"
           size="lg"
