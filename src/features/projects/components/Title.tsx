@@ -3,7 +3,7 @@ interface IProps {
   description: string;
 }
 
-const Title = ({ title, description }: IProps) => {
+export const Title = ({ title, description }: IProps) => {
   return (
     <div className="mb-10 w-full flex flex-col items-center">
       <h1 className="text-page-title font-bold text-neutral-900 mb-2">
@@ -14,4 +14,3 @@ const Title = ({ title, description }: IProps) => {
   );
 };
 
-export default Title;

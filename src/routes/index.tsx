@@ -8,7 +8,7 @@ import { paths } from "./paths";
 import { LandingPage } from "@/features/landing";
 import { LoginPage, RegisterPage, ForgotPasswordPage } from "@/features/auth";
 import { NotFound, ErrorPage } from "@/features/misc";
-import { CreateProjectPage } from "@/features/projects";
+import { CreateProjectPage, AddSourcesPage } from "@/features/projects";
 
 export const router = createBrowserRouter([
   {
@@ -67,6 +67,10 @@ export const router = createBrowserRouter([
           {
             path: paths.project.create,
             element: <CreateProjectPage />,
+          },
+          {
+            path: paths.project.upload,
+            element: <AddSourcesPage />,
           },
         ],
       },

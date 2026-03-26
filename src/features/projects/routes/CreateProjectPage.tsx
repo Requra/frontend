@@ -7,13 +7,8 @@ import { ProjectDetailsForm } from "../components/ProjectDetailsForm";
 import { createProjectApi } from "../api/createProject";
 import { paths } from "@/routes/paths";
 import type { CreateProjectFormData } from "../schemas/createProjectSchema";
-import Title from "../components/Title";
-
-const steps = [
-  { title: "Project Details" },
-  { title: "Add Sources" },
-  { title: "AI Generate" },
-];
+import { Title } from "../components/Title";
+import { STEPPER_STEPS } from "../constants";
 
 export const CreateProjectPage = () => {
   const navigate = useNavigate();
@@ -24,7 +19,7 @@ export const CreateProjectPage = () => {
     try {
       const result = await createProjectApi(data);
       toast.success(`Project "${result.projectName}" created successfully!`);
-      navigate(paths.app.dashboard);
+      navigate(paths.project.upload);
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Something went wrong",
@@ -39,7 +34,7 @@ export const CreateProjectPage = () => {
       {/* Stepper */}
       <div className="w-full max-w-[712px] mb-8">
         <Stepper
-          steps={steps}
+          steps={[...STEPPER_STEPS]}
           activeStep={0}
           orientation="horizontal"
           size="lg"
