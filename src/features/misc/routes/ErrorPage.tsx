@@ -1,3 +1,5 @@
+import { ChevronLeft } from "lucide-react";
+import { Button } from "@/components/ui/Button/Button";
 import { useRouteError, isRouteErrorResponse } from "react-router-dom";
 
 export const ErrorPage = () => {
@@ -29,12 +31,15 @@ export const ErrorPage = () => {
         </div>
         
         <div className="pt-6 border-t border-neutral-100">
-          <button
+          <Button
             onClick={() => window.location.assign(window.location.origin)}
-            className="inline-flex items-center justify-center px-6 py-2.5 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-50 hover:bg-red-100 transition-colors"
+            variant="default"
+            size="lg"
+            className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-all shadow-lg hover:shadow-indigo-500/20 active:scale-95 m-auto"
           >
-            Refresh Page
-          </button>
+            <ChevronLeft size={20} />
+            Go back to safety
+          </Button>
         </div>
       </div>
     </div>

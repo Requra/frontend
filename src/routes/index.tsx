@@ -8,6 +8,8 @@ import { paths } from "./paths";
 import { LandingPage } from "@/features/landing";
 import { LoginPage, RegisterPage, ForgotPasswordPage } from "@/features/auth";
 import { NotFound, ErrorPage } from "@/features/misc";
+import { DashboardPage, ProjectsPage, ProfilePage } from "@/features/dashboard";
+import { DashboardLayout } from "@/layouts/DashboardLayout";
 
 export const router = createBrowserRouter([
   {
@@ -45,13 +47,21 @@ export const router = createBrowserRouter([
         path: paths.app.root,
         element: (
           <ProtectedRoute>
-            <MainLayout />
+            <DashboardLayout />
           </ProtectedRoute>
         ),
         children: [
           {
             path: paths.app.dashboard,
-            element: <div className="p-8">Protected Dashboard Area</div>,
+            element: <DashboardPage />,
+          },
+          {
+            path: paths.app.projects,
+            element: <ProjectsPage />,
+          },
+          {
+            path: paths.app.profile,
+            element: <ProfilePage />,
           },
         ],
       },

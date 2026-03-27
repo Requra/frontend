@@ -65,13 +65,14 @@ export const VerifyCodeForm = ({ onSubmit, isLoading }: VerifyCodeFormProps) => 
 
       <div className="text-sm text-neutral-600">
         Didn't receive the email?{" "}
-        <button
+        <Button
           type="button"
-          className="text-primary-600 font-bold hover:underline"
+          variant="link"
+          className="text-primary-600 font-bold hover:underline p-0 h-auto"
           onClick={() => toast.success("Reset link resent!")}
         >
           resend the reset link.
-        </button>
+        </Button>
       </div>
     </form>
   );

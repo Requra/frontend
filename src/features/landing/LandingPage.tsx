@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/Button/Button";
 import { paths } from "@/routes/paths";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 export const LandingPage = () => {
   return (
