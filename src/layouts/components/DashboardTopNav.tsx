@@ -1,4 +1,5 @@
 import { Search, Bell, BellOff } from "lucide-react";
+import { Button } from "@/components/ui/Button/Button";
 
 interface DashboardTopNavProps {
   isNotificationsOpen: boolean;
@@ -20,19 +21,21 @@ export const DashboardTopNav = ({ isNotificationsOpen, toggleNotifications }: Da
 
       {/* Right Side */}
       <div className="flex items-center gap-6">
-        <button
+        <Button
           onClick={toggleNotifications}
+          variant="ghost"
+          size="icon"
           className={`relative p-2 rounded-full transition-all duration-200 ${isNotificationsOpen
-              ? "bg-white text-[#8145C2] shadow-lg scale-110"
+              ? "bg-white text-primary-600 shadow-lg scale-110"
               : "text-white hover:bg-white/10"
             }`}
         >
           {isNotificationsOpen ? <BellOff size={24} /> : <Bell size={24} />}
           {/* Notification badge dot - only show when closed */}
           {!isNotificationsOpen && (
-            <span className="absolute top-2 right-2.5 w-2.5 h-2.5 bg-sky-200 rounded-full border-2 border-[#8145C2]"></span>
+            <span className="absolute top-2 right-2.5 w-2.5 h-2.5 bg-sky-200 rounded-full border-2 border-primary-600"></span>
           )}
-        </button>
+        </Button>
 
         <div className="flex items-center gap-3 bg-white/10 pr-4 pl-1 py-1 rounded-full cursor-pointer hover:bg-white/20 transition-colors text-white border border-white/10 shadow-sm backdrop-blur-sm">
           <div className="w-9 h-9 rounded-full bg-white text-[#7E57C2] flex items-center justify-center font-bold text-sm shadow-sm">

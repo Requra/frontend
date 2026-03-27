@@ -1,3 +1,6 @@
+import { Folder, Link as LinkIcon } from "lucide-react";
+import { Button } from "@/components/ui/Button/Button";
+
 export const ProjectsTable = () => {
   const data = [
     { client: "VOIS", project: "Ana Vodafone", status: "Approved", statusColor: "bg-green-500", pending: 3, comments: 6, updated: "1h ago" },
@@ -39,12 +42,12 @@ export const ProjectsTable = () => {
                 <td className="py-4 px-6 text-neutral-600">{row.comments}</td>
                 <td className="py-4 px-6 text-neutral-600">{row.updated}</td>
                 <td className="py-4 px-6 flex justify-center gap-2">
-                  <button className="w-8 h-8 rounded-full bg-indigo-50 text-[#6944A9] flex items-center justify-center hover:bg-indigo-100 transition-colors">
-                    📁
-                  </button>
-                  <button className="w-8 h-8 rounded-full bg-indigo-50 text-[#6944A9] flex items-center justify-center hover:bg-indigo-100 transition-colors">
-                    🔗
-                  </button>
+                  <Button variant="outline" size="icon-sm" className="rounded-full bg-primary-50 text-primary-700 border-none hover:bg-primary-100">
+                    <Folder size={16} />
+                  </Button>
+                  <Button variant="outline" size="icon-sm" className="rounded-full bg-primary-50 text-primary-700 border-none hover:bg-primary-100">
+                    <LinkIcon size={16} />
+                  </Button>
                 </td>
               </tr>
             ))}

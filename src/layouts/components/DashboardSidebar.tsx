@@ -1,6 +1,7 @@
 import { BarChart2, Plus, Folder, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import LogoImg from "@/assets/images/Logo.png";
+import { Button } from "@/components/ui/Button/Button";
 
 export const DashboardSidebar = () => {
   const { pathname } = useLocation();
@@ -35,9 +36,9 @@ export const DashboardSidebar = () => {
         >
           <BarChart2 size={24} />
         </Link>
-        <button className={getItemStyles("/app/add-project")}>
+        <Button variant="ghost" className={getItemStyles("/app/add-project")}>
           <Plus size={24} />
-        </button>
+        </Button>
         <Link
           to="/app/projects"
           className={getItemStyles("/app/projects")}
