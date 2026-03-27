@@ -15,18 +15,17 @@ export const DashboardTopNav = ({
   return (
     <header className="w-full h-24 flex items-center justify-between px-8 z-10 shrink-0">
       {/* Search Input */}
-      <div className="relative w-full max-w-[400px]">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" size={18} />
+      <div className="relative w-full max-w-[400px] ">
         <input
           type="text"
           placeholder="Search..."
           aria-label="Search"
-          className="w-full h-11 pl-11 pr-16 rounded-full bg-white/95 border-none shadow-sm focus:outline-none focus:ring-2 focus:ring-white/50 text-sm placeholder:text-neutral-500"
+          className="w-full h-11 pl-4 pr-11 rounded-full bg-white/95 border-none shadow-sm focus:outline-none focus:ring-2 focus:ring-white/50 text-sm placeholder:text-neutral-500"
         />
-        {/* Keyboard shortcut hint */}
-        <kbd className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-neutral-400 bg-neutral-100 px-1.5 py-0.5 rounded border border-neutral-200 font-mono pointer-events-none">
-          ⌘K
-        </kbd>
+        <Search
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400"
+          size={18}
+        />
       </div>
 
       {/* Right Side */}
@@ -36,11 +35,14 @@ export const DashboardTopNav = ({
           onClick={toggleNotifications}
           variant="ghost"
           size="icon"
-          aria-label={isNotificationsOpen ? "Close notifications" : "Open notifications"}
-          className={`relative p-2 rounded-full transition-all duration-200 ${isNotificationsOpen
+          aria-label={
+            isNotificationsOpen ? "Close notifications" : "Open notifications"
+          }
+          className={`relative p-2 rounded-full transition-all duration-200 ${
+            isNotificationsOpen
               ? "bg-white text-primary-600 shadow-lg scale-110"
               : "text-white hover:bg-white/10"
-            }`}
+          }`}
         >
           {isNotificationsOpen ? <BellOff size={24} /> : <Bell size={24} />}
           {/* Notification count badge - only show when closed and count > 0 */}
@@ -63,7 +65,9 @@ export const DashboardTopNav = ({
           </div>
           <div className="text-sm font-medium mr-1 flex gap-1">
             <span>Hassan</span>
-            <span className="text-white/70 font-normal text-xs mt-[2px]">PA</span>
+            <span className="text-white/70 font-normal text-xs mt-[2px]">
+              PA
+            </span>
           </div>
         </div>
       </div>

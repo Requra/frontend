@@ -9,7 +9,7 @@ export const DashboardLayout = () => {
 
   const toggleNotifications = useCallback(
     () => setIsNotificationsOpen((prev) => !prev),
-    []
+    [],
   );
 
   // Close notifications on Escape key
@@ -30,7 +30,6 @@ export const DashboardLayout = () => {
 
       {/* Main Content Area - offset by sidebar width */}
       <div className="flex-1 flex flex-col relative ml-[80px] overflow-hidden">
-
         {/* Header gradient background - visible on all pages */}
         <div className="absolute top-0 left-0 right-0 h-[200px] z-0 pointer-events-none overflow-hidden">
           <svg
@@ -72,9 +71,7 @@ export const DashboardLayout = () => {
 
         {/* Scrollable page content */}
         <main
-          className={`flex-1 flex flex-col w-full h-full overflow-y-auto scroll-smooth relative z-10 pb-8 px-8 transition-[padding] duration-300 ease-in-out ${
-            isNotificationsOpen ? "pr-[340px]" : "pr-8"
-          }`}
+          className={`flex-1 flex flex-col w-full h-full overflow-y-auto scroll-smooth relative z-10 pb-8 px-8 transition-[padding] duration-300 ease-in-out`}
         >
           <Outlet context={{ isNotificationsOpen, toggleNotifications }} />
         </main>

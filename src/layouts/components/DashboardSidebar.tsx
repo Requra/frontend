@@ -21,7 +21,11 @@ export const DashboardSidebar = () => {
   };
 
   const navItems = [
-    { path: paths.app.dashboard, icon: <BarChart2 size={24} />, label: "Dashboard" },
+    {
+      path: paths.app.dashboard,
+      icon: <BarChart2 size={24} />,
+      label: "Dashboard",
+    },
     { path: paths.app.projects, icon: <Folder size={24} />, label: "Projects" },
   ];
 
@@ -75,11 +79,7 @@ export const DashboardSidebar = () => {
           )}
           <Link
             to={paths.project.create}
-            className={
-              isActive(paths.project.create)
-                ? "w-12 h-12 flex items-center justify-center rounded-xl bg-[#2A1B38] text-white shadow-lg shadow-purple-900/20 scale-105 transition-all duration-200"
-                : "w-12 h-12 flex items-center justify-center rounded-xl bg-linear-to-br from-primary-600 to-primary-800 text-white shadow-md shadow-primary-600/30 hover:shadow-lg hover:shadow-primary-600/40 hover:scale-105 transition-all duration-200"
-            }
+            className={getItemStyles(paths.project.create)}
           >
             <Plus size={24} />
           </Link>
