@@ -46,7 +46,6 @@ export const router = createBrowserRouter([
         element: <ForgotPasswordPage />,
       },
       {
-        path: paths.app.root,
         element: (
           <ProtectedRoute>
             <DashboardLayout />
@@ -65,16 +64,6 @@ export const router = createBrowserRouter([
             path: paths.app.profile,
             element: <ProfilePage />,
           },
-        ],
-      },
-      {
-        path: paths.project.root,
-        element: (
-          <ProtectedRoute>
-            <MainLayout />
-          </ProtectedRoute>
-        ),
-        children: [
           {
             path: paths.project.create,
             element: <CreateProjectPage />,

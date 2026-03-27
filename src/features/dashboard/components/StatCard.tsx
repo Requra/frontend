@@ -18,7 +18,7 @@ export const StatCard = ({
   iconColor,
 }: StatCardProps) => {
   return (
-    <div className="bg-white rounded-3xl p-6 flex flex-col justify-center shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow">
+    <div className="bg-white rounded-3xl p-6 flex flex-col justify-center shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
       <div className="flex items-center gap-5 mb-4">
         <div
           className="w-16 h-16 rounded-full flex items-center justify-center shrink-0"
