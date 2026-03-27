@@ -1,5 +1,5 @@
 import { Logo } from "@/components/ui/Logo/Logo";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const navLinks = [
   { name: "Features", href: "#features" },
