@@ -1,36 +1,55 @@
-import { MoreVertical, Share2, Trash2 } from "lucide-react"
-import { Button } from "@/components/ui/Button/Button"
-import { cn } from "@/lib/utils"
+import { MoreVertical, Share2, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/Button/Button";
+import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/DropdownMenu/DropdownMenu"
-import type { ProjectStatus } from "./types"
-import { STATUS_STYLES } from "./types"
+} from "@/components/ui/DropdownMenu/DropdownMenu";
+import type { ProjectStatus } from "./types";
+import { STATUS_STYLES } from "./types";
+import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 
 interface ProjectCardHeaderProps {
-  status: ProjectStatus
+  status: ProjectStatus;
 }
+
+const statusLabels: Record<ProjectStatus, string> = {
+  "IN PROGRESS": "Processing",
+  FINISHED: "Completed",
+  DRAFT: "Draft",
+};
 
 export function ProjectCardHeader({ status }: ProjectCardHeaderProps) {
   return (
     <div className="flex items-center justify-between">
-      <span className={cn(
-        "rounded-full border px-2.5 py-0.5 text-[10px] font-bold tracking-wider uppercase",
-        STATUS_STYLES[status]
-      )}>
-        {status}
+      <span
+        className={cn(
+          "rounded-full border px-2.5 py-0.5 text-[10px] font-bold tracking-wider uppercase",
+          STATUS_STYLES[status],
+        )}
+      >
+        {statusLabels[status]}
       </span>
       <div className="flex items-center gap-1 opacity-40 transition-opacity group-hover:opacity-100">
-        <Button variant="ghost-neutral" size="icon-xs" className="text-neutral-500">
-          <Share2 size={14} />
-        </Button>
+        <Tooltip content="Quick Share" position="top">
+          <Button
+            variant="ghost-neutral"
+            size="icon-sm"
+            className="text-neutral-500"
+          >
+            <Share2 />
+          </Button>
+        </Tooltip>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost-neutral" size="icon-xs" className="text-neutral-500 focus-visible:ring-0">
-              <MoreVertical size={14} />
+            <Button
+              variant="ghost-neutral"
+              size="icon-sm"
+              className="text-neutral-500 focus-visible:ring-0"
+            >
+              <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[180px]">
@@ -46,5 +65,5 @@ export function ProjectCardHeader({ status }: ProjectCardHeaderProps) {
         </DropdownMenu>
       </div>
     </div>
-  )
+  );
 }

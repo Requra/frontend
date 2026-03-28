@@ -10,6 +10,7 @@ export interface ProjectCardProps {
   userName: string
   userAvatar?: string
   className?: string
+  searchQuery?: string
 }
 
 export const STATUS_STYLES: Record<ProjectStatus, string> = {

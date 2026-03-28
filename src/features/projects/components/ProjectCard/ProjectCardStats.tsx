@@ -1,11 +1,15 @@
-import { ListChecks, MessageSquare } from "lucide-react"
+import { ListChecks, MessageSquare, CheckCircle2 } from "lucide-react"
+import type { ProjectStatus } from "./types"
 
 interface ProjectCardStatsProps {
+  status: ProjectStatus
   featuresCount: number
   unsolvedComments: number
 }
 
-export function ProjectCardStats({ featuresCount, unsolvedComments }: ProjectCardStatsProps) {
+export function ProjectCardStats({ status, featuresCount, unsolvedComments }: ProjectCardStatsProps) {
+  const isFinished = status === "FINISHED"
+
   return (
     <div className="grid grid-cols-2 gap-4 mt-1">
       <StatItem
@@ -14,9 +18,9 @@ export function ProjectCardStats({ featuresCount, unsolvedComments }: ProjectCar
         value={`${featuresCount} features`}
       />
       <StatItem
-        icon={<MessageSquare size={16} />}
-        label="Client comments"
-        value={`${unsolvedComments} unsolved`}
+        icon={isFinished && unsolvedComments === 0 ? <CheckCircle2 size={16} className="text-success-500" /> : <MessageSquare size={16} />}
+        label={isFinished ? "Feedback" : "Client comments"}
+        value={isFinished && unsolvedComments === 0 ? "All resolved ✓" : `${unsolvedComments} unsolved`}
       />
     </div>
   )

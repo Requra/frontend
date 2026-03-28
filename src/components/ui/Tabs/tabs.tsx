@@ -1,8 +1,8 @@
-import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
-import * as TabsPrimitive from "@radix-ui/react-tabs"
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import * as TabsPrimitive from "@radix-ui/react-tabs";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 function Tabs({
   className,
@@ -15,11 +15,11 @@ function Tabs({
       data-orientation={orientation}
       className={cn(
         "group/tabs flex gap-2 data-[orientation=horizontal]:flex-col",
-        className
+        className,
       )}
       {...props}
     />
-  )
+  );
 }
 
 const tabsListVariants = cva(
@@ -34,8 +34,8 @@ const tabsListVariants = cva(
     defaultVariants: {
       variant: "default",
     },
-  }
-)
+  },
+);
 
 function TabsList({
   className,
@@ -50,10 +50,12 @@ function TabsList({
       className={cn(tabsListVariants({ variant }), className)}
       {...props}
     />
-  )
+  );
 }
 
-interface TabsTriggerProps extends React.ComponentProps<typeof TabsPrimitive.Trigger> {
+interface TabsTriggerProps extends React.ComponentProps<
+  typeof TabsPrimitive.Trigger
+> {
   icon?: React.ReactNode;
   badge?: string | number;
 }
@@ -75,7 +77,7 @@ function TabsTrigger({
         // Underline for 'default' variant (line style)
         "after:absolute after:-bottom-px after:left-0 after:right-0 after:h-0.5 after:bg-primary-600 after:opacity-0 after:transition-opacity",
         "data-[state=active]:after:opacity-100",
-        className
+        className,
       )}
       {...props}
     >
@@ -86,16 +88,18 @@ function TabsTrigger({
       )}
       <span>{children}</span>
       {badge !== undefined && (
-        <span className={cn(
-          "flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[10px] font-bold transition-all",
-          "bg-neutral-100 text-neutral-600",
-          "group-data-[state=active]/tabs-trigger:bg-primary-50 group-data-[state=active]/tabs-trigger:text-primary-700"
-        )}>
+        <span
+          className={cn(
+            "flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[10px] font-bold transition-all",
+            "bg-neutral-100 text-neutral-600",
+            "group-data-[state=active]/tabs-trigger:bg-primary-50 group-data-[state=active]/tabs-trigger:text-primary-700",
+          )}
+        >
           {badge}
         </span>
       )}
     </TabsPrimitive.Trigger>
-  )
+  );
 }
 
 function TabsContent({
@@ -108,8 +112,7 @@ function TabsContent({
       className={cn("flex-1 text-sm outline-none pt-4", className)}
       {...props}
     />
-  )
+  );
 }
 
-export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants }
-
+export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants };
