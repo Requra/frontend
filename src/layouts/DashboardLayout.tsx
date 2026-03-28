@@ -1,11 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { DashboardSidebar } from "./components/DashboardSidebar";
 import { DashboardTopNav } from "./components/DashboardTopNav";
 import { NotificationsPanel } from "@/features/dashboard/components/NotificationsPanel";
+import { paths } from "@/routes/paths";
 
 export const DashboardLayout = () => {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const location = useLocation();
+  const isDashboard = location.pathname === paths.app.dashboard;
 
   const toggleNotifications = useCallback(
     () => setIsNotificationsOpen((prev) => !prev),
@@ -30,48 +33,19 @@ export const DashboardLayout = () => {
 
       {/* Main Content Area - offset by sidebar width */}
       <div className="flex-1 flex flex-col relative ml-[80px] overflow-hidden">
-        {/* Header gradient background - visible on all pages */}
-        <div className="absolute top-0 left-0 right-0 h-[200px] z-0 pointer-events-none overflow-hidden">
-          <svg
-            width="100%"
-            height="200"
-            viewBox="0 0 1440 200"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            preserveAspectRatio="none"
-            className="w-full h-[200px]"
-          >
-            <path
-              d="M0 0H1440V140C1440 140 1200 200 720 200C240 200 0 140 0 140V0Z"
-              fill="url(#paint_header_bg)"
-            />
-            <defs>
-              <radialGradient
-                id="paint_header_bg"
-                cx="0"
-                cy="0"
-                r="1"
-                gradientUnits="userSpaceOnUse"
-                gradientTransform="translate(720 100) scale(720 100)"
-              >
-                <stop stopColor="var(--color-primary-900)" />
-                <stop offset="0.89" stopColor="var(--color-primary-600)" />
-              </radialGradient>
-            </defs>
-          </svg>
-        </div>
 
         {/* TopNav */}
         <div className="relative z-20 shrink-0">
           <DashboardTopNav
             isNotificationsOpen={isNotificationsOpen}
             toggleNotifications={toggleNotifications}
+            variant={isDashboard ? "onGradient" : "light"}
           />
         </div>
 
         {/* Scrollable page content */}
         <main
-          className={`flex-1 flex flex-col w-full h-full overflow-y-auto scroll-smooth relative z-10 pb-8 px-8 transition-[padding] duration-300 ease-in-out`}
+          className={`flex-1 flex flex-col w-full h-full pt-8 overflow-y-auto scroll-smooth relative z-10 pb-8 px-8 transition-[padding] duration-300 ease-in-out`}
         >
           <Outlet context={{ isNotificationsOpen, toggleNotifications }} />
         </main>

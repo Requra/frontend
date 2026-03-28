@@ -54,7 +54,7 @@ export const DashboardPage = () => {
         {/* Main Content Column */}
         <div className="flex-1 flex flex-col gap-6 w-full min-w-0">
           {/* Header Title & Date */}
-          <div className="text-white mb-2 mt-2">
+          <div className="text-white mb-2">
             <h1 className="text-4xl font-bold mb-3 tracking-tight drop-shadow-sm">
               Welcome back, Hassan 👋
             </h1>
