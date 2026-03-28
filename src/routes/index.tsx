@@ -8,9 +8,13 @@ import { paths } from "./paths";
 import { LandingPage } from "@/features/landing";
 import { LoginPage, RegisterPage, ForgotPasswordPage } from "@/features/auth";
 import { NotFound, ErrorPage } from "@/features/misc";
-import { CreateProjectPage, AddSourcesPage } from "@/features/projects";
+import {
+  CreateProjectPage,
+  AddSourcesPage,
+  AllProjectsPage,
+} from "@/features/projects";
 
-import { DashboardPage, ProjectsPage, ProfilePage } from "@/features/dashboard";
+import { DashboardPage, ProfilePage } from "@/features/dashboard";
 import { DashboardLayout } from "@/layouts/DashboardLayout";
 
 export const router = createBrowserRouter([
@@ -57,8 +61,8 @@ export const router = createBrowserRouter([
             element: <DashboardPage />,
           },
           {
-            path: paths.app.projects,
-            element: <ProjectsPage />,
+            path: paths.project.root,
+            element: <AllProjectsPage />,
           },
           {
             path: paths.app.profile,
