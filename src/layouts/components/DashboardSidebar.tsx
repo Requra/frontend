@@ -26,11 +26,11 @@ export const DashboardSidebar = () => {
       icon: <BarChart2 size={24} />,
       label: "Dashboard",
     },
-    { path: paths.app.projects, icon: <Folder size={24} />, label: "Projects" },
+    { path: paths.project.root, icon: <Folder size={24} />, label: "Projects" },
   ];
 
   return (
-    <aside className="w-[80px] bg-white h-screen flex flex-col items-center py-6 border-r border-neutral-100 z-50 shadow-sm shrink-0 fixed">
+    <aside className="w-[80px] bg-white h-screen flex flex-col items-center pt-4 border-r border-neutral-100 z-50 shadow-sm shrink-0 fixed">
       {/* Top Logo */}
       <div className="mb-12">
         <Link to="/">
