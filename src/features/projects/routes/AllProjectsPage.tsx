@@ -1,17 +1,26 @@
-import { Button } from "@/components/ui/Button/Button";
 import { paths } from "@/routes/paths";
-import { CheckCircle2, Clock, FileText, Filter, Plus, Search } from "lucide-react";
+import { Button } from "@/components/ui/Button/Button";
+import { SearchBar } from "@/components/ui/SearchBar/SearchBar";
+import { CheckCircle2, Clock, FileText, Filter, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs/tabs";
 import { ProjectCard } from "../components/ProjectCard";
 import { AddProjectCard } from "../components/AddProjectCard";
+import { MOCK_PROJECTS } from "../constants";
+import type { ProjectStatus } from "../components/ProjectCard/types";
+import type { Project } from "../types";
 
 export const AllProjectsPage = () => {
   const navigate = useNavigate();
 
+  const filterByStatus = (status: ProjectStatus) =>
+    MOCK_PROJECTS.filter((p) => p.status === status);
+
+  const handleAddProject = () => navigate(paths.project.create);
+
   return (
     <div className="flex flex-col gap-8">
-      {/* Header Section */}
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-1">
           <h1 className="text-display font-bold tracking-tight text-neutral-900 leading-tight">
@@ -22,7 +31,7 @@ export const AllProjectsPage = () => {
           </p>
         </div>
         <Button
-          onClick={() => navigate(paths.project.create)}
+          onClick={handleAddProject}
           variant="default"
           size="lg"
           className="shadow-lg shadow-primary-500/20"
@@ -32,19 +41,12 @@ export const AllProjectsPage = () => {
         </Button>
       </div>
 
-      {/* Search & Filter Section */}
+      {/* Search & Filter */}
       <div className="flex items-center justify-between gap-4">
-        <div className="relative w-full max-w-[800px]">
-          <input
-            type="text"
-            placeholder="Search by project name, client, or tag..."
-            className="w-full h-12 pl-5 pr-12 rounded-full shadow-sm focus:outline-none focus:ring-2 text-sm bg-white border border-neutral-200 focus:ring-primary-500/30 text-neutral-800 placeholder:text-neutral-400 transition-all font-medium"
-          />
-          <Search
-            className="absolute right-5 top-1/2 -translate-y-1/2 text-neutral-400"
-            size={20}
-          />
-        </div>
+        <SearchBar
+          placeholder="Search by project name, client, or tag..."
+          className="max-w-[800px]"
+        />
         <Button
           variant="secondary"
           className="h-12 px-6 text-sm text-neutral-600 gap-2 border-neutral-200"
@@ -57,86 +59,34 @@ export const AllProjectsPage = () => {
       {/* Tabs & Projects Grid */}
       <Tabs defaultValue="processing" className="w-full">
         <TabsList className="mb-8">
-          <TabsTrigger value="processing" icon={<Clock size={16} />} badge={4}>
+          <TabsTrigger value="processing" icon={<Clock size={16} />} badge={filterByStatus("IN PROGRESS").length}>
             Processing
           </TabsTrigger>
-          <TabsTrigger value="completed" icon={<CheckCircle2 size={16} />} badge={2}>
+          <TabsTrigger value="completed" icon={<CheckCircle2 size={16} />} badge={filterByStatus("FINISHED").length}>
             Completed
           </TabsTrigger>
-          <TabsTrigger value="draft" icon={<FileText size={16} />} badge={1}>
+          <TabsTrigger value="draft" icon={<FileText size={16} />} badge={filterByStatus("DRAFT").length}>
             Draft
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="processing">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <ProjectCard
-              status="IN PROGRESS"
-              title="CRM System Requirements"
-              description="Requirements extracted from sales stakeholder meeting."
-              progress={30}
-              featuresCount={18}
-              unsolvedComments={3}
-              userName="Hassan Abdelhamed"
-            />
-            <ProjectCard
-              status="IN PROGRESS"
-              title="E-commerce Platform API"
-              description="Backend infrastructure for the new shopping experience."
-              progress={65}
-              featuresCount={24}
-              unsolvedComments={5}
-              userName="Hassan Abdelhamed"
-            />
-            <ProjectCard
-              status="IN PROGRESS"
-              title="Mobile App Wireframes"
-              description="User flow and high-fidelity mockups for iOS app."
-              progress={15}
-              featuresCount={12}
-              unsolvedComments={2}
-              userName="Hassan Abdelhamed"
-            />
-            <AddProjectCard onClick={() => navigate(paths.project.create)} />
-          </div>
-        </TabsContent>
-
-        <TabsContent value="completed">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <ProjectCard
-              status="FINISHED"
-              title="Inventory Management"
-              description="Finalized requirements for warehouse automation."
-              featuresCount={42}
-              unsolvedComments={0}
-              userName="Hassan Abdelhamed"
-            />
-            <ProjectCard
-              status="FINISHED"
-              title="Payment Gateway Integration"
-              description="Documentation for Stripe and PayPal integrations."
-              featuresCount={15}
-              unsolvedComments={0}
-              userName="Hassan Abdelhamed"
-            />
-            <AddProjectCard onClick={() => navigate(paths.project.create)} />
-          </div>
-        </TabsContent>
-
-        <TabsContent value="draft">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <ProjectCard
-              status="DRAFT"
-              title="Analytics Dashboard"
-              description="Initial thoughts on data visualization requirements."
-              featuresCount={8}
-              unsolvedComments={1}
-              userName="Hassan Abdelhamed"
-            />
-            <AddProjectCard onClick={() => navigate(paths.project.create)} />
-          </div>
-        </TabsContent>
+        <ProjectGrid value="processing" projects={filterByStatus("IN PROGRESS")} onAdd={handleAddProject} />
+        <ProjectGrid value="completed" projects={filterByStatus("FINISHED")} onAdd={handleAddProject} />
+        <ProjectGrid value="draft" projects={filterByStatus("DRAFT")} onAdd={handleAddProject} />
       </Tabs>
     </div>
   );
 };
+
+function ProjectGrid({ value, projects, onAdd }: { value: string; projects: Project[]; onAdd: () => void }) {
+  return (
+    <TabsContent value={value}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {projects.map((project) => (
+          <ProjectCard key={project.id} {...project} />
+        ))}
+        <AddProjectCard onClick={onAdd} />
+      </div>
+    </TabsContent>
+  );
+}
