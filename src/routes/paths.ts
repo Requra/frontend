@@ -11,4 +11,9 @@ export const paths = {
     projects: "/app/projects",
     profile: "/app/profile",
   },
+  project: {
+    root: "/projects",
+    create: "/projects/create",
+    upload: "/projects/upload",
+  },
 } as const;

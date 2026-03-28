@@ -8,6 +8,8 @@ import { paths } from "./paths";
 import { LandingPage } from "@/features/landing";
 import { LoginPage, RegisterPage, ForgotPasswordPage } from "@/features/auth";
 import { NotFound, ErrorPage } from "@/features/misc";
+import { CreateProjectPage, AddSourcesPage } from "@/features/projects";
+
 import { DashboardPage, ProjectsPage, ProfilePage } from "@/features/dashboard";
 import { DashboardLayout } from "@/layouts/DashboardLayout";
 
@@ -44,7 +46,6 @@ export const router = createBrowserRouter([
         element: <ForgotPasswordPage />,
       },
       {
-        path: paths.app.root,
         element: (
           <ProtectedRoute>
             <DashboardLayout />
@@ -62,6 +63,14 @@ export const router = createBrowserRouter([
           {
             path: paths.app.profile,
             element: <ProfilePage />,
+          },
+          {
+            path: paths.project.create,
+            element: <CreateProjectPage />,
+          },
+          {
+            path: paths.project.upload,
+            element: <AddSourcesPage />,
           },
         ],
       },

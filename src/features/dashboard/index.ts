@@ -1,3 +1,3 @@
-export * from './DashboardPage';
-export * from './ProjectsPage';
-export * from './ProfilePage';
+export { DashboardPage } from "./routes/DashboardPage";
+export { ProjectsPage } from "./routes/ProjectsPage";
+export { ProfilePage } from "./routes/ProfilePage";
