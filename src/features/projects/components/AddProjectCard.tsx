@@ -11,7 +11,7 @@ export function AddProjectCard({ className, onClick }: AddProjectCardProps) {
     <button
       onClick={onClick}
       className={cn(
-        "group flex h-full min-h-[300px] w-full flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-neutral-200 bg-neutral-50/50 p-6 transition-all hover:border-primary-300 hover:bg-neutral-50 cursor-pointer overflow-hidden",
+        "group flex h-full min-h-[220px] w-full flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-neutral-200 bg-neutral-50/50 p-6 transition-all hover:border-primary-300 hover:bg-neutral-50 cursor-pointer overflow-hidden",
         className
       )}
     >

@@ -1,12 +1,11 @@
 import { BarChart2, Plus, Folder, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
 import LogoImg from "@/assets/images/Logo.png";
 import { paths } from "@/routes/paths";
+import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 
 export const DashboardSidebar = () => {
   const { pathname } = useLocation();
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const isActive = (path: string) => pathname.startsWith(path);
 
@@ -45,74 +44,48 @@ export const DashboardSidebar = () => {
       {/* Nav Icons */}
       <nav className="flex-1 flex flex-col items-center gap-4 w-full">
         {navItems.map((item) => (
-          <div
-            key={item.path}
-            className="relative"
-            onMouseEnter={() => setHoveredItem(item.path)}
-            onMouseLeave={() => setHoveredItem(null)}
-          >
+          <div key={item.path} className="relative">
             {/* Active indicator bar */}
             {isActive(item.path) && (
               <div className="absolute left-[-14px] top-1/2 -translate-y-1/2 w-[3px] h-6 bg-[#2A1B38] rounded-r-full" />
             )}
-            <Link to={item.path} className={getItemStyles(item.path)}>
-              {item.icon}
-            </Link>
-            {/* Tooltip */}
-            {hoveredItem === item.path && (
-              <div className="absolute left-[60px] top-1/2 -translate-y-1/2 bg-[#2A1B38] text-white text-xs font-medium px-3 py-1.5 rounded-lg whitespace-nowrap shadow-lg z-50 pointer-events-none">
-                {item.label}
-                <div className="absolute left-[-4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#2A1B38] rotate-45" />
-              </div>
-            )}
+            <Tooltip content={item.label}>
+              <Link to={item.path} className={getItemStyles(item.path)}>
+                {item.icon}
+              </Link>
+            </Tooltip>
           </div>
         ))}
 
         {/* Create Project CTA - distinct style */}
-        <div
-          className="relative"
-          onMouseEnter={() => setHoveredItem("create")}
-          onMouseLeave={() => setHoveredItem(null)}
-        >
+        <div className="relative">
           {isActive(paths.project.create) && (
             <div className="absolute left-[-14px] top-1/2 -translate-y-1/2 w-[3px] h-6 bg-[#2A1B38] rounded-r-full" />
           )}
-          <Link
-            to={paths.project.create}
-            className={getItemStyles(paths.project.create)}
-          >
-            <Plus size={24} />
-          </Link>
-          {hoveredItem === "create" && (
-            <div className="absolute left-[60px] top-1/2 -translate-y-1/2 bg-[#2A1B38] text-white text-xs font-medium px-3 py-1.5 rounded-lg whitespace-nowrap shadow-lg z-50 pointer-events-none">
-              New Project
-              <div className="absolute left-[-4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#2A1B38] rotate-45" />
-            </div>
-          )}
+          <Tooltip content="New Project">
+            <Link
+              to={paths.project.create}
+              className={getItemStyles(paths.project.create)}
+            >
+              <Plus size={24} />
+            </Link>
+          </Tooltip>
         </div>
       </nav>
 
       {/* Bottom User Profile Icon */}
-      <div
-        className="mt-auto relative"
-        onMouseEnter={() => setHoveredItem("profile")}
-        onMouseLeave={() => setHoveredItem(null)}
-      >
+      <div className="mt-auto relative">
         {isActive(paths.app.profile) && (
           <div className="absolute left-[-14px] top-1/2 -translate-y-1/2 w-[3px] h-6 bg-[#2A1B38] rounded-r-full" />
         )}
-        <Link
-          to={paths.app.profile}
-          className={getItemStyles(paths.app.profile)}
-        >
-          <User size={24} />
-        </Link>
-        {hoveredItem === "profile" && (
-          <div className="absolute left-[60px] top-1/2 -translate-y-1/2 bg-[#2A1B38] text-white text-xs font-medium px-3 py-1.5 rounded-lg whitespace-nowrap shadow-lg z-50 pointer-events-none">
-            Profile
-            <div className="absolute left-[-4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#2A1B38] rotate-45" />
-          </div>
-        )}
+        <Tooltip content="Profile">
+          <Link
+            to={paths.app.profile}
+            className={getItemStyles(paths.app.profile)}
+          >
+            <User size={24} />
+          </Link>
+        </Tooltip>
       </div>
     </aside>
   );

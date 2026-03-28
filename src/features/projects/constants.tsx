@@ -1,3 +1,6 @@
+import { Clock, CheckCircle2, FileText } from "lucide-react";
+import type { Project, TabConfig } from "./types";
+
 export const STEPPER_STEPS = [
   { title: "Project Details" },
   { title: "Add Sources" },
@@ -7,10 +10,6 @@ export const STEPPER_STEPS = [
 export const ALLOWED_EXTENSIONS = ["pdf", "docx", "txt", "mp3", "mp4"];
 
 export const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB
-
-/* Mock Project Data */
-
-import type { Project } from "./types";
 
 export const MOCK_PROJECTS: Project[] = [
   {
@@ -63,11 +62,35 @@ export const MOCK_PROJECTS: Project[] = [
   },
   {
     id: "6",
-    status: "DRAFT",
+    status: "FINISHED",
     title: "Analytics Dashboard",
     description: "Initial thoughts on data visualization requirements.",
     featuresCount: 8,
     unsolvedComments: 1,
     userName: "Hassan Abdelhamed",
+  },
+];
+
+export const TABS_CONFIG: TabConfig[] = [
+  {
+    value: "processing",
+    label: "Processing",
+    icon: <Clock size={16} />,
+    status: "IN PROGRESS",
+    emptyMessage: "No processing projects",
+  },
+  {
+    value: "completed",
+    label: "Completed",
+    icon: <CheckCircle2 size={16} />,
+    status: "FINISHED",
+    emptyMessage: "No completed projects",
+  },
+  {
+    value: "draft",
+    label: "Draft",
+    icon: <FileText size={16} />,
+    status: "DRAFT",
+    emptyMessage: "No drafts found",
   },
 ];
