@@ -65,7 +65,7 @@ export const DashboardLayout = () => {
           isNotificationsOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <NotificationsPanel />
+        <NotificationsPanel onClose={toggleNotifications} />
       </div>
     </div>
   );
