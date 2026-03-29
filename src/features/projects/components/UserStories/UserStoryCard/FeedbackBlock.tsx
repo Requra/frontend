@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/Badge/Badge";
 import { MessageSquare, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/Button/Button";
 
 interface FeedbackBlockProps {
   type: "stakeholder" | "insight";
@@ -17,7 +18,7 @@ export const FeedbackBlock = ({ type, message, count }: FeedbackBlockProps) => {
         "rounded-xl p-4 transition-colors",
         isStakeholder
           ? "bg-neutral-50 hover:bg-neutral-100/60"
-          : "bg-red-50/60 border border-red-100 hover:bg-red-50/80"
+          : "bg-red-50/60 border border-red-100 hover:bg-red-50/80",
       )}
     >
       {/* Feedback label */}
@@ -25,7 +26,7 @@ export const FeedbackBlock = ({ type, message, count }: FeedbackBlockProps) => {
         <div
           className={cn(
             "flex items-center gap-2 text-xs font-semibold",
-            isStakeholder ? "text-neutral-500" : "text-red-600"
+            isStakeholder ? "text-neutral-500" : "text-red-600",
           )}
         >
           {isStakeholder ? (
@@ -50,7 +51,7 @@ export const FeedbackBlock = ({ type, message, count }: FeedbackBlockProps) => {
       <p
         className={cn(
           "text-xs leading-relaxed",
-          isStakeholder ? "text-neutral-600" : "text-red-700 font-medium"
+          isStakeholder ? "text-neutral-600" : "text-red-700 font-medium",
         )}
       >
         {message}
@@ -58,9 +59,12 @@ export const FeedbackBlock = ({ type, message, count }: FeedbackBlockProps) => {
 
       {/* Show all link */}
       {isStakeholder && count !== undefined && count > 0 && (
-        <button className="text-primary-600 text-xs font-semibold mt-2 hover:underline hover:text-primary-700 transition-colors">
+        <Button
+          variant="link"
+          className="text-primary-600 text-xs font-semibold mt-2 hover:underline hover:text-primary-700 transition-colors duration-200"
+        >
           Show all Comments →
-        </button>
+        </Button>
       )}
     </div>
   );
