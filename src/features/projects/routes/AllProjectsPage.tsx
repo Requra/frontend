@@ -67,7 +67,7 @@ export const AllProjectsPage = () => {
       }),
   });
 
-  const handleAddProject = () => navigate(paths.project.create);
+  const handleAddProject = () => navigate(paths.app.newProject);
 
   const getStatusCount = (status: ProjectStatus) =>
     MOCK_PROJECTS.filter((p) => p.status === status).length;

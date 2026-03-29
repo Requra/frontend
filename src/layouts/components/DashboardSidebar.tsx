@@ -1,8 +1,7 @@
-import { BarChart2, Plus, Folder, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import LogoImg from "@/assets/images/Logo.png";
-import { paths } from "@/routes/paths";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
+import { sidebarRoutes } from "@/routes/config";
 
 export const DashboardSidebar = () => {
   const { pathname } = useLocation();
@@ -19,14 +18,10 @@ export const DashboardSidebar = () => {
     ].join(" ");
   };
 
-  const navItems = [
-    {
-      path: paths.app.dashboard,
-      icon: <BarChart2 size={24} />,
-      label: "Dashboard",
-    },
-    { path: paths.project.root, icon: <Folder size={24} />, label: "Projects" },
-  ];
+  const mainNavItems = sidebarRoutes.filter(
+    (r) => r.sidebar?.group === "main" || !r.sidebar?.group,
+  );
+  const userNavItems = sidebarRoutes.filter((r) => r.sidebar?.group === "user");
 
   return (
     <aside className="w-[80px] bg-white h-screen flex flex-col items-center pt-4 border-r border-neutral-100 z-50 shadow-sm shrink-0 fixed">
@@ -43,49 +38,34 @@ export const DashboardSidebar = () => {
 
       {/* Nav Icons */}
       <nav className="flex-1 flex flex-col items-center gap-4 w-full">
-        {navItems.map((item) => (
+        {mainNavItems.map((item) => (
           <div key={item.path} className="relative">
-            {/* Active indicator bar */}
-            {isActive(item.path) && (
+            {isActive(item.path!) && (
               <div className="absolute left-[-14px] top-1/2 -translate-y-1/2 w-[3px] h-6 bg-[#2A1B38] rounded-r-full" />
             )}
-            <Tooltip content={item.label}>
-              <Link to={item.path} className={getItemStyles(item.path)}>
-                {item.icon}
+            <Tooltip content={item.label || ""}>
+              <Link to={item.path!} className={getItemStyles(item.path!)}>
+                {item.sidebar?.icon}
               </Link>
             </Tooltip>
           </div>
         ))}
-
-        {/* Create Project CTA - distinct style */}
-        <div className="relative">
-          {isActive(paths.project.create) && (
-            <div className="absolute left-[-14px] top-1/2 -translate-y-1/2 w-[3px] h-6 bg-[#2A1B38] rounded-r-full" />
-          )}
-          <Tooltip content="New Project">
-            <Link
-              to={paths.project.create}
-              className={getItemStyles(paths.project.create)}
-            >
-              <Plus size={24} />
-            </Link>
-          </Tooltip>
-        </div>
       </nav>
 
       {/* Bottom User Profile Icon */}
-      <div className="mt-auto relative">
-        {isActive(paths.app.profile) && (
-          <div className="absolute left-[-14px] top-1/2 -translate-y-1/2 w-[3px] h-6 bg-[#2A1B38] rounded-r-full" />
-        )}
-        <Tooltip content="Profile">
-          <Link
-            to={paths.app.profile}
-            className={getItemStyles(paths.app.profile)}
-          >
-            <User size={24} />
-          </Link>
-        </Tooltip>
+      <div className="mt-auto flex flex-col items-stretch gap-4 mb-4">
+        {userNavItems.map((item) => (
+          <div key={item.path} className="relative">
+            {isActive(item.path!) && (
+              <div className="absolute left-[-14px] top-1/2 -translate-y-1/2 w-[3px] h-6 bg-[#2A1B38] rounded-r-full" />
+            )}
+            <Tooltip content={item.label || ""}>
+              <Link to={item.path!} className={getItemStyles(item.path!)}>
+                {item.sidebar?.icon}
+              </Link>
+            </Tooltip>
+          </div>
+        ))}
       </div>
     </aside>
   );

@@ -6,13 +6,12 @@ export const paths = {
     forgotPassword: "/auth/forgot-password",
   },
   app: {
-    root: "/app",
     dashboard: "/app/dashboard",
+    projects: {
+      root: "/app/projects",
+      upload: "/app/projects/upload",
+    },
+    newProject: "/app/new-project",
     profile: "/app/profile",
-  },
-  project: {
-    root: "/projects",
-    create: "/projects/create",
-    upload: "/projects/upload",
   },
 } as const;
