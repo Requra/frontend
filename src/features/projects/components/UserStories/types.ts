@@ -36,7 +36,7 @@ export const MOCK_STORIES: UserStory[] = [
     benefit: "I can filter the backlog by technical complexity",
     feedbackType: "stakeholder",
     feedbackMessage: "No critical comments. Ready for export.",
-    qualityScore: 98,
+    qualityScore: 90,
   },
   {
     id: "US-03",
