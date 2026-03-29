@@ -19,7 +19,7 @@ export const CreateProjectPage = () => {
     try {
       const result = await createProjectApi(data);
       toast.success(`Project "${result.projectName}" created successfully!`);
-      navigate(paths.project.upload);
+      navigate(paths.app.projects.upload);
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Something went wrong",

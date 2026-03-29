@@ -72,7 +72,7 @@ export const AddSourcesPage = () => {
         <Button
           type="button"
           variant="outline"
-          onClick={() => navigate(paths.project.create)}
+          onClick={() => navigate(paths.app.newProject)}
         >
           Back
         </Button>

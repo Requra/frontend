@@ -1,7 +1,11 @@
 import { Button } from "@/components/ui/Button/Button";
 import { Bug, UserPlus, Radio, X } from "lucide-react";
 
-export const NotificationsPanel = () => {
+export interface NotificationsPanelProps {
+  onClose?: () => void;
+}
+
+export const NotificationsPanel = ({ onClose }: NotificationsPanelProps) => {
   return (
     <div className="bg-white rounded-l-4xl p-8 h-full shadow-sm sticky top-0 flex flex-col justify-between">
       <div>
@@ -10,6 +14,7 @@ export const NotificationsPanel = () => {
           <X
             size={24}
             className="text-neutral-400 hover:text-neutral-600 cursor-pointer transition-colors duration-200"
+            onClick={onClose}
           />
         </div>
 
