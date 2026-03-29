@@ -1,15 +1,20 @@
 import { User } from "lucide-react";
 import { Button } from "@/components/ui/Button/Button";
+import { useNavigate } from "react-router-dom";
+import { paths } from "@/routes/paths";
 
 interface ProjectCardFooterProps {
   userName: string;
   userAvatar?: string;
+  id: string;
 }
 
 export function ProjectCardFooter({
   userName,
   userAvatar,
+  id,
 }: ProjectCardFooterProps) {
+  const navigate = useNavigate();
   return (
     <div className="flex items-center justify-between mt-auto pt-1">
       <div className="flex items-center gap-2">
@@ -33,6 +38,7 @@ export function ProjectCardFooter({
           variant="secondary"
           size="sm"
           className="h-8 px-3 text-xs bg-primary-50"
+          onClick={(e) => e.stopPropagation()}
         >
           Edit
         </Button>
@@ -40,6 +46,9 @@ export function ProjectCardFooter({
           variant="default"
           size="sm"
           className="h-8 px-3 text-xs shadow-sm shadow-primary-500/20"
+          onClick={(e) => {
+            (e.stopPropagation(), navigate(paths.app.projects.details(id)));
+          }}
         >
           View Details
         </Button>
