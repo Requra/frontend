@@ -17,6 +17,14 @@ const badgeVariants = cva(
           "bg-red-50 text-red-700 hover:bg-red-100",
         outline: "text-neutral-600 border border-neutral-200",
         solid: "bg-primary-600 text-white hover:bg-primary-700",
+        extracted:
+          "bg-cyan-50 text-cyan-700",
+        verified:
+          "bg-indigo-50 text-indigo-700",
+        flagged:
+          "bg-orange-50 text-orange-700",
+        warning:
+          "bg-red-50/60 text-red-600 border border-red-100",
       },
       size: {
         default: "px-2.5 py-0.5 text-xs",
