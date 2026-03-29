@@ -1,5 +1,5 @@
 import { UserStoriesHeader } from "./UserStoriesHeader";
-import { UserStoryCard } from "./UserStoryCard";
+import { UserStoryCard } from "./UserStoryCard/index";
 import { BacklogHealthCard } from "./BacklogHealthCard";
 import { MOCK_STORIES } from "./types";
 
