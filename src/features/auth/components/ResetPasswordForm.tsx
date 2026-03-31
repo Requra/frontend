@@ -46,7 +46,7 @@ export const ResetPasswordForm = ({ onSubmit, isLoading }: ResetPasswordFormProp
           size="default"
           isLoading={isLoading}
         >
-          <span className="relative z-10 w-full flex justify-center items-center">
+          <span className="relative z-10">
             {isLoading ? "Resetting..." : "Reset Password"}
           </span>
         </Button>

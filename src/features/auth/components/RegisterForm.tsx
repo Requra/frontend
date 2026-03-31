@@ -70,7 +70,7 @@ export const RegisterForm = ({ onSubmit, isLoading }: RegisterFormProps) => {
         size="default"
         isLoading={isLoading}
       >
-        <span className="relative z-10 w-full flex justify-center items-center">
+        <span className="relative z-10">
           {isLoading ? "Creating account..." : "Create Account"}
         </span>
       </Button>

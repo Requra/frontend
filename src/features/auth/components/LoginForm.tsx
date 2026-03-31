@@ -65,7 +65,7 @@ export const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
         size="default"
         isLoading={isLoading}
       >
-        <span className="relative z-10 w-full flex justify-center items-center">
+        <span className="relative z-10">
           {isLoading ? "Signing in..." : "Sign In"}
         </span>
       </Button>

@@ -8,6 +8,20 @@ export interface ApiLoginResponse {
   errors: string[];
 }
 
+export interface ApiRegisterResponse {
+  statusCode: number;
+  message: string;
+  data: any[];
+}
+
+export interface ApiConfirmResponse {
+  isSuccess: boolean;
+  data: string;
+  message: string;
+  statusCode: number;
+  errors: (string | null)[];
+}
+
 export interface LoginResponseData {
   userId: string | null;
   name: string | null;
