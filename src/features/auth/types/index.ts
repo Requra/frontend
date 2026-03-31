@@ -1,27 +1,33 @@
 import { z } from "zod";
 
-export type Role = "analyst" | "pm" | "stakeholder";
-export type Language = "en" | "ar";
+// ---------- API Response envelope ----------
+export interface ApiLoginResponse {
+  isSuccess: boolean;
+  data: LoginResponseData;
+  message: string;
+  statusCode: number;
+  errors: string[];
+}
 
+export interface LoginResponseData {
+  userId: string | null;
+  name: string | null;
+  isAuthenticated: boolean;
+  token: string | null;
+  refreshToken: string | null;
+  roles: string[];
+  profilePicture: string | null;
+}
+
+// ---------- Stored user (derived from a successful login) ----------
 export interface User {
-  id: string;
-  email: string;
-  password_hash: string;
-  full_name: string;
-  role: Role;
-  preferred_language: Language;
-  avatar_url: string | null;
-  is_active: boolean;
-  last_login_at: string;
-  created_at: string;
-  updated_at: string;
+  userId: string;
+  name: string;
+  roles: string[];
+  profilePicture: string | null;
 }
 
-export interface AuthResponse {
-  user: User;
-  token: string;
-}
-
+// ---------- Zod schemas & credential types ----------
 export const loginSchema = z.object({
   email: z.string().min(1, "Email is required").email("Please enter a valid work email address."),
   password: z.string().min(1, "Password is required"),
@@ -38,7 +44,7 @@ export const registerSchema = z
   })
   .refine((data) => data.password === data.confirm_password, {
     message: "Passwords do not match.",
-    path: ["confirm_password"], // Error path
+    path: ["confirm_password"],
   });
 
 export type RegisterCredentials = z.infer<typeof registerSchema>;

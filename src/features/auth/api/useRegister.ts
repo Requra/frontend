@@ -11,7 +11,11 @@ export const useRegister = () => {
     mutationFn: registerWithEmailAndPassword,
     onSuccess: (response) => {
       if (response.IsSuccess && response.Data) {
-        setAuth(response.Data.user, response.Data.token);
+        setAuth(
+          response.Data.user,
+          response.Data.token,
+          response.Data.refreshToken ?? ""
+        );
       }
     },
   });
