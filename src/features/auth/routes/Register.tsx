@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useRegister } from "../api/useRegister";
-import { type RegisterCredentials } from "../types";
+import { type RegisterCredentials } from "../schemas/registerSchema";
 import { paths } from "@/routes/paths";
 import { RegisterForm } from "../components/RegisterForm";
 

@@ -3,7 +3,7 @@ import { StatCard } from "../components/StatCard";
 import { RecentActions } from "../components/RecentActions";
 import { GeneratedVsApproved } from "../components/GeneratedVsApproved";
 import { ProjectsTable } from "../components/ProjectsTable";
-
+import { useAuthStore } from "@/stores/auth";
 
 const getFormattedDate = () => {
   const now = new Date();
@@ -16,7 +16,10 @@ const getFormattedDate = () => {
 };
 
 export const DashboardPage = () => {
+  const { user } = useAuthStore();
 
+  const name = user?.name || "User";
+  const firstName = name.split(" ")[0];
   return (
     <>
       {/* SVG Gradient Background - Dashboard only */}
@@ -56,7 +59,7 @@ export const DashboardPage = () => {
           {/* Header Title & Date */}
           <div className="text-white mb-2">
             <h1 className="text-4xl font-bold mb-3 tracking-tight drop-shadow-sm">
-              Welcome back, Hassan 👋
+              Welcome back, {firstName} 👋
             </h1>
             <div className="flex items-center gap-2 text-white/90 text-sm font-medium">
               <Calendar size={18} />

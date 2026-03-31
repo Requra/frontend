@@ -2,10 +2,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
 import { EyeIcon, MailIcon } from "lucide-react";
-import { loginSchema, type LoginCredentials } from "../types";
+import { loginSchema, type LoginCredentials } from "../schemas/loginSchema";
 import { Button } from "@/components/ui/Button/Button";
 import { Input } from "@/components/ui/Input/Input";
-import { Checkbox } from "@/components/ui/Checkbox/checkbox";
+import { Checkbox } from "@/components/ui/Checkbox/checkbox"; 
 import { paths } from "@/routes/paths";
 import BrandsButtons from "./BrandsButtons";
 
@@ -24,7 +24,7 @@ export const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
       <Input
         label="Work Email"
         type="email"

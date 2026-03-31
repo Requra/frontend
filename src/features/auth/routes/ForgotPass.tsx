@@ -8,11 +8,9 @@ import { ForgotPasswordForm } from "../components/ForgotPasswordForm";
 import { VerifyCodeForm } from "../components/VerifyCodeForm";
 import { ResetPasswordForm } from "../components/ResetPasswordForm";
 import { ResetSuccess } from "../components/ResetSuccess";
-import {
-  type ForgotPasswordCredentials,
-  type VerifyCodeCredentials,
-  type ResetPasswordCredentials,
-} from "../types";
+import { type ForgotPasswordCredentials } from "../schemas/forgotPasswordSchema";
+import { type VerifyCodeCredentials } from "../schemas/verifyCodeSchema";
+import { type ResetPasswordCredentials } from "../schemas/resetPasswordSchema";
 
 const ForgotPasswordPage = () => {
   const navigate = useNavigate();

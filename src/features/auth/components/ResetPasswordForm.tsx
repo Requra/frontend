@@ -3,10 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon } from "lucide-react";
 import { Button } from "@/components/ui/Button/Button";
 import { Input } from "@/components/ui/Input/Input";
-import {
-  resetPasswordSchema,
-  type ResetPasswordCredentials,
-} from "../types";
+import { resetPasswordSchema, type ResetPasswordCredentials } from "../schemas/resetPasswordSchema";
 
 export interface ResetPasswordFormProps {
   onSubmit: (data: ResetPasswordCredentials) => void;
