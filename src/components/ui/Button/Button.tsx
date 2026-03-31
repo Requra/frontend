@@ -66,7 +66,7 @@ function Button({
       data-variant={variant}
       data-size={size}
       disabled={isLoading || props.disabled}
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={`${cn(buttonVariants({ variant, size, className }))} flex items-center gap-2`}
       {...props}
     >
       {isLoading && <Spinner className="shrink-0 size-5" />}

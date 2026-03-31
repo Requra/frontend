@@ -55,7 +55,7 @@ export const VerifyCodeForm = ({ onSubmit, isLoading }: VerifyCodeFormProps) => 
         size="default"
         isLoading={isLoading}
       >
-        <span className="relative z-10 w-full flex justify-center items-center">
+        <span className="relative z-10">
           {isLoading ? "Verifying..." : "Verify Code"}
         </span>
       </Button>

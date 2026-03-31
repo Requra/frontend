@@ -38,10 +38,9 @@ export const ForgotPasswordForm = ({ onSubmit, isLoading }: ForgotPasswordFormPr
         size="default"
         isLoading={isLoading}
       >
-        <span className="relative z-10 w-full flex justify-center items-center">
+        <span className="relative z-10">
           {isLoading ? "Sending..." : "Send Code"}
-        </span>
-      </Button>
+        </span>      </Button>
 
       <div className="text-center text-sm text-neutral-600 mt-1">
         Remember your password?{" "}

@@ -1,8 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import { loginWithEmailAndPassword } from "./auth";
 import { useAuthStore } from "@/stores/auth";
-import type { LoginCredentials, ApiLoginResponse } from "../types";
+import type { ApiLoginResponse } from "../types";
 import type { AxiosError } from "axios";
+import type { LoginCredentials } from "../schemas/loginSchema";
 
 export const useLogin = () => {
   const setAuth = useAuthStore((state) => state.setAuth);
