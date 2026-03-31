@@ -1,8 +1,9 @@
 import { apiClient } from "@/services/api";
-import type { LoginCredentials, ApiLoginResponse } from "../types";
+import type { ApiLoginResponse } from "../types";
+import type { LoginCredentials } from "../schemas/loginSchema";
 
 export const loginWithEmailAndPassword = async (
-  data: LoginCredentials
+  data: LoginCredentials,
 ): Promise<ApiLoginResponse> => {
   const response = await apiClient.post<ApiLoginResponse>("/api/Auth/login", {
     email: data.email,
@@ -10,4 +11,8 @@ export const loginWithEmailAndPassword = async (
   });
 
   return response.data;
+};
+
+export const logoutUser = async (): Promise<void> => {
+  await apiClient.get("/api/Auth/logout");
 };

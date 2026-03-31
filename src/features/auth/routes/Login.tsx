@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useLogin } from "../api/useLogin";
-import { type LoginCredentials } from "../types";
+import { type LoginCredentials } from "../schemas/loginSchema";
 import { paths } from "@/routes/paths";
 import { LoginForm } from "../components/LoginForm";
 
@@ -21,9 +21,13 @@ export const LoginPage = () => {
         }
       },
       onError: (error) => {
-        // Axios error — the server returned a non-2xx status
-        const serverMessage = error.response?.data?.message;
-        toast.error(serverMessage || "An unexpected error occurred. Please try again.");
+        const serverData = error.response?.data;
+        // Prioritize specific validation error array if the backend provides it
+        if (serverData?.errors && serverData.errors.length > 0) {
+          toast.error(serverData.errors[0]);
+        } else {
+          toast.error(serverData?.message || "An unexpected error occurred. Please try again.");
+        }
       },
     });
   };

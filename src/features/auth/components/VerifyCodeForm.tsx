@@ -7,10 +7,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/Input/input-otp";
-import {
-  verifyCodeSchema,
-  type VerifyCodeCredentials,
-} from "../types";
+import { verifyCodeSchema, type VerifyCodeCredentials } from "../schemas/verifyCodeSchema";
 
 export interface VerifyCodeFormProps {
   onSubmit: (data: VerifyCodeCredentials) => void;

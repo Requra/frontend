@@ -5,10 +5,7 @@ import { MailIcon } from "lucide-react";
 import { paths } from "@/routes/paths";
 import { Button } from "@/components/ui/Button/Button";
 import { Input } from "@/components/ui/Input/Input";
-import {
-  forgotPasswordSchema,
-  type ForgotPasswordCredentials,
-} from "../types";
+import { forgotPasswordSchema, type ForgotPasswordCredentials } from "../schemas/forgotPasswordSchema";
 
 export interface ForgotPasswordFormProps {
   onSubmit: (data: ForgotPasswordCredentials) => void;
