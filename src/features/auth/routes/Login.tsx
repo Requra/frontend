@@ -12,15 +12,18 @@ export const LoginPage = () => {
   const onSubmit = (data: LoginCredentials) => {
     loginMutation.mutate(data, {
       onSuccess: (res) => {
-        if (res.IsSuccess) {
-          toast.success("Login successful!");
+        if (res.isSuccess && res.data.token) {
+          toast.success(res.message || "Login successful!");
           navigate(paths.app.dashboard);
         } else {
-          toast.error(res.Message || "Login failed");
+          // API returned 200 but isSuccess is false (e.g. invalid credentials)
+          toast.error(res.message || "Login failed");
         }
       },
-      onError: (err) => {
-        toast.error("An error occurred: " + err.message);
+      onError: (error) => {
+        // Axios error — the server returned a non-2xx status
+        const serverMessage = error.response?.data?.message;
+        toast.error(serverMessage || "An unexpected error occurred. Please try again.");
       },
     });
   };
