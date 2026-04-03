@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import { MainLayout } from "@/layouts/MainLayout";
 import { AuthLayout } from "@/layouts/AuthLayout";
 import { DashboardLayout } from "@/layouts/DashboardLayout";

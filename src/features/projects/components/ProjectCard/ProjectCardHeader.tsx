@@ -32,7 +32,10 @@ export function ProjectCardHeader({ status }: ProjectCardHeaderProps) {
       >
         {statusLabels[status]}
       </span>
-      <div className="flex items-center gap-1 opacity-40 transition-opacity group-hover:opacity-100">
+      <div 
+        className="flex items-center gap-1 opacity-40 transition-opacity group-hover:opacity-100"
+        onClick={(e) => e.stopPropagation()}
+      >
         <Tooltip content="Quick Share" position="top">
           <Button
             variant="ghost-neutral"

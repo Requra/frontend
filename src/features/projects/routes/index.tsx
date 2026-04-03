@@ -12,6 +12,9 @@ const CreateProjectPage = React.lazy(() =>
 const AddSourcesPage = React.lazy(() =>
   import("./AddSourcesPage").then((m) => ({ default: m.AddSourcesPage })),
 );
+const ProjectDetailsPage = React.lazy(() =>
+  import("./ProjectDetailsPage").then((m) => ({ default: m.ProjectDetailsPage })),
+);
 
 export const projectsRoutes: AppRoute[] = [
   {
@@ -37,5 +40,9 @@ export const projectsRoutes: AppRoute[] = [
   {
     path: paths.app.projects.upload,
     element: <AddSourcesPage />,
+  },
+  {
+    path: paths.app.projects.detailsRoute,
+    element: <ProjectDetailsPage />,
   },
 ];

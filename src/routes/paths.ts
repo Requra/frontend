@@ -10,6 +10,8 @@ export const paths = {
     projects: {
       root: "/app/projects",
       upload: "/app/projects/upload",
+      detailsRoute: "/app/projects/:projectId",
+      details: (id: string) => `/app/projects/${id}`,
     },
     newProject: "/app/new-project",
     profile: "/app/profile",

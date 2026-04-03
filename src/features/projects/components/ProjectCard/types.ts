@@ -1,6 +1,7 @@
 export type ProjectStatus = "IN PROGRESS" | "FINISHED" | "DRAFT"
 
 export interface ProjectCardProps {
+  id: string
   status: ProjectStatus
   title: string
   description: string
