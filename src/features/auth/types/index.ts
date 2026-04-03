@@ -1,4 +1,3 @@
-
 // ---------- API Response envelope ----------
 export interface ApiLoginResponse {
   isSuccess: boolean;
@@ -15,6 +14,14 @@ export interface ApiRegisterResponse {
 }
 
 export interface ApiConfirmResponse {
+  isSuccess: boolean;
+  data: string;
+  message: string;
+  statusCode: number;
+  errors: (string | null)[];
+}
+
+export interface ApiForgotPasswordResponse {
   isSuccess: boolean;
   data: string;
   message: string;
@@ -39,4 +46,3 @@ export interface User {
   roles: string[];
   profilePicture: string | null;
 }
-
