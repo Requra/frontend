@@ -5,14 +5,20 @@ import { MailIcon } from "lucide-react";
 import { paths } from "@/routes/paths";
 import { Button } from "@/components/ui/Button/Button";
 import { Input } from "@/components/ui/Input/Input";
-import { forgotPasswordSchema, type ForgotPasswordCredentials } from "../schemas/forgotPasswordSchema";
+import {
+  forgotPasswordSchema,
+  type ForgotPasswordCredentials,
+} from "../schemas/forgotPasswordSchema";
 
 export interface ForgotPasswordFormProps {
   onSubmit: (data: ForgotPasswordCredentials) => void;
   isLoading: boolean;
 }
 
-export const ForgotPasswordForm = ({ onSubmit, isLoading }: ForgotPasswordFormProps) => {
+export const ForgotPasswordForm = ({
+  onSubmit,
+  isLoading,
+}: ForgotPasswordFormProps) => {
   const {
     register,
     handleSubmit,
@@ -40,7 +46,8 @@ export const ForgotPasswordForm = ({ onSubmit, isLoading }: ForgotPasswordFormPr
       >
         <span className="relative z-10">
           {isLoading ? "Sending..." : "Send Code"}
-        </span>      </Button>
+        </span>{" "}
+      </Button>
 
       <div className="text-center text-sm text-neutral-600 mt-1">
         Remember your password?{" "}
