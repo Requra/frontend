@@ -4,9 +4,13 @@ import type {
   ApiRegisterResponse,
   ApiConfirmResponse,
   ApiForgotPasswordResponse,
+  ApiVerifyOtpResponse,
+  ApiResetPasswordResponse,
+  ApiResendOtpResponse,
 } from "../types";
 import type { LoginCredentials } from "../schemas/loginSchema";
 import type { RegisterCredentials } from "../schemas/registerSchema";
+import type { ResetPasswordCredentials } from "../schemas/resetPasswordSchema";
 
 export const loginWithEmailAndPassword = async (
   data: LoginCredentials,
@@ -39,12 +43,13 @@ export const confirmAccount = async (
   email: string,
   otpCode: string,
 ): Promise<ApiConfirmResponse> => {
-  const url = "http://127.0.0.1:3658/m2/1212435-1208182-default/31810759";
-
-  const response = await apiClient.post<ApiConfirmResponse>(url, {
-    email,
-    otpCode,
-  });
+  const response = await apiClient.post<ApiConfirmResponse>(
+    "/api/Auth/confirm-account",
+    {
+      email,
+      otpCode,
+    },
+  );
 
   return response.data;
 };
@@ -52,14 +57,46 @@ export const confirmAccount = async (
 export const forgotPassword = async (
   email: string,
 ): Promise<ApiForgotPasswordResponse> => {
-  const url = "http://127.0.0.1:3658/m2/1212435-1208182-default/31811176";
-  const response = await apiClient.post<ApiForgotPasswordResponse>(url, {
+  const response = await apiClient.post<ApiForgotPasswordResponse>("/api/Auth/password/forgot", {
     email,
   });
 
   return response.data;
 };
 
+export const verifyForgotPasswordOtp = async (
+  otp: string,
+): Promise<ApiVerifyOtpResponse> => {
+  const response = await apiClient.post<ApiVerifyOtpResponse>("/api/Auth/password/verifyotp", {
+    otp,
+  });
+
+  return response.data;
+};
+
+export const resetPassword = async (
+  data: ResetPasswordCredentials,
+): Promise<ApiResetPasswordResponse> => {
+  const response = await apiClient.post<ApiResetPasswordResponse>("/api/Auth/password/reset", {
+    newPassword: data.password,
+    confirmPassword: data.confirm_password,
+  });
+
+  return response.data;
+};
+
+export const resendOtp = async (
+  email: string,
+  otpType: number,
+): Promise<ApiResendOtpResponse> => {
+  const response = await apiClient.post<ApiResendOtpResponse>("/api/Auth/otp/resend", {
+    email,
+    otpType,
+  });
+
+  return response.data;
+};
+
 export const logoutUser = async (): Promise<void> => {
-  await apiClient.get("/api/Auth/logout");
+  await apiClient.post("/api/Auth/logout");
 };

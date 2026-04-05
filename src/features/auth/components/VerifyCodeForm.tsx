@@ -1,6 +1,5 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/Button/Button";
 import {
   InputOTP,
@@ -12,9 +11,10 @@ import { verifyCodeSchema, type VerifyCodeCredentials } from "../schemas/verifyC
 export interface VerifyCodeFormProps {
   onSubmit: (data: VerifyCodeCredentials) => void;
   isLoading: boolean;
+  onResendCode?: () => void;
 }
 
-export const VerifyCodeForm = ({ onSubmit, isLoading }: VerifyCodeFormProps) => {
+export const VerifyCodeForm = ({ onSubmit, isLoading, onResendCode }: VerifyCodeFormProps) => {
   const {
     control,
     handleSubmit,
@@ -60,15 +60,15 @@ export const VerifyCodeForm = ({ onSubmit, isLoading }: VerifyCodeFormProps) => 
         </span>
       </Button>
 
-      <div className="text-sm text-neutral-600">
-        Didn't receive the email?{" "}
+      <div className="text-sm text-neutral-600 mt-2">
+        Didn't receive the code?{" "}
         <Button
           type="button"
           variant="link"
           className="text-primary-600 font-bold hover:underline p-0 h-auto"
-          onClick={() => toast.success("Reset link resent!")}
+          onClick={() => onResendCode?.()}
         >
-          resend the reset link.
+          Resend code.
         </Button>
       </div>
     </form>

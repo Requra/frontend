@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useRegister } from "../api/useRegister";
 import { useConfirmAccount } from "../api/useConfirmAccount";
+import { useResendOtp } from "../api/useResendOtp";
 import { type RegisterCredentials } from "../schemas/registerSchema";
 import { type VerifyCodeCredentials } from "../schemas/verifyCodeSchema";
 import { paths } from "@/routes/paths";
@@ -16,6 +17,13 @@ export const RegisterPage = () => {
   
   const registerMutation = useRegister();
   const confirmMutation = useConfirmAccount();
+  const resendOtpMutation = useResendOtp();
+
+  const handleResendCode = () => {
+    if (registeredEmail) {
+      resendOtpMutation.mutate({ email: registeredEmail, otpType: 0 });
+    }
+  };
 
   const onRegisterSubmit = (data: RegisterCredentials) => {
     registerMutation.mutate(data, {
@@ -84,7 +92,11 @@ export const RegisterPage = () => {
         {step === 1 ? (
           <RegisterForm onSubmit={onRegisterSubmit} isLoading={registerMutation.isPending} />
         ) : (
-          <VerifyCodeForm onSubmit={onVerifySubmit} isLoading={confirmMutation.isPending} />
+          <VerifyCodeForm 
+            onSubmit={onVerifySubmit} 
+            isLoading={confirmMutation.isPending} 
+            onResendCode={handleResendCode}
+          />
         )}
       </div>
     </div>

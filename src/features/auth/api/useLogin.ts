@@ -11,7 +11,7 @@ export const useLogin = () => {
   return useMutation<ApiLoginResponse, AxiosError<ApiLoginResponse>, LoginCredentials>({
     mutationFn: loginWithEmailAndPassword,
     onSuccess: (response) => {
-      if (response.isSuccess && response.data.token) {
+      if (response.isSuccess && response.data?.token) {
         setAuth(
           {
             userId: response.data.userId!,

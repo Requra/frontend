@@ -1,33 +1,19 @@
+import type { ApiResponse } from "@/types/api";
+
 // ---------- API Response envelope ----------
-export interface ApiLoginResponse {
-  isSuccess: boolean;
-  data: LoginResponseData;
-  message: string;
-  statusCode: number;
-  errors: string[];
-}
+export type ApiLoginResponse = ApiResponse<LoginResponseData>;
 
-export interface ApiRegisterResponse {
-  statusCode: number;
-  message: string;
-  data: any[];
-}
+export type ApiRegisterResponse = ApiResponse<unknown>;
 
-export interface ApiConfirmResponse {
-  isSuccess: boolean;
-  data: string;
-  message: string;
-  statusCode: number;
-  errors: (string | null)[];
-}
+export type ApiConfirmResponse = ApiResponse<string>;
 
-export interface ApiForgotPasswordResponse {
-  isSuccess: boolean;
-  data: string;
-  message: string;
-  statusCode: number;
-  errors: (string | null)[];
-}
+export type ApiForgotPasswordResponse = ApiResponse<boolean>;
+
+export type ApiVerifyOtpResponse = ApiResponse<boolean>;
+
+export type ApiResetPasswordResponse = ApiResponse<boolean>;
+
+export type ApiResendOtpResponse = ApiResponse<boolean>;
 
 export interface LoginResponseData {
   userId: string | null;

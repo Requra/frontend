@@ -11,34 +11,52 @@ import { ResetSuccess } from "../components/ResetSuccess";
 import { type ForgotPasswordCredentials } from "../schemas/forgotPasswordSchema";
 import { type VerifyCodeCredentials } from "../schemas/verifyCodeSchema";
 import { type ResetPasswordCredentials } from "../schemas/resetPasswordSchema";
+import {
+  useForgotPassword,
+  useVerifyForgotPasswordOtp,
+  useResetPassword,
+  useResendOtp,
+} from "../api";
 
 const ForgotPasswordPage = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState("");
 
-  const onEmailSubmit = (_data: ForgotPasswordCredentials) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setStep(2);
-      setIsLoading(false);
-    }, 1000);
+  const forgotPassword = useForgotPassword();
+  const verifyOtp = useVerifyForgotPasswordOtp();
+  const resetPassword = useResetPassword();
+  const resendOtp = useResendOtp();
+
+  const onEmailSubmit = (data: ForgotPasswordCredentials) => {
+    setEmail(data.email);
+    forgotPassword.mutate(data.email, {
+      onSuccess: (res) => {
+        if (res.isSuccess) setStep(2);
+      },
+    });
   };
 
-  const onCodeSubmit = (_data: VerifyCodeCredentials) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setStep(3);
-      setIsLoading(false);
-    }, 1000);
+  const onCodeSubmit = (data: VerifyCodeCredentials) => {
+    verifyOtp.mutate(data.code, {
+      onSuccess: (res) => {
+        if (res.isSuccess) setStep(3);
+      },
+    });
   };
 
-  const onResetSubmit = (_data: ResetPasswordCredentials) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setStep(4);
-      setIsLoading(false);
-    }, 1000);
+  const onResetSubmit = (data: ResetPasswordCredentials) => {
+    resetPassword.mutate(data, {
+      onSuccess: (res) => {
+        if (res.isSuccess) setStep(4);
+      },
+    });
+  };
+
+  const handleResendCode = () => {
+    if (email) {
+      resendOtp.mutate({ email, otpType: 1 });
+    }
   };
 
   // STEP 1: SPLIT SCREEN LAYOUT
@@ -73,7 +91,7 @@ const ForgotPasswordPage = () => {
                   </p>
                 </div>
 
-                <ForgotPasswordForm onSubmit={onEmailSubmit} isLoading={isLoading} />
+                <ForgotPasswordForm onSubmit={onEmailSubmit} isLoading={forgotPassword.isPending} />
               </div>
             </div>
           </div>
@@ -98,7 +116,11 @@ const ForgotPasswordPage = () => {
                 We sent a verification code to your email. Enter the code below
                 to continue.
               </p>
-              <VerifyCodeForm onSubmit={onCodeSubmit} isLoading={isLoading} />
+              <VerifyCodeForm 
+                onSubmit={onCodeSubmit} 
+                isLoading={verifyOtp.isPending}
+                onResendCode={handleResendCode}
+              />
             </>
           )}
 
@@ -107,7 +129,7 @@ const ForgotPasswordPage = () => {
               <h1 className="text-3xl lg:text-4xl font-bold text-gradient-primary mb-8 text-center">
                 Create a new password
               </h1>
-              <ResetPasswordForm onSubmit={onResetSubmit} isLoading={isLoading} />
+              <ResetPasswordForm onSubmit={onResetSubmit} isLoading={resetPassword.isPending} />
             </div>
           )}
 

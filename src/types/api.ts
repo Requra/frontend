@@ -1,7 +1,7 @@
 export type ApiResponse<T> = {
-  IsSuccess: boolean;
-  Data: T | null;
-  Message: string;
-  StatusCode: number;
-  Errors: string[] | null;
+  isSuccess: boolean;
+  data: T | null;
+  message: string;
+  statusCode: number;
+  errors: string[] | null;
 };
