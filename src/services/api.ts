@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useAuthStore } from "@/stores/auth";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:3658/m1/1212435-1208182-default";
+const API_BASE_URL =
+  import.meta.env.API_DOG_URL ||
+  "http://127.0.0.1:3658/m1/1212435-1208182-default";
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -38,7 +40,7 @@ apiClient.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // ---------------------------------------------------------------------------
@@ -75,17 +77,22 @@ apiClient.interceptors.response.use(
 
       try {
         // Use a clean axios instance to avoid circular interceptors
-        const response = await axios.post(`${API_BASE_URL}/api/Auth/token/refresh`, {
-          refreshToken: currentRefreshToken,
-        });
+        const response = await axios.post(
+          `${API_BASE_URL}/api/Auth/token/refresh`,
+          {
+            refreshToken: currentRefreshToken,
+          },
+        );
 
         const resData = response.data;
         const token = resData?.data?.token || resData?.token;
-        const newRefreshToken = resData?.data?.refreshToken || resData?.refreshToken;
+        const newRefreshToken =
+          resData?.data?.refreshToken || resData?.refreshToken;
 
         if (token && newRefreshToken) {
           useAuthStore.getState().setTokens(token, newRefreshToken);
-          apiClient.defaults.headers.common["Authorization"] = "Bearer " + token;
+          apiClient.defaults.headers.common["Authorization"] =
+            "Bearer " + token;
           originalRequest.headers.Authorization = "Bearer " + token;
           processQueue(null, token);
           return apiClient(originalRequest);
@@ -102,5 +109,5 @@ apiClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
