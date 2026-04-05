@@ -11,18 +11,14 @@ const REFRESH_COOKIE = "refresh_token";
 // State shape
 // ---------------------------------------------------------------------------
 interface AuthState {
-  // --- persisted in localStorage (safe, non-sensitive profile data) ---
   user: User | null;
   isAuthenticated: boolean;
 
-  // --- persisted in cookies (will move to HttpOnly backend cookies later) ---
   token: string | null;
   refreshToken: string | null;
 
-  // --- hydration flag ---
   _hasHydrated: boolean;
 
-  // --- actions ---
   setAuth: (user: User, token: string, refreshToken: string) => void;
   setTokens: (token: string, refreshToken: string) => void;
   logout: () => void;

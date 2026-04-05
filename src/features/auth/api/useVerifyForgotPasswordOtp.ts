@@ -3,6 +3,7 @@ import { verifyForgotPasswordOtp } from "./auth";
 import type { ApiVerifyOtpResponse } from "../types";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
+import { handleApiError } from "@/utils/errorHelpers";
 
 export const useVerifyForgotPasswordOtp = () => {
   return useMutation<ApiVerifyOtpResponse, AxiosError<ApiVerifyOtpResponse>, string>({
@@ -11,11 +12,11 @@ export const useVerifyForgotPasswordOtp = () => {
       if (response.isSuccess) {
         toast.success(response.message);
       } else {
-        toast.error(response.message);
+        toast.error(response.errors?.[0] || response.message || "Verification failed.");
       }
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || "Invalid OTP code");
+      toast.error(handleApiError(error));
     },
   });
 };

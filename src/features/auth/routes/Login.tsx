@@ -12,21 +12,12 @@ export const LoginPage = () => {
   const onSubmit = (data: LoginCredentials) => {
     loginMutation.mutate(data, {
       onSuccess: (res) => {
-        if (res.isSuccess && res.data.token) {
+        if (res.isSuccess && res.data?.token) {
           toast.success(res.message || "Login successful!");
           navigate(paths.app.dashboard);
         } else {
           // API returned 200 but isSuccess is false (e.g. invalid credentials)
           toast.error(res.message || "Login failed");
-        }
-      },
-      onError: (error) => {
-        const serverData = error.response?.data;
-        // Prioritize specific validation error array if the backend provides it
-        if (serverData?.errors && serverData.errors.length > 0) {
-          toast.error(serverData.errors[0]);
-        } else {
-          toast.error(serverData?.message || "An unexpected error occurred. Please try again.");
         }
       },
     });

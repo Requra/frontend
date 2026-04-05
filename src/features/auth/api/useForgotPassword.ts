@@ -3,6 +3,7 @@ import { forgotPassword } from "./auth";
 import type { ApiForgotPasswordResponse } from "../types";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
+import { handleApiError } from "@/utils/errorHelpers";
 
 export const useForgotPassword = () => {
   return useMutation<
@@ -15,11 +16,11 @@ export const useForgotPassword = () => {
       if (response.isSuccess) {
         toast.success(response.message);
       } else {
-        toast.error(response.message);
+        toast.error(response.errors?.[0] || response.message || "Failed to initiate password reset.");
       }
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(handleApiError(error));
     },
   });
 };

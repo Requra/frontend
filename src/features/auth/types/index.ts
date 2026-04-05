@@ -3,7 +3,7 @@ import type { ApiResponse } from "@/types/api";
 // ---------- API Response envelope ----------
 export type ApiLoginResponse = ApiResponse<LoginResponseData>;
 
-export type ApiRegisterResponse = ApiResponse<unknown>;
+export type ApiRegisterResponse = ApiResponse<string>;
 
 export type ApiConfirmResponse = ApiResponse<string>;
 
@@ -14,6 +14,8 @@ export type ApiVerifyOtpResponse = ApiResponse<boolean>;
 export type ApiResetPasswordResponse = ApiResponse<boolean>;
 
 export type ApiResendOtpResponse = ApiResponse<boolean>;
+
+export type ApiRefreshTokenResponse = ApiResponse<LoginResponseData>;
 
 export interface LoginResponseData {
   userId: string | null;

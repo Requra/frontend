@@ -32,14 +32,6 @@ export const RegisterPage = () => {
         setRegisteredEmail(data.email);
         setStep(2);
       },
-      onError: (err: any) => {
-        const serverData = err.response?.data;
-        if (serverData?.errors && serverData.errors.length > 0) {
-          toast.error(serverData.errors[0]);
-        } else {
-          toast.error(serverData?.message || "An unexpected error occurred. Please try again.");
-        }
-      },
     });
   };
 
@@ -55,10 +47,6 @@ export const RegisterPage = () => {
         onSuccess: () => {
           toast.success("Account Confirmed Successfully! Please log in.");
           navigate(paths.auth.login);
-        },
-        onError: (err: any) => {
-          const serverData = err.response?.data;
-          toast.error(serverData?.message || "Invalid or expired verification code.");
         },
       }
     );

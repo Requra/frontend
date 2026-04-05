@@ -4,6 +4,7 @@ import type { ApiResetPasswordResponse } from "../types";
 import type { ResetPasswordCredentials } from "../schemas/resetPasswordSchema";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
+import { handleApiError } from "@/utils/errorHelpers";
 
 export const useResetPassword = () => {
   return useMutation<ApiResetPasswordResponse, AxiosError<ApiResetPasswordResponse>, ResetPasswordCredentials>({
@@ -12,11 +13,11 @@ export const useResetPassword = () => {
       if (response.isSuccess) {
         toast.success(response.message);
       } else {
-        toast.error(response.message);
+        toast.error(response.errors?.[0] || response.message || "Failed to reset password.");
       }
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || "Something went wrong resetting password");
+      toast.error(handleApiError(error));
     },
   });
 };

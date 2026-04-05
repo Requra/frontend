@@ -3,6 +3,7 @@ import { resendOtp } from "./auth";
 import type { ApiResendOtpResponse } from "../types";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
+import { handleApiError } from "@/utils/errorHelpers";
 
 interface ResendOtpParams {
   email: string;
@@ -16,11 +17,11 @@ export const useResendOtp = () => {
       if (response.isSuccess) {
         toast.success(response.message);
       } else {
-        toast.error(response.message);
+        toast.error(response.errors?.[0] || response.message || "Failed to resend OTP.");
       }
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || "Failed to resend OTP");
+      toast.error(handleApiError(error));
     },
   });
 };

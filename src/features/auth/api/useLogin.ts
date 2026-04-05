@@ -4,6 +4,8 @@ import { useAuthStore } from "@/stores/auth";
 import type { ApiLoginResponse } from "../types";
 import type { AxiosError } from "axios";
 import type { LoginCredentials } from "../schemas/loginSchema";
+import { toast } from "sonner";
+import { handleApiError } from "@/utils/errorHelpers";
 
 export const useLogin = () => {
   const setAuth = useAuthStore((state) => state.setAuth);
@@ -23,6 +25,9 @@ export const useLogin = () => {
           response.data.refreshToken!
         );
       }
+    },
+    onError: (error) => {
+      toast.error(handleApiError(error));
     },
   });
 };
