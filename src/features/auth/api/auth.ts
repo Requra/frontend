@@ -1,108 +1,102 @@
-import type { ApiResponse } from "@/types/api";
-import type { AuthResponse, LoginCredentials, RegisterCredentials, User } from "../types";
-import { mockUsers } from "./mockAuthDb";
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+import { apiClient } from "@/services/api";
+import type {
+  ApiLoginResponse,
+  ApiRegisterResponse,
+  ApiConfirmResponse,
+  ApiForgotPasswordResponse,
+  ApiVerifyOtpResponse,
+  ApiResetPasswordResponse,
+  ApiResendOtpResponse,
+} from "../types";
+import type { LoginCredentials } from "../schemas/loginSchema";
+import type { RegisterCredentials } from "../schemas/registerSchema";
+import type { ResetPasswordCredentials } from "../schemas/resetPasswordSchema";
 
 export const loginWithEmailAndPassword = async (
-  data: LoginCredentials
-): Promise<ApiResponse<AuthResponse>> => {
-  await delay(1000);
-
-  const user = mockUsers.find((u) => u.email === data.email);
-
-  // In a real app, password verification happens on the backend
-  if (!user || data.password !== "password") { 
-    return {
-      IsSuccess: false,
-      Data: null,
-      Message: "Invalid email or password",
-      StatusCode: 401,
-      Errors: ["Invalid credentials"],
-    };
-  }
-
-  const token = "mock_jwt_token_" + Math.random().toString(36).substring(7);
-
-  return {
-    IsSuccess: true,
-    Data: {
-      user,
-      token,
-    },
-    Message: "Login successful",
-    StatusCode: 200,
-    Errors: null,
-  };
-};
-
-export const registerWithEmailAndPassword = async (
-  data: RegisterCredentials
-): Promise<ApiResponse<AuthResponse>> => {
-  await delay(1000);
-
-  const existingUser = mockUsers.find((u) => u.email === data.email);
-  if (existingUser) {
-    return {
-      IsSuccess: false,
-      Data: null,
-      Message: "Registration failed",
-      StatusCode: 400,
-      Errors: ["Email already exists"],
-    };
-  }
-
-  const newUser: User = {
-    id: "uuid-" + Math.random().toString(36).substring(7),
+  data: LoginCredentials,
+): Promise<ApiLoginResponse> => {
+  const response = await apiClient.post<ApiLoginResponse>("/api/Auth/login", {
     email: data.email,
-    password_hash: "mock_hash", // Fake hash
-    full_name: data.full_name,
-    role: "analyst", // Default role
-    preferred_language: "en",
-    avatar_url: null,
-    is_active: true,
-    last_login_at: new Date().toISOString(),
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  };
+    password: data.password,
+  });
 
-  mockUsers.push(newUser);
-
-  const token = "mock_jwt_token_" + Math.random().toString(36).substring(7);
-
-  return {
-    IsSuccess: true,
-    Data: {
-      user: newUser,
-      token,
-    },
-    Message: "Registration successful",
-    StatusCode: 201,
-    Errors: null,
-  };
+  return response.data;
 };
 
-export const getUser = async (): Promise<ApiResponse<User>> => {
-  await delay(500);
-  
-  // Pretend we verify token from localStorage and get the user
-  const token = localStorage.getItem("auth_token_mock");
-  if (!token) {
-     return {
-        IsSuccess: false,
-        Data: null,
-        Message: "Unauthorized",
-        StatusCode: 401,
-        Errors: null,
-    };
-  }
+export const registerUser = async (
+  data: RegisterCredentials,
+): Promise<ApiRegisterResponse> => {
+  const response = await apiClient.post<ApiRegisterResponse>(
+    "/api/Auth/register",
+    {
+      fullName: data.full_name,
+      email: data.email,
+      password: data.password,
+      confirmPassword: data.confirm_password,
+    },
+  );
 
-  // Fallback to first user for mock auth persistence
-  return {
-    IsSuccess: true,
-    Data: mockUsers[0],
-    Message: "User fetched",
-    StatusCode: 200,
-    Errors: null,
-  };
+  return response.data;
+};
+
+export const confirmAccount = async (
+  email: string,
+  otpCode: string,
+): Promise<ApiConfirmResponse> => {
+  const response = await apiClient.post<ApiConfirmResponse>(
+    "/api/Auth/confirm-account",
+    {
+      email,
+      otpCode,
+    },
+  );
+
+  return response.data;
+};
+
+export const forgotPassword = async (
+  email: string,
+): Promise<ApiForgotPasswordResponse> => {
+  const response = await apiClient.post<ApiForgotPasswordResponse>("/api/Auth/password/forgot", {
+    email,
+  });
+
+  return response.data;
+};
+
+export const verifyForgotPasswordOtp = async (
+  otp: string,
+): Promise<ApiVerifyOtpResponse> => {
+  const response = await apiClient.post<ApiVerifyOtpResponse>("/api/Auth/password/verifyotp", {
+    otp,
+  });
+
+  return response.data;
+};
+
+export const resetPassword = async (
+  data: ResetPasswordCredentials,
+): Promise<ApiResetPasswordResponse> => {
+  const response = await apiClient.post<ApiResetPasswordResponse>("/api/Auth/password/reset", {
+    newPassword: data.password,
+    confirmPassword: data.confirm_password,
+  });
+
+  return response.data;
+};
+
+export const resendOtp = async (
+  email: string,
+  otpType: number,
+): Promise<ApiResendOtpResponse> => {
+  const response = await apiClient.post<ApiResendOtpResponse>("/api/Auth/otp/resend", {
+    email,
+    otpType,
+  });
+
+  return response.data;
+};
+
+export const logoutUser = async (): Promise<void> => {
+  await apiClient.post("/api/Auth/logout");
 };

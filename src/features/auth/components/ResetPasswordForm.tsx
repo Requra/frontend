@@ -3,10 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon } from "lucide-react";
 import { Button } from "@/components/ui/Button/Button";
 import { Input } from "@/components/ui/Input/Input";
-import {
-  resetPasswordSchema,
-  type ResetPasswordCredentials,
-} from "../types";
+import { resetPasswordSchema, type ResetPasswordCredentials } from "../schemas/resetPasswordSchema";
 
 export interface ResetPasswordFormProps {
   onSubmit: (data: ResetPasswordCredentials) => void;
@@ -49,7 +46,7 @@ export const ResetPasswordForm = ({ onSubmit, isLoading }: ResetPasswordFormProp
           size="default"
           isLoading={isLoading}
         >
-          <span className="relative z-10 w-full flex justify-center items-center">
+          <span className="relative z-10">
             {isLoading ? "Resetting..." : "Reset Password"}
           </span>
         </Button>

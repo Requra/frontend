@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
 import { EyeIcon, MailIcon, UserIcon } from "lucide-react";
-import { registerSchema, type RegisterCredentials } from "../types";
+import { registerSchema, type RegisterCredentials } from "../schemas/registerSchema";
 import { Button } from "@/components/ui/Button/Button";
 import { Input } from "@/components/ui/Input/Input";
 import { paths } from "@/routes/paths";
@@ -70,7 +70,7 @@ export const RegisterForm = ({ onSubmit, isLoading }: RegisterFormProps) => {
         size="default"
         isLoading={isLoading}
       >
-        <span className="relative z-10 w-full flex justify-center items-center">
+        <span className="relative z-10">
           {isLoading ? "Creating account..." : "Create Account"}
         </span>
       </Button>
