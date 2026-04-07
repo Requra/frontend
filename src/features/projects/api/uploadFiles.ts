@@ -1,6 +1,6 @@
+import { apiClient } from "@/services/api";
+import type { ApiResponse } from "@/types/api";
 import { ALLOWED_EXTENSIONS, MAX_FILE_SIZE } from "../constants";
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export interface UploadedFile {
   id: string;
@@ -13,6 +13,9 @@ export interface UploadedFile {
   errorMessage?: string;
 }
 
+/**
+ * Validates a file for size and extension.
+ */
 export function validateFile(file: File): { valid: boolean; error?: string } {
   const extension = file.name.split(".").pop()?.toLowerCase() || "";
 
@@ -33,21 +36,51 @@ export function validateFile(file: File): { valid: boolean; error?: string } {
   return { valid: true };
 }
 
+/**
+ * Service to upload a file to a specific project.
+ * Senior Practice: Using FormData and Axios onUploadProgress for real status feedback.
+ */
 export async function uploadFileApi(
-  _file: File,
+  file: File,
+  projectId: string,
   onProgress: (progress: number) => void,
-): Promise<{ success: boolean; error?: string }> {
-  // Simulate upload progress in chunks
-  const totalSteps = 10;
-  for (let i = 1; i <= totalSteps; i++) {
-    await delay(150 + Math.random() * 200);
-    onProgress(Math.round((i / totalSteps) * 100));
-  }
+): Promise<{ success: boolean; data?: any; error?: string }> {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("project_id", projectId);
+    formData.append("title", file.name);
+    // Assuming 'type' is needed based on OAS (0 for now as placeholder)
+    formData.append("type", "0");
 
-  // 5% chance of simulated server error
-  if (Math.random() < 0.05) {
-    return { success: false, error: "Upload failed. Please try again." };
-  }
+    const response = await apiClient.post<ApiResponse<any>>(
+      "/api/documents",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.total) {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            onProgress(percentCompleted);
+          }
+        },
+      }
+    );
 
-  return { success: true };
+    if (!response.data.isSuccess) {
+      return { success: false, error: response.data.message || "Upload failed" };
+    }
+
+    return { success: true, data: response.data.data };
+  } catch (error: any) {
+    console.error("Upload Error:", error);
+    return { 
+      success: false, 
+      error: error?.response?.data?.message || "An unexpected error occurred during upload." 
+    };
+  }
 }

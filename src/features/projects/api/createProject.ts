@@ -1,37 +1,32 @@
+import { apiClient } from "@/services/api";
+import type { ApiResponse } from "@/types/api";
+import type { ApiProject } from "../types";
 import type { CreateProjectFormData } from "../schemas/createProjectSchema";
 
-// Simulates network latency
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-export interface ProjectResponse {
-  id: string;
-  projectName: string;
-  clientName: string;
-  projectType: string;
-  description?: string;
-  teamMembers: string[];
-  createdAt: string;
-}
-
+/**
+ * Service to create a new project.
+ * Senior Practice: Explicit mapping from Form Data to API DTO.
+ */
 export async function createProjectApi(
-  data: CreateProjectFormData
-): Promise<ProjectResponse> {
-  // Simulate network delay
-  await delay(1500);
+  formData: CreateProjectFormData
+): Promise<ApiProject> {
+  // Map form data to backend-expected structure
+  const requestBody = {
+    name: formData.projectName,
+    description: formData.description || "",
+    clientName: formData.clientName,
+    teamMembers: formData.teamMembers.map((email) => ({ email })),
+    // Note: status is likely set by backend to 'InProgress' by default
+  };
 
-  // Simulate random server error (10% chance)
-  if (Math.random() < 0.1) {
-    throw new Error("Server error: Unable to create project. Please try again.");
+  const response = await apiClient.post<ApiResponse<ApiProject>>(
+    "/api/projects",
+    requestBody
+  );
+
+  if (!response.data.isSuccess || !response.data.data) {
+    throw new Error(response.data.message || "Failed to create project");
   }
 
-  // Return mock response
-  return {
-    id: crypto.randomUUID(),
-    projectName: data.projectName,
-    clientName: data.clientName,
-    projectType: data.projectType,
-    description: data.description || undefined,
-    teamMembers: data.teamMembers || [],
-    createdAt: new Date().toISOString(),
-  };
+  return response.data.data;
 }
