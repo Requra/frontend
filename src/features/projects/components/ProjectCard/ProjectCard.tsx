@@ -31,7 +31,7 @@ export function ProjectCard({
       )}
       onClick={() => navigate(paths.app.projects.details(id))}
     >
-      <ProjectCardHeader status={status} />
+      <ProjectCardHeader status={status} projectId={id} />
       <ProjectCardBody name={name} description={description} searchQuery={searchQuery} />
       <ProjectCardProgress status={status} progress={progress} />
       <ProjectCardStats status={status} featuresCount={featuresCount} unsolvedComments={unsolvedComments} />

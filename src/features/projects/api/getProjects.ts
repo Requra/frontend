@@ -115,9 +115,7 @@ export async function getProjectsApi({
  */
 export async function getProjectByIdApi(id: string): Promise<Project> {
   try {
-    const response = await apiClient.get<ApiResponse<Project>>(`/api/projects`, {
-      params: { id },
-    });
+    const response = await apiClient.get<ApiResponse<Project>>(`/api/projects/${id}`);
 
     if (!response.data.isSuccess || !response.data.data) {
       const message = response.data.message || "Project not found";

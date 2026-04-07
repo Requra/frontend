@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ProjectStatus } from "../types/enums";
 
 export const projectTypes = [
   { value: "web", label: "Web Application" },
@@ -8,6 +9,13 @@ export const projectTypes = [
   { value: "saas", label: "SaaS Platform" },
   { value: "ecommerce", label: "E-commerce" },
   { value: "other", label: "Other" },
+] as const;
+
+export const statusOptions = [
+  { value: ProjectStatus.InProgress, label: "In Progress" },
+  { value: ProjectStatus.Drafted, label: "Draft" },
+  { value: ProjectStatus.Completed, label: "Completed" },
+  { value: ProjectStatus.Cancelled, label: "Cancelled" },
 ] as const;
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -25,6 +33,9 @@ export const createProjectSchema = z.object({
   projectType: z
     .string()
     .min(1, "Please select a project type"),
+  status: z
+    .preprocess((val) => (typeof val === "string" ? parseInt(val, 10) : val), z.nativeEnum(ProjectStatus))
+    .default(ProjectStatus.InProgress),
   description: z
     .string()
     .max(1000, "Description must be less than 1000 characters")

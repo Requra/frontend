@@ -38,7 +38,7 @@ export function ProjectCardFooter({
           variant="secondary"
           size="sm"
           className="h-8 px-3 text-xs bg-primary-50"
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) =>{ e.stopPropagation(), navigate(paths.app.projects.edit(id))}}
         >
           Edit
         </Button>

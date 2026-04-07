@@ -1,6 +1,8 @@
-import { MoreVertical, Share2, Trash2 } from "lucide-react";
+import { MoreVertical, Share2, Trash2, Edit } from "lucide-react";
 import { Button } from "@/components/ui/Button/Button";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
+import { paths } from "@/routes/paths";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,9 +15,12 @@ import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 
 interface ProjectCardHeaderProps {
   status: ProjectStatus;
+  projectId: string;
 }
 
-export function ProjectCardHeader({ status }: ProjectCardHeaderProps) {
+export function ProjectCardHeader({ status, projectId }: ProjectCardHeaderProps) {
+  const navigate = useNavigate();
+
   return (
     <div className="flex items-center justify-between">
       <span
@@ -50,12 +55,19 @@ export function ProjectCardHeader({ status }: ProjectCardHeaderProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[180px]">
+            <DropdownMenuItem 
+              className="text-neutral-600"
+              onClick={() => navigate(paths.app.projects.edit(projectId))}
+            >
+              <Edit size={14} className="mr-2" />
+              Edit project
+            </DropdownMenuItem>
             <DropdownMenuItem className="text-neutral-600">
-              <Share2 size={14} className="mr-1" />
+              <Share2 size={14} className="mr-2" />
               Share link
             </DropdownMenuItem>
             <DropdownMenuItem className="text-danger-600 focus:bg-danger-50 focus:text-danger-700">
-              <Trash2 size={14} className="mr-1" />
+              <Trash2 size={14} className="mr-2" />
               Delete project
             </DropdownMenuItem>
           </DropdownMenuContent>

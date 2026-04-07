@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ArrowRight, Save } from "lucide-react";
 
 import { Input } from "@/components/ui/Input/Input";
 import { Button } from "@/components/ui/Button/Button";
@@ -12,16 +14,19 @@ import {
   createProjectSchema,
   type CreateProjectFormData,
   projectTypes,
+  statusOptions,
   isValidEmail,
 } from "../schemas/createProjectSchema";
 
 interface ProjectDetailsFormProps {
+  initialData?: CreateProjectFormData;
   onSubmit: (data: CreateProjectFormData) => void;
   onCancel: () => void;
   isSubmitting: boolean;
 }
 
 export const ProjectDetailsForm = ({
+  initialData,
   onSubmit,
   onCancel,
   isSubmitting,
@@ -30,11 +35,12 @@ export const ProjectDetailsForm = ({
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<CreateProjectFormData>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(createProjectSchema) as any,
-    defaultValues: {
+    defaultValues: initialData || {
       projectName: "",
       clientName: "",
       projectType: "",
@@ -42,6 +48,15 @@ export const ProjectDetailsForm = ({
       teamMembers: [],
     },
   });
+
+  // Sync form with initialData when it changes (e.g., after fetching)
+  useEffect(() => {
+    if (initialData) {
+      reset(initialData);
+    }
+  }, [initialData, reset]);
+
+  const isEdit = !!initialData;
 
   return (
     <form
@@ -64,20 +79,38 @@ export const ProjectDetailsForm = ({
         />
       </div>
 
-      {/* Project Type */}
-      <Controller
-        name="projectType"
-        control={control}
-        render={({ field }) => (
-          <Select
-            label="Project Type"
-            placeholder="Select Type"
-            options={[...projectTypes]}
-            error={errors.projectType?.message}
-            {...field}
+      {/* Project Type & Status */}
+      <div className={cn("grid gap-6", isEdit ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1")}>
+        <Controller
+          name="projectType"
+          control={control}
+          render={({ field }) => (
+            <Select
+              label="Project Type"
+              placeholder="Select Type"
+              options={[...projectTypes]}
+              error={errors.projectType?.message}
+              {...field}
+            />
+          )}
+        />
+
+        {isEdit && (
+          <Controller
+            name="status"
+            control={control}
+            render={({ field }) => (
+              <Select
+                label="Project Status"
+                placeholder="Select Status"
+                options={[...statusOptions]}
+                error={errors.status?.message}
+                {...field}
+              />
+            )}
           />
         )}
-      />
+      </div>
 
       {/* Description */}
       <Textarea
@@ -115,8 +148,17 @@ export const ProjectDetailsForm = ({
           className="w-auto! px-6"
         >
           <span className="relative z-10 flex items-center gap-2">
-            Continue to Upload
-            <ArrowRight className="h-4 w-4" />
+            {isEdit ? (
+              <>
+                Save Changes
+                <Save className="h-4 w-4" />
+              </>
+            ) : (
+              <>
+                Continue to Upload
+                <ArrowRight className="h-4 w-4" />
+              </>
+            )}
           </span>
         </Button>
       </div>

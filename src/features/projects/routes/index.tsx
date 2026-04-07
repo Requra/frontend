@@ -15,6 +15,9 @@ const AddSourcesPage = React.lazy(() =>
 const ProjectDetailsPage = React.lazy(() =>
   import("./ProjectDetailsPage").then((m) => ({ default: m.ProjectDetailsPage })),
 );
+const EditProjectPage = React.lazy(() =>
+  import("./EditProjectPage").then((m) => ({ default: m.EditProjectPage })),
+);
 
 export const projectsRoutes: AppRoute[] = [
   {
@@ -44,5 +47,9 @@ export const projectsRoutes: AppRoute[] = [
   {
     path: paths.app.projects.detailsRoute,
     element: <ProjectDetailsPage />,
+  },
+  {
+    path: paths.app.projects.editRoute,
+    element: <EditProjectPage />,
   },
 ];

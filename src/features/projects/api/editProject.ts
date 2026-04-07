@@ -18,6 +18,7 @@ export async function editProjectApi(
     if (formData.projectName) requestBody.name = formData.projectName;
     if (formData.description !== undefined) requestBody.description = formData.description;
     if (formData.clientName) requestBody.clientName = formData.clientName;
+    if (formData.status !== undefined) requestBody.status = formData.status;
     if (formData.teamMembers) {
       requestBody.teamMembers = formData.teamMembers.map(email => ({ email }));
     }
