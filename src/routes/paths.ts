@@ -9,7 +9,8 @@ export const paths = {
     dashboard: "/app/dashboard",
     projects: {
       root: "/app/projects",
-      upload: "/app/projects/upload",
+      upload: "/app/projects/:projectId/upload",
+      uploadByProject: (id: string) => `/app/projects/${id}/upload`,
       detailsRoute: "/app/projects/:projectId",
       details: (id: string) => `/app/projects/${id}`,
     },

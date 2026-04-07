@@ -1,7 +1,7 @@
 import { apiClient } from "@/services/api";
 import { toast } from "sonner";
 import type { ApiResponse } from "@/types/api";
-import type { ApiProject } from "../types";
+import type { Project } from "../types";
 import type { CreateProjectFormData } from "../schemas/createProjectSchema";
 
 /**
@@ -11,7 +11,7 @@ import type { CreateProjectFormData } from "../schemas/createProjectSchema";
 export async function editProjectApi(
   id: string,
   formData: Partial<CreateProjectFormData>
-): Promise<ApiProject> {
+): Promise<Project> {
   try {
     // Map partial form data to backend update structure
     const requestBody: any = {};
@@ -22,7 +22,7 @@ export async function editProjectApi(
       requestBody.teamMembers = formData.teamMembers.map(email => ({ email }));
     }
 
-    const response = await apiClient.patch<ApiResponse<ApiProject>>(
+    const response = await apiClient.patch<ApiResponse<Project>>(
       "/api/projects",
       requestBody,
       { params: { id } }
@@ -34,7 +34,6 @@ export async function editProjectApi(
       throw new Error(message);
     }
 
-    toast.success("Project updated successfully");
     return response.data.data;
   } catch (error: any) {
     if (!error.message || error.message === "Failed to update project") {

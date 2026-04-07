@@ -20,8 +20,11 @@ export interface Project {
   description: string;
   status: ProjectStatus;
   clientName: string;
-  teamMembers: { email: string; role: ProjectRole }[];
+  teamMembers?: { email: string; role: ProjectRole }[]; // Made optional
   createdAt: string;
+  totalRequirements?: number;
+  totalUserStories?: number;
+  totalComments?: number;
   // UI-only derived fields (Optional)
   progress?: number;
   featuresCount?: number;

@@ -10,12 +10,11 @@ import type { Document } from "../types";
  */
 export async function getDocumentsApi(projectId: string): Promise<Document[]> {
   try {
-    const response = await apiClient.get<ApiResponse<Document[]>>("/", {
+    const response = await apiClient.get<ApiResponse<{ items: Document[]; totalCount: number }>>("/", {
       params: { project_id: projectId },
     });
 
     if (!response.data.isSuccess || !response.data.data) {
-      // If it's a 404 or empty list, return empty array safely
       if (response.data.statusCode === 404) return [];
       
       const message = response.data.message || "Failed to fetch documents";
@@ -23,7 +22,7 @@ export async function getDocumentsApi(projectId: string): Promise<Document[]> {
       throw new Error(message);
     }
 
-    return response.data.data;
+    return response.data.data.items || [];
   } catch (error: any) {
     if (!error.message || error.message === "Failed to fetch documents") {
       toast.error("Network error: Unable to load documents.");

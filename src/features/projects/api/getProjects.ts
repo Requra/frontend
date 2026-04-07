@@ -19,6 +19,23 @@ export interface GetProjectsResponse {
 }
 
 /**
+ * Normalizes backend statuses (string or number) to the frontend numeric enum.
+ * Handles common string mocks and returns InProgress (0) as fallback.
+ */
+function normalizeStatus(status: any): ProjectStatus {
+  if (typeof status === 'number') return status as ProjectStatus;
+  
+  // Minimal fallback for common enum string representations
+  const s = String(status).toLowerCase();
+  if (s.includes('progress')) return ProjectStatus.InProgress;
+  if (s.includes('completed')) return ProjectStatus.Completed;
+  if (s.includes('draft')) return ProjectStatus.Drafted;
+  if (s.includes('cancel')) return ProjectStatus.Cancelled;
+  
+  return ProjectStatus.InProgress;
+}
+
+/**
  * Fetches projects from the real API and handles local filtering/pagination 
  * if backend requirements aren't provided by the endpoint yet.
  * Senior Practice: Using direct API fields with UI-specific derivations.
@@ -26,12 +43,12 @@ export interface GetProjectsResponse {
 export async function getProjectsApi({
   page = 1,
   limit = 6,
-  status,
+  status: filterStatus,
   searchQuery = "",
 }: GetProjectsParams = {}): Promise<GetProjectsResponse> {
   try {
-    // Call real API: GET /api/projects (without ID to list all)
-    const response = await apiClient.get<ApiResponse<Project[]>>("/api/projects");
+    // Call real API: GET /api/projects
+    const response = await apiClient.get<ApiResponse<{ items: Project[]; totalCount: number }>>("/api/projects");
     
     if (!response.data.isSuccess || !response.data.data) {
       const message = response.data.message || "Failed to fetch projects";
@@ -39,18 +56,25 @@ export async function getProjectsApi({
       throw new Error(message);
     }
 
+    // Extract items from paginated response
+    const rawItems = response.data.data.items || [];
+
     // Direct usage of backend models with UI derivations
-    const allProjects = response.data.data.map(p => ({
-      ...p,
-      // Derived fields for UI components that aren't yet in the API
-      featuresCount: 0, 
-      unsolvedComments: 0,
-      progress: p.status === ProjectStatus.Completed ? 100 : 45,
-    }));
+    const allProjects = rawItems.map(p => {
+      const normalizedStatus = normalizeStatus(p.status);
+      return {
+        ...p,
+        status: normalizedStatus,
+        // Derived fields for UI components that aren't yet in the API
+        featuresCount: p.totalRequirements ?? p.totalUserStories ?? 0, 
+        unsolvedComments: p.totalComments ?? 0,
+        progress: normalizedStatus === ProjectStatus.Completed ? 100 : 45,
+      };
+    });
 
     // Apply filtering (Status & Search)
     const filtered = allProjects.filter((p) => {
-      const statusMatch = !status || p.status === status;
+      const statusMatch = !filterStatus || p.status === filterStatus;
       
       if (!statusMatch) return false;
 
@@ -102,11 +126,14 @@ export async function getProjectByIdApi(id: string): Promise<Project> {
     }
 
     const project = response.data.data;
+    const normalizedStatus = normalizeStatus(project.status);
+    
     return {
       ...project,
+      status: normalizedStatus,
       featuresCount: 0,
       unsolvedComments: 0,
-      progress: project.status === ProjectStatus.Completed ? 100 : 45,
+      progress: normalizedStatus === ProjectStatus.Completed ? 100 : 45,
     };
   } catch (error: any) {
     if (!error.message || error.message === "Project not found") {

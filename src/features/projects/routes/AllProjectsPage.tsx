@@ -23,6 +23,7 @@ import { TABS_CONFIG } from "../constants";
 import { ProjectStatus } from "../types/enums";
 import { useQuery } from "@tanstack/react-query";
 import { getProjectsApi } from "../api/getProjects";
+import type { Project } from "../types";
 import { ProjectCardSkeleton } from "../components/ProjectCardSkeleton";
 import { Pagination } from "@/components/ui/Pagination/Pagination";
 import { MOCK_PROJECTS } from "../constants";
@@ -202,7 +203,7 @@ export const AllProjectsPage = () => {
               // Data State + Pagination
               <div className="flex flex-col gap-8">
                 <div className={getGridClassname()}>
-                  {data?.data.map((project) => (
+                  {data?.data.map((project: Project) => (
                     <ProjectCard key={project.id} {...project} searchQuery={searchQuery} />
                   ))}
                   

@@ -1,7 +1,7 @@
 import { apiClient } from "@/services/api";
 import { toast } from "sonner";
 import type { ApiResponse } from "@/types/api";
-import type { ApiProject } from "../types";
+import type { Project } from "../types";
 import type { CreateProjectFormData } from "../schemas/createProjectSchema";
 
 /**
@@ -10,7 +10,7 @@ import type { CreateProjectFormData } from "../schemas/createProjectSchema";
  */
 export async function createProjectApi(
   formData: CreateProjectFormData
-): Promise<ApiProject> {
+): Promise<Project> {
   try {
     // Map form data to backend-expected structure
     const requestBody = {
@@ -21,7 +21,7 @@ export async function createProjectApi(
       // Note: status is likely set by backend to 'InProgress' by default
     };
 
-    const response = await apiClient.post<ApiResponse<ApiProject>>(
+    const response = await apiClient.post<ApiResponse<Project>>(
       "/api/projects",
       requestBody
     );
@@ -32,7 +32,6 @@ export async function createProjectApi(
       throw new Error(message);
     }
 
-    toast.success("Project created successfully");
     return response.data.data;
   } catch (error: any) {
     if (!error.message || error.message === "Failed to create project") {
