@@ -38,7 +38,10 @@ export function ProjectCardFooter({
           variant="secondary"
           size="sm"
           className="h-8 px-3 text-xs bg-primary-50"
-          onClick={(e) =>{ e.stopPropagation(), navigate(paths.app.projects.edit(id))}}
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(paths.app.projects.edit(id));
+          }}
         >
           Edit
         </Button>
@@ -47,11 +50,13 @@ export function ProjectCardFooter({
           size="sm"
           className="h-8 px-3 text-xs shadow-sm shadow-primary-500/20"
           onClick={(e) => {
-            (e.stopPropagation(), navigate(paths.app.projects.details(id)));
+            e.stopPropagation();
+            navigate(paths.app.projects.details(id));
           }}
         >
           View Details
         </Button>
+
       </div>
     </div>
   );

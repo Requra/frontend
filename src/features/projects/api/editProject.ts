@@ -29,6 +29,7 @@ export async function editProjectApi(
       { params: { id } }
     );
 
+
     if (!response.data.isSuccess || !response.data.data) {
       const message = response.data.message || "Failed to update project";
       toast.error(message);

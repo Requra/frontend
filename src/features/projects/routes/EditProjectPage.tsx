@@ -26,7 +26,7 @@ export const EditProjectPage = () => {
       toast.success("Project updated successfully");
       queryClient.invalidateQueries({ queryKey: ["projects"] });
       queryClient.invalidateQueries({ queryKey: ["project", projectId] });
-      navigate(paths.app.projects.details(projectId!));
+      navigate(paths.app.projects.root);
     },
     onError: (err: any) => {
       toast.error(err.message || "Failed to update project");

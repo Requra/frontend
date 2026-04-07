@@ -7,17 +7,37 @@ import {
   Clock,
   ChevronRight,
   Edit3,
+  Trash2,
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { paths } from "@/routes/paths";
 import { getProjectByIdApi } from "../../api/getProjects";
+import { deleteProjectApi } from "../../api/deleteProject";
 import { ProjectStatus } from "../../types/enums";
 import { STATUS_STYLES, STATUS_LABELS } from "../ProjectCard/types";
+import { useState } from "react";
+import { toast } from "sonner";
+import { ConfirmationModal } from "../ConfirmationModal";
 
 export const ProjectHeader = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { projectId } = useParams<{ projectId: string }>();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const { mutate: deleteProject, isPending: isDeleting } = useMutation({
+    mutationFn: deleteProjectApi,
+    onSuccess: () => {
+      toast.success("Project deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      navigate(paths.app.projects.root);
+    },
+    onError: (error: any) => {
+      toast.error(error?.message || "Failed to delete project");
+    },
+  });
+
 
   const { data: project } = useQuery({
     queryKey: ["project", projectId],
@@ -69,6 +89,15 @@ export const ProjectHeader = () => {
 
         <div className="flex items-center gap-2 shrink-0">
           <Button
+            variant="ghost-neutral"
+            className="h-10 px-4 rounded-xl text-danger-600 hover:bg-danger-50 hover:text-danger-700 font-semibold transition-all text-sm border-none shadow-none"
+            onClick={() => setIsDeleteModalOpen(true)}
+          >
+            <Trash2 className="mr-2 h-3.5 w-3.5" />
+            Delete Project
+          </Button>
+
+          <Button
             variant="outline"
             className="h-10 px-4 rounded-xl border-neutral-200 text-neutral-600 hover:bg-neutral-50 hover:border-neutral-300 shadow-sm font-semibold transition-all text-sm"
             onClick={() => navigate(paths.app.projects.edit(projectId!))}
@@ -92,6 +121,20 @@ export const ProjectHeader = () => {
           </Button>
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={() => deleteProject(projectId!)}
+        title="Delete Project?"
+        description={`Are you sure you want to delete "${projectName}"? This action cannot be undone and all associated requirements and stories will be lost.`}
+        confirmLabel="Delete Project"
+        cancelLabel="Keep Project"
+        variant="destructive"
+        icon={Trash2}
+        isLoading={isDeleting}
+      />
     </div>
   );
 };
+
