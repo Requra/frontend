@@ -1,4 +1,5 @@
 import { apiClient } from "@/services/api";
+import { toast } from "sonner";
 import type { ApiResponse } from "@/types/api";
 import type { ApiUserStory, UserStory } from "../types";
 
@@ -42,15 +43,25 @@ function transformUserStory(apiStory: ApiUserStory): UserStory {
  * Service to fetch all user stories associated with a project.
  */
 export async function getUserStoriesApi(projectId: string): Promise<UserStory[]> {
-  const response = await apiClient.get<ApiResponse<{ items: ApiUserStory[]; totalCount: number }>>(
-    "/api/results/userstories",
-    { params: { project_id: projectId } }
-  );
+  try {
+    const response = await apiClient.get<ApiResponse<{ items: ApiUserStory[]; totalCount: number }>>(
+      "/api/results/userstories",
+      { params: { project_id: projectId } }
+    );
 
-  if (!response.data.isSuccess || !response.data.data) {
-    if (response.data.statusCode === 404) return [];
-    throw new Error(response.data.message || "Failed to fetch user stories");
+    if (!response.data.isSuccess || !response.data.data) {
+      if (response.data.statusCode === 404) return [];
+      
+      const message = response.data.message || "Failed to fetch user stories";
+      toast.error(message);
+      throw new Error(message);
+    }
+
+    return response.data.data.items.map(transformUserStory);
+  } catch (error: any) {
+    if (!error.message || error.message === "Failed to fetch user stories") {
+      toast.error("Network error: Unable to load user stories.");
+    }
+    throw error;
   }
-
-  return response.data.data.items.map(transformUserStory);
 }

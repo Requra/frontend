@@ -1,4 +1,5 @@
 import { apiClient } from "@/services/api";
+import { toast } from "sonner";
 import type { ApiResponse } from "@/types/api";
 import type { ApiDocument, Document } from "../types";
 
@@ -21,15 +22,25 @@ function transformDocument(apiDoc: ApiDocument): Document {
  * Uses the root path GET /?project_id=... as defined in OAS.
  */
 export async function getDocumentsApi(projectId: string): Promise<Document[]> {
-  const response = await apiClient.get<ApiResponse<ApiDocument[]>>("/", {
-    params: { project_id: projectId },
-  });
+  try {
+    const response = await apiClient.get<ApiResponse<ApiDocument[]>>("/", {
+      params: { project_id: projectId },
+    });
 
-  if (!response.data.isSuccess || !response.data.data) {
-    // If it's a 404 or empty list, return empty array safely
-    if (response.data.statusCode === 404) return [];
-    throw new Error(response.data.message || "Failed to fetch documents");
+    if (!response.data.isSuccess || !response.data.data) {
+      // If it's a 404 or empty list, return empty array safely
+      if (response.data.statusCode === 404) return [];
+      
+      const message = response.data.message || "Failed to fetch documents";
+      toast.error(message);
+      throw new Error(message);
+    }
+
+    return response.data.data.map(transformDocument);
+  } catch (error: any) {
+    if (!error.message || error.message === "Failed to fetch documents") {
+      toast.error("Network error: Unable to load documents.");
+    }
+    throw error;
   }
-
-  return response.data.data.map(transformDocument);
 }

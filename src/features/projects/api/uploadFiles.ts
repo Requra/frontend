@@ -1,4 +1,5 @@
 import { apiClient } from "@/services/api";
+import { toast } from "sonner";
 import type { ApiResponse } from "@/types/api";
 import { ALLOWED_EXTENSIONS, MAX_FILE_SIZE } from "../constants";
 
@@ -72,15 +73,19 @@ export async function uploadFileApi(
     );
 
     if (!response.data.isSuccess) {
-      return { success: false, error: response.data.message || "Upload failed" };
+      const message = response.data.message || "Upload failed";
+      toast.error(message);
+      return { success: false, error: message };
     }
 
     return { success: true, data: response.data.data };
   } catch (error: any) {
     console.error("Upload Error:", error);
+    const message = error?.response?.data?.message || "An unexpected error occurred during upload.";
+    toast.error(message);
     return { 
       success: false, 
-      error: error?.response?.data?.message || "An unexpected error occurred during upload." 
+      error: message 
     };
   }
 }

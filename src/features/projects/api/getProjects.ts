@@ -1,4 +1,5 @@
 import { apiClient } from "@/services/api";
+import { toast } from "sonner";
 import type { ApiResponse } from "@/types/api";
 import type { ApiProject, Project } from "../types";
 import { ProjectStatus } from "../types/enums";
@@ -48,46 +49,55 @@ export async function getProjectsApi({
   status,
   searchQuery = "",
 }: GetProjectsParams = {}): Promise<GetProjectsResponse> {
-  // Call real API: GET /api/projects (without ID to list all)
-  const response = await apiClient.get<ApiResponse<ApiProject[]>>("/api/projects");
-  
-  if (!response.data.isSuccess || !response.data.data) {
-    throw new Error(response.data.message || "Failed to fetch projects");
-  }
-
-  // Transform backend models to frontend models
-  const allProjects = response.data.data.map(transformProject);
-
-  // Apply filtering (Status & Search)
-  const filtered = allProjects.filter((p) => {
-    const statusMatch = !status || p.status === status;
+  try {
+    // Call real API: GET /api/projects (without ID to list all)
+    const response = await apiClient.get<ApiResponse<ApiProject[]>>("/api/projects");
     
-    if (!statusMatch) return false;
-
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      return (
-        p.title.toLowerCase().includes(q) ||
-        p.description.toLowerCase().includes(q) ||
-        p.userName.toLowerCase().includes(q) ||
-        p.clientName?.toLowerCase().includes(q)
-      );
+    if (!response.data.isSuccess || !response.data.data) {
+      const message = response.data.message || "Failed to fetch projects";
+      toast.error(message);
+      throw new Error(message);
     }
-    return true;
-  });
 
-  // Calculate pagination locally to support UI expectations
-  const totalCount = filtered.length;
-  const totalPages = Math.ceil(totalCount / limit);
-  const startIndex = (page - 1) * limit;
-  const paginatedData = filtered.slice(startIndex, startIndex + limit);
+    // Transform backend models to frontend models
+    const allProjects = response.data.data.map(transformProject);
 
-  return {
-    data: paginatedData,
-    totalCount,
-    totalPages,
-    currentPage: page,
-  };
+    // Apply filtering (Status & Search)
+    const filtered = allProjects.filter((p) => {
+      const statusMatch = !status || p.status === status;
+      
+      if (!statusMatch) return false;
+
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        return (
+          p.title.toLowerCase().includes(q) ||
+          p.description.toLowerCase().includes(q) ||
+          p.userName.toLowerCase().includes(q) ||
+          p.clientName?.toLowerCase().includes(q)
+        );
+      }
+      return true;
+    });
+
+    // Calculate pagination locally to support UI expectations
+    const totalCount = filtered.length;
+    const totalPages = Math.ceil(totalCount / limit);
+    const startIndex = (page - 1) * limit;
+    const paginatedData = filtered.slice(startIndex, startIndex + limit);
+
+    return {
+      data: paginatedData,
+      totalCount,
+      totalPages,
+      currentPage: page,
+    };
+  } catch (error: any) {
+    if (!error.message || error.message === "Failed to fetch projects") {
+      toast.error("Network error: Unable to load projects.");
+    }
+    throw error;
+  }
 }
 
 /**
@@ -95,13 +105,22 @@ export async function getProjectsApi({
  * Senior Practice: Explicitly named services for clear intent.
  */
 export async function getProjectByIdApi(id: string): Promise<Project> {
-  const response = await apiClient.get<ApiResponse<ApiProject>>(`/api/projects`, {
-    params: { id },
-  });
+  try {
+    const response = await apiClient.get<ApiResponse<ApiProject>>(`/api/projects`, {
+      params: { id },
+    });
 
-  if (!response.data.isSuccess || !response.data.data) {
-    throw new Error(response.data.message || "Project not found");
+    if (!response.data.isSuccess || !response.data.data) {
+      const message = response.data.message || "Project not found";
+      toast.error(message);
+      throw new Error(message);
+    }
+
+    return transformProject(response.data.data);
+  } catch (error: any) {
+    if (!error.message || error.message === "Project not found") {
+      toast.error("Network error: Unable to load project details.");
+    }
+    throw error;
   }
-
-  return transformProject(response.data.data);
 }
