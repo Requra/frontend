@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { X } from "lucide-react";
+import { X, Plus } from "lucide-react";
+import { Button } from "@/components/ui/Button/Button";
 
 export interface TagInputProps {
   label?: string | React.ReactNode;
@@ -26,15 +27,27 @@ export function TagInput({
   validate,
 }: TagInputProps) {
   const [inputValue, setInputValue] = React.useState("");
+  const [localError, setLocalError] = React.useState<string | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const defaultId = React.useId();
-  const isInvalid = !!error;
+  const isInvalid = !!error || !!localError;
 
   const addTag = (tag: string) => {
     const trimmed = tag.trim();
     if (!trimmed) return;
-    if (value.includes(trimmed)) return;
-    if (validate && !validate(trimmed)) return;
+    
+    setLocalError(null);
+    
+    if (value.includes(trimmed)) {
+      setLocalError("This value has already been added.");
+      return;
+    }
+    
+    if (validate && !validate(trimmed)) {
+      setLocalError("Please enter a valid value.");
+      return;
+    }
+    
     onChange([...value, trimmed]);
     setInputValue("");
   };
@@ -81,13 +94,28 @@ export function TagInput({
           ref={inputRef}
           type="text"
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+            setLocalError(null);
+          }}
           onKeyDown={handleKeyDown}
           onBlur={() => addTag(inputValue)}
           placeholder={value.length === 0 ? placeholder : ""}
           disabled={disabled}
           className="flex-1 min-w-[120px] bg-transparent text-base outline-none placeholder:text-neutral-400 md:text-sm border-none p-0 focus:ring-0"
         />
+        {inputValue && (
+          <Button
+            type="button"
+            size="sm"
+            variant="ghost"
+            onClick={() => addTag(inputValue)}
+            className="h-8 w-auto px-2 text-primary-600 hover:text-primary-700 hover:bg-primary-50"
+          >
+            <Plus className="h-4 w-4" />
+            Add
+          </Button>
+        )}
       </div>
       {value.length > 0 && (
         <div className="flex flex-wrap gap-2">
@@ -113,8 +141,10 @@ export function TagInput({
           ))}
         </div>
       )}
-      {error && (
-        <p className="text-[0.8rem] font-medium text-danger-500">{error}</p>
+      {(localError || error) && (
+        <p className="text-[0.8rem] font-medium text-danger-500">
+          {localError || error}
+        </p>
       )}
     </div>
   );
