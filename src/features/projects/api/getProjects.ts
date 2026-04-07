@@ -16,7 +16,9 @@ export interface GetProjectsResponse {
   totalCount: number;
   totalPages: number;
   currentPage: number;
+  statusCounts: Record<number, number>;
 }
+
 
 /**
  * Normalizes backend statuses (string or number) to the frontend numeric enum.
@@ -89,18 +91,30 @@ export async function getProjectsApi({
       return true;
     });
 
-    // Calculate pagination locally to support UI expectations
+    // Calculate counts for all statuses
+    const statusCounts: Record<number, number> = {
+      [ProjectStatus.InProgress]: allProjects.filter(p => p.status === ProjectStatus.InProgress).length,
+      [ProjectStatus.Drafted]:    allProjects.filter(p => p.status === ProjectStatus.Drafted).length,
+      [ProjectStatus.Completed]:  allProjects.filter(p => p.status === ProjectStatus.Completed).length,
+      [ProjectStatus.Cancelled]:  allProjects.filter(p => p.status === ProjectStatus.Cancelled).length,
+    };
+
+
+    // Pagination for the filtered list
     const totalCount = filtered.length;
     const totalPages = Math.ceil(totalCount / limit);
     const startIndex = (page - 1) * limit;
     const paginatedData = filtered.slice(startIndex, startIndex + limit);
-
+    
     return {
       data: paginatedData,
       totalCount,
       totalPages,
       currentPage: page,
+      statusCounts,
     };
+
+
   } catch (error: any) {
     if (!error.message || error.message === "Failed to fetch projects") {
       toast.error("Network error: Unable to load projects.");

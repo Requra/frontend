@@ -26,7 +26,7 @@ import { getProjectsApi } from "../api/getProjects";
 import type { Project } from "../types";
 import { ProjectCardSkeleton } from "../components/ProjectCardSkeleton";
 import { Pagination } from "@/components/ui/Pagination/Pagination";
-import { MOCK_PROJECTS } from "../constants";
+
 
 type ViewMode = "grid" | "list";
 type SortOption = "newest" | "oldest" | "az";
@@ -71,7 +71,8 @@ export const AllProjectsPage = () => {
   const handleAddProject = () => navigate(paths.app.newProject);
 
   const getStatusCount = (status: ProjectStatus) =>
-    MOCK_PROJECTS.filter((p) => p.status === status).length;
+    data?.statusCounts[status] || 0;
+
 
   const getGridClassname = () =>
     viewMode === "grid"

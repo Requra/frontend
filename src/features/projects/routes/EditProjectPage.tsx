@@ -34,7 +34,7 @@ export const EditProjectPage = () => {
   });
 
   const handleCancel = () => {
-    navigate(paths.app.projects.details(projectId!));
+    navigate(paths.app.projects.root);
   };
 
   const handleSubmit = (data: CreateProjectFormData) => {
