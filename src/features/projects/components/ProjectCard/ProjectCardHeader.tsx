@@ -8,18 +8,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu/DropdownMenu";
 import type { ProjectStatus } from "./types";
-import { STATUS_STYLES } from "./types";
+import { STATUS_STYLES, STATUS_LABELS } from "./types";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 
 interface ProjectCardHeaderProps {
   status: ProjectStatus;
 }
-
-const statusLabels: Record<ProjectStatus, string> = {
-  "IN PROGRESS": "Processing",
-  FINISHED: "Completed",
-  DRAFT: "Draft",
-};
 
 export function ProjectCardHeader({ status }: ProjectCardHeaderProps) {
   return (
@@ -30,7 +24,7 @@ export function ProjectCardHeader({ status }: ProjectCardHeaderProps) {
           STATUS_STYLES[status],
         )}
       >
-        {statusLabels[status]}
+        {STATUS_LABELS[status]}
       </span>
       <div 
         className="flex items-center gap-1 opacity-40 transition-opacity group-hover:opacity-100"

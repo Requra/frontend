@@ -2,25 +2,36 @@ import { Card } from "@/components/ui/Card/Card";
 import { Badge } from "@/components/ui/Badge/Badge";
 import { CircleCheckBig } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { UserStory, StoryStatus } from "../types";
+import type { UserStory } from "../types";
+import { UserStoryStatus } from "../types";
 import { NarrativeLine } from "./NarrativeLine";
 import { FeedbackBlock } from "./FeedbackBlock";
 import { QualityScore } from "./QualityScore";
 import { CardActions } from "./CardActions";
 
+/** Status Labels for UI display */
+const STATUS_LABELS: Record<UserStoryStatus, string> = {
+  [UserStoryStatus.Draft]: "Draft",
+  [UserStoryStatus.Approved]: "Approved",
+  [UserStoryStatus.InProgress]: "In Progress",
+  [UserStoryStatus.Rejected]: "Rejected",
+};
+
 /** Map story status → Badge variant */
-const STATUS_VARIANT: Record<StoryStatus, "extracted" | "verified" | "flagged"> =
+const STATUS_VARIANT: Record<UserStoryStatus, "extracted" | "verified" | "flagged"> =
   {
-    Extracted: "extracted",
-    Verified: "verified",
-    Flagged: "flagged",
+    [UserStoryStatus.Draft]: "extracted",
+    [UserStoryStatus.Approved]: "verified",
+    [UserStoryStatus.InProgress]: "extracted",
+    [UserStoryStatus.Rejected]: "flagged",
   };
 
 /** Gradient accent per status */
-const ACCENT_GRADIENT: Record<StoryStatus, string> = {
-  Extracted: "bg-linear-to-r from-cyan-400 to-cyan-500",
-  Verified: "bg-linear-to-r from-indigo-400 to-indigo-500",
-  Flagged: "bg-linear-to-r from-orange-400 to-orange-500",
+const ACCENT_GRADIENT: Record<UserStoryStatus, string> = {
+  [UserStoryStatus.Draft]: "bg-linear-to-r from-cyan-400 to-cyan-500",
+  [UserStoryStatus.Approved]: "bg-linear-to-r from-indigo-400 to-indigo-500",
+  [UserStoryStatus.InProgress]: "bg-linear-to-r from-primary-400 to-primary-500",
+  [UserStoryStatus.Rejected]: "bg-linear-to-r from-orange-400 to-orange-500",
 };
 
 export const UserStoryCard = ({
@@ -34,8 +45,8 @@ export const UserStoryCard = ({
   feedbackCount,
   qualityScore,
 }: UserStory) => {
-  const isVerified = status === "Verified";
-  const isFlagged = status === "Flagged";
+  const isVerified = status === UserStoryStatus.Approved;
+  const isFlagged = status === UserStoryStatus.Rejected;
 
   return (
     <Card
@@ -63,7 +74,7 @@ export const UserStoryCard = ({
         </div>
         <Badge variant={STATUS_VARIANT[status]} size="lg">
           {isVerified && <CircleCheckBig className="w-3 h-3 mr-1" />}
-          {status}
+          {STATUS_LABELS[status]}
         </Badge>
       </div>
 

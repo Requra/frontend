@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { ProjectStatus } from "./types"
+import { ProjectStatus } from "./types"
 
 interface ProjectCardProgressProps {
   status: ProjectStatus
@@ -10,14 +10,14 @@ export function ProjectCardProgress({ status, progress }: ProjectCardProgressPro
   const [width, setWidth] = useState(0);
 
   useEffect(() => {
-    if (status === "IN PROGRESS" && progress !== undefined) {
+    if (status === ProjectStatus.InProgress && progress !== undefined) {
       // Small delay to ensure the animation is visible after mount
       const timer = setTimeout(() => setWidth(progress), 100);
       return () => clearTimeout(timer);
     }
   }, [status, progress]);
 
-  if (status !== "IN PROGRESS" || progress === undefined) return null
+  if (status !== ProjectStatus.InProgress || progress === undefined) return null
 
   return (
     <div className="flex flex-col gap-2 mt-1">

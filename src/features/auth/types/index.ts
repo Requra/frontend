@@ -1,4 +1,5 @@
 import type { ApiResponse } from "@/types/api";
+import { UserRole } from "./enums";
 
 // ---------- API Response envelope ----------
 export type ApiLoginResponse = ApiResponse<LoginResponseData>;
@@ -23,7 +24,7 @@ export interface LoginResponseData {
   isAuthenticated: boolean;
   token: string | null;
   refreshToken: string | null;
-  roles: string[];
+  roles: UserRole[];
   profilePicture: string | null;
 }
 
@@ -31,6 +32,6 @@ export interface LoginResponseData {
 export interface User {
   userId: string;
   name: string;
-  roles: string[];
+  roles: UserRole[];
   profilePicture: string | null;
 }

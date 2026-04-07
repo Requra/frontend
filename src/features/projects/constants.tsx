@@ -1,5 +1,6 @@
 import { Clock, CheckCircle2, FileText } from "lucide-react";
 import type { Project, TabConfig } from "./types";
+import { ProjectStatus } from "./types/enums";
 
 export const STEPPER_STEPS = [
   { title: "Project Details" },
@@ -14,7 +15,7 @@ export const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB
 export const MOCK_PROJECTS: Project[] = [
   {
     id: "1",
-    status: "IN PROGRESS",
+    status: ProjectStatus.InProgress,
     title: "CRM System Requirements",
     description: "Requirements extracted from sales stakeholder meeting.",
     progress: 30,
@@ -24,7 +25,7 @@ export const MOCK_PROJECTS: Project[] = [
   },
   {
     id: "2",
-    status: "IN PROGRESS",
+    status: ProjectStatus.InProgress,
     title: "E-commerce Platform API",
     description: "Backend infrastructure for the new shopping experience.",
     progress: 65,
@@ -34,7 +35,7 @@ export const MOCK_PROJECTS: Project[] = [
   },
   {
     id: "3",
-    status: "IN PROGRESS",
+    status: ProjectStatus.InProgress,
     title: "Mobile App Wireframes",
     description: "User flow and high-fidelity mockups for iOS app.",
     progress: 15,
@@ -44,7 +45,7 @@ export const MOCK_PROJECTS: Project[] = [
   },
   {
     id: "4",
-    status: "FINISHED",
+    status: ProjectStatus.Completed,
     title: "Inventory Management",
     description: "Finalized requirements for warehouse automation.",
     featuresCount: 42,
@@ -53,7 +54,7 @@ export const MOCK_PROJECTS: Project[] = [
   },
   {
     id: "5",
-    status: "FINISHED",
+    status: ProjectStatus.Completed,
     title: "Payment Gateway Integration",
     description: "Documentation for Stripe and PayPal integrations.",
     featuresCount: 15,
@@ -62,7 +63,7 @@ export const MOCK_PROJECTS: Project[] = [
   },
   {
     id: "6",
-    status: "FINISHED",
+    status: ProjectStatus.Completed,
     title: "Analytics Dashboard",
     description: "Initial thoughts on data visualization requirements.",
     featuresCount: 8,
@@ -76,21 +77,21 @@ export const TABS_CONFIG: TabConfig[] = [
     value: "processing",
     label: "Processing",
     icon: <Clock size={16} />,
-    status: "IN PROGRESS",
+    status: ProjectStatus.InProgress,
     emptyMessage: "No processing projects",
   },
   {
     value: "completed",
     label: "Completed",
     icon: <CheckCircle2 size={16} />,
-    status: "FINISHED",
+    status: ProjectStatus.Completed,
     emptyMessage: "No completed projects",
   },
   {
     value: "draft",
     label: "Draft",
     icon: <FileText size={16} />,
-    status: "DRAFT",
+    status: ProjectStatus.Drafted,
     emptyMessage: "No drafts found",
   },
 ];
