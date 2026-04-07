@@ -5,8 +5,6 @@ import type { UserStory } from "../types";
 
 /**
  * Service to fetch all user stories associated with a project.
- * Senior Practice: Returning direct API response for direct consumption in the UI.
- * Any parsing or specific formatting is now handled at the component level if required.
  */
 export async function getUserStoriesApi(projectId: string): Promise<UserStory[]> {
   try {

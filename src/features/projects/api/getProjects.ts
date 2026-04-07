@@ -39,8 +39,6 @@ function normalizeStatus(status: any): ProjectStatus {
 
 /**
  * Fetches projects from the real API and handles local filtering/pagination 
- * if backend requirements aren't provided by the endpoint yet.
- * Senior Practice: Using direct API fields with UI-specific derivations.
  */
 export async function getProjectsApi({
   page = 1,
@@ -125,7 +123,6 @@ export async function getProjectsApi({
 
 /**
  * Utility to fetch a single project by ID.
- * Senior Practice: Using direct API response for UI model consistency.
  */
 export async function getProjectByIdApi(id: string): Promise<Project> {
   try {

@@ -6,7 +6,6 @@ import type { CreateProjectFormData } from "../schemas/createProjectSchema";
 
 /**
  * Service to create a new project.
- * Senior Practice: Explicit mapping from Form Data to API DTO.
  */
 export async function createProjectApi(
   formData: CreateProjectFormData

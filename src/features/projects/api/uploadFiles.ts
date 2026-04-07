@@ -39,7 +39,6 @@ export function validateFile(file: File): { valid: boolean; error?: string } {
 
 /**
  * Service to upload a file to a specific project.
- * Senior Practice: Using FormData and Axios onUploadProgress for real status feedback.
  */
 export async function uploadFileApi(
   file: File,
