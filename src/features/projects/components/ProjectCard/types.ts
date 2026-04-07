@@ -5,12 +5,12 @@ export { ProjectStatus }
 export interface ProjectCardProps {
   id: string
   status: ProjectStatus
-  title: string
+  name: string
   description: string
   progress?: number
-  featuresCount: number
-  unsolvedComments: number
-  userName: string
+  featuresCount?: number
+  unsolvedComments?: number
+  clientName: string
   userAvatar?: string
   className?: string
   searchQuery?: string

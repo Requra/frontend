@@ -1,5 +1,5 @@
 interface ProjectCardBodyProps {
-  title: string
+  name: string
   description: string
   searchQuery?: string
 }
@@ -25,11 +25,11 @@ function HighlightedText({ text, query }: { text: string; query?: string }) {
   );
 }
 
-export function ProjectCardBody({ title, description, searchQuery }: ProjectCardBodyProps) {
+export function ProjectCardBody({ name, description, searchQuery }: ProjectCardBodyProps) {
   return (
     <div className="flex flex-col gap-1.5">
       <h3 className="text-heading-md font-bold text-neutral-900 line-clamp-1">
-        <HighlightedText text={title} query={searchQuery} />
+        <HighlightedText text={name} query={searchQuery} />
       </h3>
       <p className="text-body-md text-neutral-500 line-clamp-2">
         <HighlightedText text={description} query={searchQuery} />

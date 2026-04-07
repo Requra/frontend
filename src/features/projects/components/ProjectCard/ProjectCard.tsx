@@ -11,12 +11,12 @@ import { ProjectCardFooter } from "./ProjectCardFooter"
 export function ProjectCard({
   id,
   status,
-  title,
+  name,
   description,
   progress,
   featuresCount,
   unsolvedComments,
-  userName,
+  clientName,
   userAvatar,
   className,
   searchQuery,
@@ -32,11 +32,11 @@ export function ProjectCard({
       onClick={() => navigate(paths.app.projects.details(id))}
     >
       <ProjectCardHeader status={status} />
-      <ProjectCardBody title={title} description={description} searchQuery={searchQuery} />
+      <ProjectCardBody name={name} description={description} searchQuery={searchQuery} />
       <ProjectCardProgress status={status} progress={progress} />
       <ProjectCardStats status={status} featuresCount={featuresCount} unsolvedComments={unsolvedComments} />
       <div className="h-px w-full bg-neutral-50 mt-1" />
-      <ProjectCardFooter userName={userName} userAvatar={userAvatar} id={id} />
+      <ProjectCardFooter clientName={clientName} userAvatar={userAvatar} id={id} />
     </div>
   )
 }

@@ -4,8 +4,6 @@ import { CircleCheckBig } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { UserStory } from "../types";
 import { UserStoryStatus } from "../types";
-import { NarrativeLine } from "./NarrativeLine";
-import { FeedbackBlock } from "./FeedbackBlock";
 import { QualityScore } from "./QualityScore";
 import { CardActions } from "./CardActions";
 
@@ -37,12 +35,8 @@ const ACCENT_GRADIENT: Record<UserStoryStatus, string> = {
 export const UserStoryCard = ({
   id,
   status,
-  role,
-  action,
-  benefit,
-  feedbackType,
-  feedbackMessage,
-  feedbackCount,
+  title,
+  description,
   qualityScore,
 }: UserStory) => {
   const isVerified = status === UserStoryStatus.Approved;
@@ -79,25 +73,19 @@ export const UserStoryCard = ({
       </div>
 
       {/* Narrative */}
-      <div className="text-sm text-neutral-600 leading-relaxed space-y-2.5">
-        <NarrativeLine label="As a" value={role} />
-        <NarrativeLine label="I want to" value={action} />
-        <NarrativeLine label="So that" value={benefit} />
-      </div>
-
-      {/* Dynamic feedback block (pushes to bottom) */}
-      <div className="mt-auto">
-        {feedbackType && (
-          <FeedbackBlock
-            type={feedbackType}
-            message={feedbackMessage}
-            count={feedbackCount}
-          />
+      <div className="flex flex-col gap-3">
+        <h3 className="text-sm font-semibold text-neutral-800 leading-relaxed">
+          {title}
+        </h3>
+        {description && (
+          <p className="text-xs text-neutral-500 italic border-l-2 border-neutral-100 pl-3 py-0.5">
+            {description}
+          </p>
         )}
       </div>
 
       {/* Footer — quality score + actions */}
-      <div className="flex items-center justify-between border-t border-neutral-100 pt-4">
+      <div className="flex items-center justify-between border-t border-neutral-100 pt-4 mt-auto">
         <QualityScore score={qualityScore} />
         <CardActions isVerified={isVerified} />
       </div>

@@ -3,11 +3,11 @@ import { ProjectStatus } from "./types"
 
 interface ProjectCardStatsProps {
   status: ProjectStatus
-  featuresCount: number
-  unsolvedComments: number
+  featuresCount?: number
+  unsolvedComments?: number
 }
 
-export function ProjectCardStats({ status, featuresCount, unsolvedComments }: ProjectCardStatsProps) {
+export function ProjectCardStats({ status, featuresCount = 0, unsolvedComments = 0 }: ProjectCardStatsProps) {
   const isFinished = status === ProjectStatus.Completed
 
   return (

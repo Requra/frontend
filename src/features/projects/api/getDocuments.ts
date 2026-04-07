@@ -1,29 +1,16 @@
 import { apiClient } from "@/services/api";
 import { toast } from "sonner";
 import type { ApiResponse } from "@/types/api";
-import type { ApiDocument, Document } from "../types";
-
-/**
- * Transforms backend document DTO to frontend UI model.
- */
-function transformDocument(apiDoc: ApiDocument): Document {
-  return {
-    id: apiDoc.id,
-    name: apiDoc.name || "Untitled Document",
-    type: apiDoc.type ,
-    size: apiDoc.size || 0,
-    uploadDate: apiDoc.upload_date || new Date().toISOString(),
-    status: apiDoc.status,
-  };
-}
+import type { Document } from "../types";
 
 /**
  * Service to fetch all documents for a given project.
  * Uses the root path GET /?project_id=... as defined in OAS.
+ * Senior Practice: Using direct API responses for UI models.
  */
 export async function getDocumentsApi(projectId: string): Promise<Document[]> {
   try {
-    const response = await apiClient.get<ApiResponse<ApiDocument[]>>("/", {
+    const response = await apiClient.get<ApiResponse<Document[]>>("/", {
       params: { project_id: projectId },
     });
 
@@ -36,7 +23,7 @@ export async function getDocumentsApi(projectId: string): Promise<Document[]> {
       throw new Error(message);
     }
 
-    return response.data.data.map(transformDocument);
+    return response.data.data;
   } catch (error: any) {
     if (!error.message || error.message === "Failed to fetch documents") {
       toast.error("Network error: Unable to load documents.");

@@ -1,50 +1,16 @@
 import { apiClient } from "@/services/api";
 import { toast } from "sonner";
 import type { ApiResponse } from "@/types/api";
-import type { ApiUserStory, UserStory } from "../types";
-
-/**
- * Parses a User Story string (e.g. "As a <role>, I want <action>, so that <benefit>")
- * into separate fields for the UI.
- * Senior Practice: Graceful degradation if format is non-standard.
- */
-function parseStory(title: string): { role: string; action: string; benefit: string } {
-  const roleMatch = title.match(/As a (.*?), I want/i);
-  const actionMatch = title.match(/I want (.*?), so that/i);
-  const benefitMatch = title.match(/so that (.*)/i);
-
-  return {
-    role: roleMatch?.[1]?.trim() || "User",
-    action: actionMatch?.[1]?.trim() || title, // Fallback to full title if no match
-    benefit: benefitMatch?.[1]?.trim() || "the system functions as expected",
-  };
-}
-
-/**
- * Transforms backend user story DTO to frontend UI model.
- */
-function transformUserStory(apiStory: ApiUserStory): UserStory {
-  const { role, action, benefit } = parseStory(apiStory.title);
-  
-  return {
-    id: apiStory.id,
-    status: apiStory.status,
-    role,
-    action,
-    benefit,
-    priority: apiStory.priority,
-    qualityScore: 80, // Default for now if not in API
-    createdAt: apiStory.createdAt,
-    comments: apiStory.comments,
-  };
-}
+import type { UserStory } from "../types";
 
 /**
  * Service to fetch all user stories associated with a project.
+ * Senior Practice: Returning direct API response for direct consumption in the UI.
+ * Any parsing or specific formatting is now handled at the component level if required.
  */
 export async function getUserStoriesApi(projectId: string): Promise<UserStory[]> {
   try {
-    const response = await apiClient.get<ApiResponse<{ items: ApiUserStory[]; totalCount: number }>>(
+    const response = await apiClient.get<ApiResponse<{ items: UserStory[]; totalCount: number }>>(
       "/api/results/userstories",
       { params: { project_id: projectId } }
     );
@@ -57,7 +23,11 @@ export async function getUserStoriesApi(projectId: string): Promise<UserStory[]>
       throw new Error(message);
     }
 
-    return response.data.data.items.map(transformUserStory);
+    // Returning items directly from the backend response
+    return response.data.data.items.map(story => ({
+      ...story,
+      qualityScore: 80, // Derived/optional field for UI
+    }));
   } catch (error: any) {
     if (!error.message || error.message === "Failed to fetch user stories") {
       toast.error("Network error: Unable to load user stories.");

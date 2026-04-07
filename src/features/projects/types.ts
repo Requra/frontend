@@ -11,31 +11,35 @@ import {
 
 export { ProjectStatus, ProjectRole, DocumentStatus, DocumentType, UserStoryStatus, UserStoryPriority, RequirementStatus, RequirementType };
 
-// --- API Data Transfer Objects (DTOs) ---
-// These match the backend contract directly (OAS)
+// --- Data Models (Synchronized with Backend API) ---
+// We use these models directly in both API services and UI components.
 
-export interface ApiProject {
+export interface Project {
   id: string;
-  name: string; // Map to title in UI
+  name: string; // Backend: 'name'
   description: string;
-  status: ProjectStatus; // Backend status as enum
+  status: ProjectStatus;
   clientName: string;
   teamMembers: { email: string; role: ProjectRole }[];
   createdAt: string;
+  // UI-only derived fields (Optional)
+  progress?: number;
+  featuresCount?: number;
+  unsolvedComments?: number;
 }
 
-export interface ApiDocument {
+export interface Document {
   id: string;
   name: string;
   type: DocumentType;
   size: number;
-  upload_date: string;
+  upload_date: string; // Backend: 'upload_date'
   status: DocumentStatus;
 }
 
-export interface ApiUserStory {
+export interface UserStory {
   id: string;
-  title: string;
+  title: string; // Backend: 'title'
   description: string | null;
   status: UserStoryStatus;
   priority: UserStoryPriority;
@@ -47,9 +51,11 @@ export interface ApiUserStory {
     content: string;
     createdAt: string;
   }[];
+  // UI-only derivation (Optional)
+  qualityScore?: number;
 }
 
-export interface ApiRequirement {
+export interface Requirement {
   id: string;
   title: string;
   description: string;
@@ -59,59 +65,12 @@ export interface ApiRequirement {
   createdAt: string;
 }
 
-// --- Frontend UI Models ---
-// These are optimized for the React components and consumption
-
-export interface Project {
-  id: string;
-  status: ProjectStatus;
-  title: string;
-  description: string;
-  clientName?: string;
-  teamMembers?: { email: string; role: ProjectRole }[];
-  userName: string; // We'll derive this or keep for compatibility
-  progress?: number;
-  featuresCount: number;
-  unsolvedComments: number;
-  createdAt?: string;
-}
-
-export interface Document {
-  id: string;
-  name: string;
-  type: DocumentType;
-  size: number;
-  uploadDate: string;
-  status: DocumentStatus;
-}
-
-export interface UserStory {
-  id: string;
-  status: UserStoryStatus;
-  role: string;
-  action: string;
-  benefit: string;
-  priority: UserStoryPriority;
-  qualityScore: number;
-  createdAt?: string;
-  comments?: any[];
-}
-
-export interface Requirement {
-  id: string;
-  title: string;
-  description: string;
-  type: RequirementType;
-  status: RequirementStatus;
-  createdAt: string;
-}
-
 // --- UI Utilities ---
 
 export interface TabConfig {
   value: string;
   label: string;
-  icon: any; // Keep generic to avoid ReactNode issues if not imported
+  icon: any; 
   status: ProjectStatus;
   emptyMessage: string;
 }

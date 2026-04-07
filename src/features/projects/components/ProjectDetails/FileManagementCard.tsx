@@ -6,18 +6,18 @@ import { DocumentStatus, DocumentType } from "../../types/enums";
 export const FileManagementCard = () => {
   const files = [
     {
-      id: 1,
+      id: "1",
       name: "Core_Banking_Specs.pdf",
-      size: "12.4 MB",
-      date: "Verified Oct 24",
+      size: 12400000,
+      upload_date: "2024-10-24T10:00:00Z",
       status: DocumentStatus.Ready,
       type: DocumentType.pdf,
     },
     {
-      id: 2,
+      id: "2",
       name: "Architecture_Diagram.docx",
-      size: "4.2 MB",
-      date: "Verified Oct 23",
+      size: 4200000,
+      upload_date: "2024-10-23T14:30:00Z",
       status: DocumentStatus.Processing,
       type: DocumentType.docx,
     },
@@ -108,8 +108,14 @@ export const FileManagementCard = () => {
                     {file.name}
                   </span>
                   <span className="text-xs text-neutral-500 font-medium mt-0.5">
-                    {file.size} •{" "}
-                    <span className="text-neutral-400">{file.date}</span>
+                    {(file.size / 1024 / 1024).toFixed(1)} MB •{" "}
+                    <span className="text-neutral-400">
+                      {new Date(file.upload_date).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </span>
                   </span>
                 </div>
               </div>

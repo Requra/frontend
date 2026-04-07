@@ -20,7 +20,7 @@ import { ProjectCard } from "../components/ProjectCard";
 import { AddProjectCard } from "../components/AddProjectCard";
 import { ProjectEmptyState } from "../components/ProjectEmptyState";
 import { TABS_CONFIG } from "../constants";
-import type { ProjectStatus } from "../components/ProjectCard/types";
+import { ProjectStatus } from "../types/enums";
 import { useQuery } from "@tanstack/react-query";
 import { getProjectsApi } from "../api/getProjects";
 import { ProjectCardSkeleton } from "../components/ProjectCardSkeleton";
@@ -40,7 +40,7 @@ export const AllProjectsPage = () => {
   const [sortBy, setSortBy] = useState<SortOption>("newest");
 
   const currentTabConfig = TABS_CONFIG.find((t) => t.value === activeTab);
-  const currentStatus = currentTabConfig?.status || "IN PROGRESS";
+  const currentStatus = currentTabConfig?.status ?? ProjectStatus.InProgress;
 
   const handleSearchChange = (val: string) => {
     setInputSearch(val);
