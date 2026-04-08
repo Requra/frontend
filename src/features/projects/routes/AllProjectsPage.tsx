@@ -66,6 +66,7 @@ export const AllProjectsPage = () => {
         limit: viewMode === "grid" ? 2 : 3,
         searchQuery,
       }),
+    staleTime: 60_000, // 1 minute — avoids refetching on focus/tab changes
   });
 
   const handleAddProject = () => navigate(paths.app.newProject);

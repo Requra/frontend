@@ -8,7 +8,14 @@ import {
   ChevronRight,
   Edit3,
   Trash2,
+  MoreHorizontal,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/DropdownMenu/DropdownMenu";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { paths } from "@/routes/paths";
@@ -38,11 +45,11 @@ export const ProjectHeader = () => {
     },
   });
 
-
   const { data: project } = useQuery({
     queryKey: ["project", projectId],
     queryFn: () => getProjectByIdApi(projectId!),
     enabled: !!projectId,
+    staleTime: 30_000,
   });
 
   const projectName = project?.name || "Loading...";
@@ -87,31 +94,9 @@ export const ProjectHeader = () => {
           </div>
         </div>
 
+        {/* Actions: Primary CTA + More dropdown */}
         <div className="flex items-center gap-2 shrink-0">
-          <Button
-            variant="ghost-neutral"
-            className="h-10 px-4 rounded-xl text-danger-600 hover:bg-danger-50 hover:text-danger-700 font-semibold transition-all text-sm border-none shadow-none"
-            onClick={() => setIsDeleteModalOpen(true)}
-          >
-            <Trash2 className="mr-2 h-3.5 w-3.5" />
-            Delete Project
-          </Button>
-
-          <Button
-            variant="outline"
-            className="h-10 px-4 rounded-xl border-neutral-200 text-neutral-600 hover:bg-neutral-50 hover:border-neutral-300 shadow-sm font-semibold transition-all text-sm"
-            onClick={() => navigate(paths.app.projects.edit(projectId!))}
-          >
-            <Edit3 className="mr-2 h-3.5 w-3.5" />
-            Edit Project
-          </Button>
-          <Button
-            variant="outline"
-            className="h-10 px-4 rounded-xl border-neutral-200 text-neutral-600 hover:bg-neutral-50 hover:border-neutral-300 shadow-sm font-semibold transition-all text-sm"
-          >
-            <Share2 className="mr-2 h-3.5 w-3.5" />
-            Share
-          </Button>
+          {/* Primary action */}
           <Button
             variant="default"
             className="h-10 px-5 rounded-xl bg-linear-to-b from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white shadow-md shadow-primary-500/20 font-bold border-none transition-all text-sm"
@@ -119,6 +104,40 @@ export const ProjectHeader = () => {
             <CheckCircle className="mr-2 h-3.5 w-3.5" />
             Finalize Report
           </Button>
+
+          {/* More actions dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-10 w-10 rounded-xl border-neutral-200 text-neutral-500 hover:bg-neutral-50 hover:border-neutral-300 shadow-sm transition-all"
+              >
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[200px]">
+              <DropdownMenuItem
+                className="text-neutral-600 cursor-pointer"
+                onClick={() => navigate(paths.app.projects.edit(projectId!))}
+              >
+                <Edit3 className="mr-2 h-4 w-4" />
+                Edit Project
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-neutral-600 cursor-pointer">
+                <Share2 className="mr-2 h-4 w-4" />
+                Share Project
+              </DropdownMenuItem>
+              <hr className="my-1 border-neutral-100" />
+              <DropdownMenuItem
+                className="text-danger-600 focus:bg-danger-50 focus:text-danger-700 cursor-pointer"
+                onClick={() => setIsDeleteModalOpen(true)}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete Project
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
@@ -137,4 +156,3 @@ export const ProjectHeader = () => {
     </div>
   );
 };
-

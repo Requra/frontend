@@ -1,8 +1,13 @@
 import { Button } from "@/components/ui/Button/Button";
 import { Badge } from "@/components/ui/Badge/Badge";
-import { Filter, Upload, FileText } from "lucide-react";
+import { Filter, Download, FileText } from "lucide-react";
 
-export const UserStoriesHeader = () => {
+interface UserStoriesHeaderProps {
+  totalCount: number;
+  isLoading: boolean;
+}
+
+export const UserStoriesHeader = ({ totalCount, isLoading }: UserStoriesHeaderProps) => {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
       <div className="flex items-start gap-4">
@@ -15,7 +20,11 @@ export const UserStoriesHeader = () => {
               User Stories
             </h2>
             <Badge variant="primary" size="sm" className="font-bold">
-              3 Stories
+              {isLoading ? (
+                <span className="inline-block w-8 h-3 animate-pulse rounded bg-primary-200" />
+              ) : (
+                `${totalCount} ${totalCount === 1 ? "Story" : "Stories"}`
+              )}
             </Badge>
           </div>
           <p className="text-sm text-neutral-500 font-medium max-w-2xl leading-relaxed">
@@ -37,7 +46,7 @@ export const UserStoriesHeader = () => {
           variant="default"
           className="h-10 px-5 rounded-xl bg-linear-to-b from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white shadow-md shadow-primary-500/20 font-bold border-none transition-all text-sm"
         >
-          <Upload className="mr-2 h-3.5 w-3.5" />
+          <Download className="mr-2 h-3.5 w-3.5" />
           Export
         </Button>
       </div>

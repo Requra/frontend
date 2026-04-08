@@ -6,10 +6,11 @@ import {
   UserStoryPriority,
   ProjectRole,
   RequirementStatus,
-  RequirementType
+  RequirementType,
+  CommentStatus
 } from "./types/enums";
 
-export { ProjectStatus, ProjectRole, DocumentStatus, DocumentType, UserStoryStatus, UserStoryPriority, RequirementStatus, RequirementType };
+export { ProjectStatus, ProjectRole, DocumentStatus, DocumentType, UserStoryStatus, UserStoryPriority, RequirementStatus, RequirementType, CommentStatus };
 
 // --- Data Models (Synchronized with Backend API) ---
 // We use these models directly in both API services and UI components.
@@ -31,6 +32,35 @@ export interface Project {
   unsolvedComments?: number;
 }
 
+export interface Comment {
+  id: string;
+  userStoryId: string;
+  authorId: string;
+  status: CommentStatus;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UserStory {
+  id: string;
+  title: string; // Backend: 'title'
+  description: string | null;
+  acceptanceCriteria: string[];
+  status: UserStoryStatus;
+  priority: UserStoryPriority;
+  language: number;
+  creatorId: string;
+  requirementId: string;
+  jiraTicket: string;
+  createdAt: string;
+  updatedAt: string;
+  totalComments: number;
+  comments: Comment[];
+  // UI-only derivation (Optional)
+  qualityScore?: number;
+}
+
 export interface Document {
   id: string;
   name: string;
@@ -38,24 +68,6 @@ export interface Document {
   size: number;
   upload_date: string; // Backend: 'upload_date'
   status: DocumentStatus;
-}
-
-export interface UserStory {
-  id: string;
-  title: string; // Backend: 'title'
-  description: string | null;
-  status: UserStoryStatus;
-  priority: UserStoryPriority;
-  createdAt: string;
-  updatedAt: string;
-  totalComments: number;
-  comments: {
-    id: string;
-    content: string;
-    createdAt: string;
-  }[];
-  // UI-only derivation (Optional)
-  qualityScore?: number;
 }
 
 export interface Requirement {

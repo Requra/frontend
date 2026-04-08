@@ -32,7 +32,7 @@ export const DashboardTopNav = ({
   const name = user?.name || "User";
   const firstName = name.split(" ")[0];
   const initial = name.charAt(0).toUpperCase();
-  const primaryRole = user?.roles?.[0] || "Member";
+  const primaryRole = String(user?.roles?.[0] || "Member");
 
   // Quick helper to abbreviate roles nicely, e.g., "Project Admin" -> "PA"
   const getRoleAbbreviation = (roleStr: string) => {

@@ -18,6 +18,7 @@ export const EditProjectPage = () => {
     queryKey: ["project", projectId],
     queryFn: () => getProjectByIdApi(projectId!),
     enabled: !!projectId,
+    staleTime: 30_000, // 30s cache
   });
 
   const updateMutation = useMutation({

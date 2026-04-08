@@ -63,3 +63,11 @@ export const RequirementType = {
   Business_Rule: 2,
 } as const;
 export type RequirementType = (typeof RequirementType)[keyof typeof RequirementType];
+
+export const CommentStatus = {
+  Open: 0,
+  InProgress: 1,
+  Resolved: 2,
+  Rejected: 3,
+} as const;
+export type CommentStatus = (typeof CommentStatus)[keyof typeof CommentStatus];
