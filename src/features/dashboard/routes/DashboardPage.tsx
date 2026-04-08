@@ -1,4 +1,6 @@
-import { Folder, MessageSquare, Clock, Download, Calendar } from "lucide-react";
+import { Folder, MessageSquare, Clock, Download, Calendar, PhoneOff } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { paths } from "@/routes/paths";
 import { StatCard } from "../components/StatCard";
 import { RecentActions } from "../components/RecentActions";
 import { GeneratedVsApproved } from "../components/GeneratedVsApproved";
@@ -16,6 +18,7 @@ const getFormattedDate = () => {
 };
 
 export const DashboardPage = () => {
+  const navigate = useNavigate();
   const { user } = useAuthStore();
 
   const name = user?.name || "User";
@@ -61,9 +64,21 @@ export const DashboardPage = () => {
             <h1 className="text-4xl font-bold mb-3 tracking-tight drop-shadow-sm">
               Welcome back, {firstName} 👋
             </h1>
-            <div className="flex items-center gap-2 text-white/90 text-sm font-medium">
-              <Calendar size={18} />
-              <span>{getFormattedDate()}</span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-white/90 text-sm font-medium">
+                <Calendar size={18} />
+                <span>{getFormattedDate()}</span>
+              </div>
+              <button 
+                onClick={() => navigate(paths.app.projects.root)}
+                className="flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white px-4 py-2 rounded-xl text-sm font-bold transition-all border border-white/10 shadow-lg group active:scale-95"
+              >
+                <div className="relative">
+                   <PhoneOff size={16} className="rotate-135 group-hover:animate-pulse" />
+                   <span className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-red-500 rounded-full" />
+                </div>
+                Quick Meeting
+              </button>
             </div>
           </div>
 

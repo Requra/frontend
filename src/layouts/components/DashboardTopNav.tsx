@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu/DropdownMenu";
+import { UserRole } from "@/features/auth/types/enums";
 
 interface DashboardTopNavProps {
   isNotificationsOpen: boolean;
@@ -32,7 +33,16 @@ export const DashboardTopNav = ({
   const name = user?.name || "User";
   const firstName = name.split(" ")[0];
   const initial = name.charAt(0).toUpperCase();
-  const primaryRole = user?.roles?.[0] || "Member";
+
+  // Map role enum to display name
+  const roleNameMap: Record<number, string> = {
+    [UserRole.Stackholder]: "Stakeholder",
+    [UserRole.BussinessAnalyst]: "Analyst",
+    [UserRole.ProjectManager]: "Project Manager",
+  };
+  const primaryRole = typeof user?.roles?.[0] === 'number' 
+    ? roleNameMap[user.roles[0]] || "Member"
+    : "Member";
 
   // Quick helper to abbreviate roles nicely, e.g., "Project Admin" -> "PA"
   const getRoleAbbreviation = (roleStr: string) => {

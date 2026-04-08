@@ -8,6 +8,7 @@ import {
   ChevronRight,
   Edit3,
   Trash2,
+  PhoneOff,
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -104,6 +105,17 @@ export const ProjectHeader = () => {
           >
             <Edit3 className="mr-2 h-3.5 w-3.5" />
             Edit Project
+          </Button>
+          <Button
+            variant="outline"
+            className="h-10 px-4 rounded-xl border-primary-100 text-primary-600 hover:bg-primary-50 hover:border-primary-200 shadow-sm font-bold transition-all text-sm group"
+            onClick={() => navigate(paths.app.projects.meetings.live(projectId!))}
+          >
+            <div className="relative mr-2">
+              <PhoneOff className="h-3.5 w-3.5 rotate-135 group-hover:scale-110 transition-transform" />
+              <span className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
+            </div>
+            Start Meeting
           </Button>
           <Button
             variant="outline"

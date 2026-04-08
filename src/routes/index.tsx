@@ -9,10 +9,11 @@ import { ErrorPage } from "@/features/misc/routes/ErrorPage";
 import { sidebarRoutes } from "./config";
 import { authRoutes, publicAuthRoutes } from "@/features/auth/routes/index";
 import { dashboardRoutes } from "@/features/dashboard/routes/index";
-import { projectsRoutes } from "@/features/projects/routes/index";
+import { projectsRoutes, immersiveMeetingRoutes } from "@/features/projects/routes/index";
 import { landingRoutes } from "@/features/landing/routes/index";
 import { miscellaneousRoutes } from "@/features/misc/routes/index";
 import type { AppRoute } from "@/types/routes";
+import { Outlet } from "react-router-dom";
 
 // Export sidebarRoutes from here if components are still importing from index.tsx
 export { sidebarRoutes };
@@ -56,6 +57,14 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
         children: withSuspense([...dashboardRoutes, ...projectsRoutes]),
+      },
+      {
+        element: (
+          <ProtectedRoute>
+            <Outlet />
+          </ProtectedRoute>
+        ),
+        children: withSuspense(immersiveMeetingRoutes),
       },
       ...withSuspense(miscellaneousRoutes),
     ],

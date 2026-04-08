@@ -18,6 +18,7 @@ const ProjectDetailsPage = React.lazy(() =>
 const EditProjectPage = React.lazy(() =>
   import("./EditProjectPage").then((m) => ({ default: m.EditProjectPage })),
 );
+import { meetingsRoutes } from "@/features/meetings/routes";
 
 export const projectsRoutes: AppRoute[] = [
   {
@@ -53,3 +54,8 @@ export const projectsRoutes: AppRoute[] = [
     element: <EditProjectPage />,
   },
 ];
+
+export const immersiveMeetingRoutes: AppRoute[] = meetingsRoutes.map((route) => ({
+  ...route,
+  path: `${paths.app.projects.detailsRoute}/meetings/${route.path}`,
+}));
