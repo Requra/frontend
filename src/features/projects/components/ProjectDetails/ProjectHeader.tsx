@@ -17,32 +17,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu/DropdownMenu";
 import { useNavigate, useParams } from "react-router-dom";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { paths } from "@/routes/paths";
 import { getProjectByIdApi } from "../../api/getProjects";
-import { deleteProjectApi } from "../../api/deleteProject";
 import { ProjectStatus } from "../../types/enums";
 import { STATUS_STYLES, STATUS_LABELS } from "../ProjectCard/types";
 import { useState } from "react";
-import { toast } from "sonner";
 import { ConfirmationModal } from "../ConfirmationModal";
+import { useDeleteProject } from "../../hooks/useDeleteProject";
 
 export const ProjectHeader = () => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const { projectId } = useParams<{ projectId: string }>();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const { mutate: deleteProject, isPending: isDeleting } = useMutation({
-    mutationFn: deleteProjectApi,
-    onSuccess: () => {
-      toast.success("Project deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
-      navigate(paths.app.projects.root);
-    },
-    onError: (error: any) => {
-      toast.error(error?.message || "Failed to delete project");
-    },
+  const { mutate: deleteProject, isPending: isDeleting } = useDeleteProject({
+    navigateOnSuccess: true,
+    onSuccess: () => setIsDeleteModalOpen(false),
   });
 
   const { data: project } = useQuery({

@@ -13,10 +13,8 @@ import type { ProjectStatus } from "./types";
 import { STATUS_STYLES, STATUS_LABELS } from "./types";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteProjectApi } from "../../api/deleteProject";
-import { toast } from "sonner";
 import { ConfirmationModal } from "../ConfirmationModal";
+import { useDeleteProject } from "../../hooks/useDeleteProject";
 
 interface ProjectCardHeaderProps {
   status: ProjectStatus;
@@ -25,50 +23,11 @@ interface ProjectCardHeaderProps {
 
 export function ProjectCardHeader({ status, projectId }: ProjectCardHeaderProps) {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const { mutate: deleteProject, isPending: isDeleting } = useMutation({
-    mutationFn: deleteProjectApi,
-    onMutate: async (id) => {
-      // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-      await queryClient.cancelQueries({ queryKey: ["projects"] });
-
-      // Snapshot the previous values
-      const previousProjects = queryClient.getQueryData(["projects"]);
-
-      // Optimistically update to the new value
-      // This effectively "removes it from the list" immediately for the user
-      queryClient.setQueriesData({ queryKey: ["projects"] }, (old: any) => {
-        if (!old || !old.data) return old;
-        return {
-          ...old,
-          data: old.data.filter((p: any) => p.id !== id),
-          totalCount: Math.max(0, old.totalCount - 1),
-        };
-      });
-
-      // Return a context object with the snapshotted value
-      return { previousProjects };
-    },
-    onSuccess: () => {
-      // Close the modal immediately on success
-      setIsDeleteModalOpen(false);
-      toast.success("Project deleted successfully");
-    },
-    onError: (error: any, __, context) => {
-      // If the mutation fails, use the context returned from onMutate to roll back
-      if (context?.previousProjects) {
-        queryClient.setQueriesData({ queryKey: ["projects"] }, context.previousProjects);
-      }
-      toast.error(error?.message || "Failed to delete project");
-    },
-    onSettled: () => {
-      // Always refetch after error or success to ensure we are in sync with the server
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
-    },
+  const { mutate: deleteProject, isPending: isDeleting } = useDeleteProject({
+    onSuccess: () => setIsDeleteModalOpen(false),
   });
-
 
   return (
     <div className="flex items-center justify-between">
@@ -152,4 +111,3 @@ export function ProjectCardHeader({ status, projectId }: ProjectCardHeaderProps)
     </div>
   );
 }
-

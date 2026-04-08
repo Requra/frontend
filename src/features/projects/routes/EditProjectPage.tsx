@@ -29,7 +29,7 @@ export const EditProjectPage = () => {
       queryClient.invalidateQueries({ queryKey: ["project", projectId] });
       navigate(paths.app.projects.root);
     },
-    onError: (err: any) => {
+    onError: (err: Error) => {
       toast.error(err.message || "Failed to update project");
     },
   });
@@ -78,10 +78,10 @@ export const EditProjectPage = () => {
   const initialData: CreateProjectFormData = {
     projectName: project.name,
     clientName: project.clientName,
-    projectType: (project as any).projectType || "web",
+    projectType: project.projectType ?? "web",
     status: project.status ,
     description: project.description || "",
-    teamMembers: project.teamMembers?.map((m: any) => m.email) || [],
+    teamMembers: project.teamMembers?.map((m) => m.email) || [],
   };
 
   return (

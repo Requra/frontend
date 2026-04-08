@@ -2,17 +2,9 @@ import { apiClient } from "@/services/api";
 import { toast } from "sonner";
 import type { ApiResponse } from "@/types/api";
 import { ALLOWED_EXTENSIONS, MAX_FILE_SIZE } from "../constants";
+import type { Document, UploadedFile } from "../types";
 
-export interface UploadedFile {
-  id: string;
-  file: File;
-  name: string;
-  size: number;
-  type: string;
-  progress: number;
-  status: "uploading" | "completed" | "error";
-  errorMessage?: string;
-}
+export type { UploadedFile };
 
 /**
  * Validates a file for size and extension.
@@ -37,6 +29,13 @@ export function validateFile(file: File): { valid: boolean; error?: string } {
   return { valid: true };
 }
 
+/** Response shape from the upload endpoint */
+interface UploadResult {
+  success: boolean;
+  data?: Document;
+  error?: string;
+}
+
 /**
  * Service to upload a file to a specific project.
  */
@@ -44,7 +43,7 @@ export async function uploadFileApi(
   file: File,
   projectId: string,
   onProgress: (progress: number) => void,
-): Promise<{ success: boolean; data?: any; error?: string }> {
+): Promise<UploadResult> {
   try {
     const formData = new FormData();
     formData.append("file", file);
@@ -53,7 +52,7 @@ export async function uploadFileApi(
     // Assuming 'type' is needed based on OAS (0 for now as placeholder)
     formData.append("type", "0");
 
-    const response = await apiClient.post<ApiResponse<any>>(
+    const response = await apiClient.post<ApiResponse<Document>>(
       "/api/documents",
       formData,
       {
@@ -77,10 +76,13 @@ export async function uploadFileApi(
       return { success: false, error: message };
     }
 
-    return { success: true, data: response.data.data };
-  } catch (error: any) {
+    return { success: true, data: response.data.data ?? undefined };
+  } catch (error: unknown) {
     console.error("Upload Error:", error);
-    const message = error?.response?.data?.message || "An unexpected error occurred during upload.";
+    const message =
+      error instanceof Error
+        ? error.message
+        : "An unexpected error occurred during upload.";
     toast.error(message);
     return { 
       success: false, 

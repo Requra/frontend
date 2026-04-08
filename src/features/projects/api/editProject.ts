@@ -1,7 +1,7 @@
 import { apiClient } from "@/services/api";
 import { toast } from "sonner";
 import type { ApiResponse } from "@/types/api";
-import type { Project } from "../types";
+import type { Project, UpdateProjectPayload } from "../types";
 import type { CreateProjectFormData } from "../schemas/createProjectSchema";
 
 /**
@@ -14,7 +14,7 @@ export async function editProjectApi(
 ): Promise<Project> {
   try {
     // Map partial form data to backend update structure
-    const requestBody: any = {};
+    const requestBody: UpdateProjectPayload = {};
     if (formData.projectName) requestBody.name = formData.projectName;
     if (formData.description !== undefined) requestBody.description = formData.description;
     if (formData.clientName) requestBody.clientName = formData.clientName;
@@ -29,7 +29,6 @@ export async function editProjectApi(
       { params: { id } }
     );
 
-
     if (!response.data.isSuccess || !response.data.data) {
       const message = response.data.message || "Failed to update project";
       toast.error(message);
@@ -37,8 +36,9 @@ export async function editProjectApi(
     }
 
     return response.data.data;
-  } catch (error: any) {
-    if (!error.message || error.message === "Failed to update project") {
+  } catch (error: unknown) {
+    const errMessage = error instanceof Error ? error.message : "Network error: Unable to update project.";
+    if (errMessage !== "Failed to update project") {
       toast.error("Network error: Unable to update project.");
     }
     throw error;

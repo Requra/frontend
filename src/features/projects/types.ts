@@ -13,7 +13,6 @@ import {
 export { ProjectStatus, ProjectRole, DocumentStatus, DocumentType, UserStoryStatus, UserStoryPriority, RequirementStatus, RequirementType, CommentStatus };
 
 // --- Data Models (Synchronized with Backend API) ---
-// We use these models directly in both API services and UI components.
 
 export interface Project {
   id: string;
@@ -21,6 +20,7 @@ export interface Project {
   description: string;
   status: ProjectStatus;
   clientName: string;
+  projectType?: string; // Optional — may not be returned by backend yet
   teamMembers?: { email: string; role: ProjectRole }[]; // Made optional
   createdAt: string;
   totalRequirements?: number;
@@ -80,12 +80,44 @@ export interface Requirement {
   createdAt: string;
 }
 
+// --- API Request / Response Shapes ---
+
+/** PATCH /api/projects — partial update payload */
+export interface UpdateProjectPayload {
+  name?: string;
+  description?: string;
+  clientName?: string;
+  status?: number;
+  teamMembers?: { email: string }[];
+}
+
+/** File tracked by the upload UI (useFileUpload hook + UploadedFileCard) */
+export interface UploadedFile {
+  id: string;
+  file: File;
+  name: string;
+  size: number;
+  type: string;
+  progress: number;
+  status: "uploading" | "completed" | "error";
+  errorMessage?: string;
+}
+
+/** Shape of the projects query cache — used for optimistic updates */
+export interface ProjectsQueryData {
+  data: Project[];
+  totalCount: number;
+  currentPage: number;
+  totalPages: number;
+  statusCounts: Record<number, number>;
+}
+
 // --- UI Utilities ---
 
 export interface TabConfig {
   value: string;
   label: string;
-  icon: any; 
+  icon: React.ReactNode;
   status: ProjectStatus;
   emptyMessage: string;
 }
