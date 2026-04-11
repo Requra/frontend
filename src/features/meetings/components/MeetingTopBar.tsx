@@ -1,25 +1,28 @@
-import { Users, Layout, ScrollText, Settings, ShieldCheck, ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/Button/Button";
+import { Users, Layout, ScrollText, Settings, ShieldCheck, Timer } from "lucide-react";
+import { useMeetingStore } from "../stores/useMeetingStore";
 import { cn } from "@/lib/utils";
 
 interface MeetingTopBarProps {
   title: string;
-  duration: string;
-  participantCount: number;
-  viewMode: "grid" | "transcript";
-  onViewModeChange: (mode: "grid" | "transcript") => void;
-  isRecording?: boolean;
 }
 
-export const MeetingTopBar = ({ 
-  title, 
-  duration, 
-  participantCount, 
-  viewMode,
-  onViewModeChange,
-  isRecording = true 
-}: MeetingTopBarProps) => {
+export const MeetingTopBar = ({ title }: MeetingTopBarProps) => {
+  const { 
+    viewMode, 
+    duration, 
+    participants, 
+    setViewMode,
+    toggleSidebar,
+    activeSidePanel
+  } = useMeetingStore();
+
   const isDark = viewMode === "grid";
+
+  const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
 
   return (
     <div className={cn(
@@ -28,40 +31,40 @@ export const MeetingTopBar = ({
         ? "bg-neutral-950/40 backdrop-blur-2xl border-b border-white/5" 
         : "bg-white/90 backdrop-blur-2xl border-b border-neutral-200"
     )}>
-      {/* Left: Meeting Info & Security */}
+      {/* Left: Meeting Info */}
       <div className="flex items-center gap-6">
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col">
           <h1 className={cn(
-            "text-lg font-bold tracking-tight",
+            "text-lg font-black tracking-tight flex items-center gap-3",
             isDark ? "text-white" : "text-neutral-900"
-          )}>{title}</h1>
-          <div className={cn(
-            "flex items-center gap-2 p-1.5 px-3 rounded-xl border transition-colors",
-            isDark ? "bg-white/5 border-white/5 text-neutral-400 group hover:border-white/10" : "bg-neutral-100 border-neutral-200 text-neutral-500"
           )}>
-            <ShieldCheck size={14} className="text-emerald-500" />
-            <span className="text-xs font-mono font-bold tracking-widest uppercase">req-4a7x-bkm</span>
-            <ChevronDown size={14} className="ml-1 opacity-50" />
+            {title}
+            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-green-500/10 border border-green-500/20 rounded-lg">
+              <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+              <span className="text-[10px] uppercase font-black tracking-widest text-green-500">Live</span>
+            </div>
+          </h1>
+          <div className="flex items-center gap-4 mt-1">
+            <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-neutral-500">
+               <ShieldCheck size={12} className="text-primary-500" />
+               End-to-End Encrypted
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Center: Live Status */}
-      <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-6">
-        {isRecording && (
-          <div className="flex items-center gap-3 bg-red-500/10 px-4 py-2 rounded-2xl border border-red-500/20">
-            <div className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
-            </div>
-            <span className="text-xs font-bold text-red-500 uppercase tracking-widest">Live Record</span>
-            <div className="w-px h-3 bg-red-500/20 mx-1" />
-            <span className="text-xs font-mono font-bold text-red-500/80">{duration}</span>
-          </div>
-        )}
+      {/* Center: Live Timer */}
+      <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-3 bg-primary-500/10 px-4 py-2 rounded-2xl border border-primary-500/20">
+        <Timer size={14} className="text-primary-500" />
+        <span className={cn(
+          "text-sm font-mono font-bold tracking-tighter",
+          isDark ? "text-primary-400" : "text-primary-600"
+        )}>
+          {formatDuration(duration)}
+        </span>
       </div>
 
-      {/* Right: View Switching & Global Actions */}
+      {/* Right: Actions */}
       <div className="flex items-center gap-4">
         {/* View Switchers */}
         <div className={cn(
@@ -69,24 +72,24 @@ export const MeetingTopBar = ({
           isDark ? "bg-white/5 border-white/5" : "bg-neutral-100 border-neutral-200"
         )}>
           <button 
-            onClick={() => onViewModeChange("grid")}
+            onClick={() => setViewMode("grid")}
             className={cn(
               "h-10 px-4 rounded-xl flex items-center gap-2 transition-all text-xs font-bold",
               viewMode === "grid" 
                 ? (isDark ? "bg-white/10 text-white shadow-xl" : "bg-white text-neutral-900 shadow-sm")
-                : (isDark ? "text-neutral-500 hover:text-neutral-300" : "text-neutral-400 hover:text-neutral-600")
+                : "text-neutral-500 hover:text-neutral-300"
             )}
           >
             <Layout size={16} />
             Grid
           </button>
           <button 
-            onClick={() => onViewModeChange("transcript")}
+            onClick={() => setViewMode("transcript")}
             className={cn(
               "h-10 px-4 rounded-xl flex items-center gap-2 transition-all text-xs font-bold",
               viewMode === "transcript" 
                 ? (isDark ? "bg-white/10 text-white shadow-xl" : "bg-white text-neutral-900 shadow-sm")
-                : (isDark ? "text-neutral-500 hover:text-neutral-300" : "text-neutral-400 hover:text-neutral-600")
+                : "text-neutral-500 hover:text-neutral-300"
             )}
           >
             <ScrollText size={16} />
@@ -97,34 +100,34 @@ export const MeetingTopBar = ({
         <div className="w-px h-6 bg-white/10 mx-1" />
 
         <div className="flex items-center gap-2">
-          <Button 
-            variant="ghost" 
-            size="icon" 
+          <button 
+            onClick={() => toggleSidebar("participants")}
             className={cn(
-               "h-11 w-11 rounded-2xl relative",
-               isDark ? "text-neutral-400 hover:bg-white/5" : "text-neutral-500 hover:bg-neutral-100"
+               "h-11 w-11 rounded-2xl relative flex items-center justify-center transition-all",
+               activeSidePanel === "participants" 
+                 ? "bg-primary-500 text-white shadow-lg shadow-primary-500/30" 
+                 : (isDark ? "text-neutral-400 hover:bg-white/5" : "text-neutral-500 hover:bg-neutral-100")
             )}
           >
             <Users size={20} />
-            <span className="absolute -top-1 -right-1 h-5 w-5 bg-primary-500 text-white text-[10px] font-bold flex items-center justify-center rounded-lg border-2 border-neutral-950">
-              {participantCount}
+            <span className={cn(
+              "absolute -top-1 -right-1 h-5 w-5 text-[10px] font-bold flex items-center justify-center rounded-lg border-2",
+              isDark ? "bg-primary-500 text-white border-neutral-950" : "bg-primary-600 text-white border-white"
+            )}>
+              {participants.length}
             </span>
-          </Button>
+          </button>
           
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className={cn(
-              "h-11 w-11 rounded-2xl",
-              isDark ? "text-neutral-400 hover:bg-white/5" : "text-neutral-500 hover:bg-neutral-100"
-            )}
-          >
+          <button className={cn(
+            "h-11 w-11 rounded-2xl flex items-center justify-center transition-all",
+            isDark ? "text-neutral-400 hover:bg-white/5" : "text-neutral-500 hover:bg-neutral-100"
+          )}>
             <Settings size={20} />
-          </Button>
+          </button>
           
           <div className="h-10 w-10 rounded-full border-2 border-primary-500 p-0.5 ml-2 ring-1 ring-primary-500/20 shadow-xl overflow-hidden cursor-pointer group">
-            <div className="h-full w-full rounded-full bg-neutral-800 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <span className="text-xs font-bold text-white">JD</span>
+            <div className="h-full w-full rounded-full bg-neutral-800 flex items-center justify-center group-hover:scale-110 transition-transform text-white text-xs font-bold uppercase">
+              {participants[0]?.initials || "AJ"}
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { 
   Mic, 
   MicOff, 
@@ -14,27 +14,30 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
+import { useMeetingStore } from "../stores/useMeetingStore";
 
 interface InMeetingControlsProps {
-  viewMode: "grid" | "transcript";
-  isMuted: boolean;
-  onToggleMute: () => void;
-  isCameraOff: boolean;
-  onToggleCamera: () => void;
   onEndMeeting: () => void;
   className?: string;
 }
 
 export const InMeetingControls: React.FC<InMeetingControlsProps> = ({
-  viewMode,
-  isMuted,
-  onToggleMute,
-  isCameraOff,
-  onToggleCamera,
   onEndMeeting,
   className,
 }) => {
-  const [isHandRaised, setIsHandRaised] = useState(false);
+  const { 
+    viewMode, 
+    isMuted, 
+    isVideoOff, 
+    isHandRaised,
+    isScreenSharing,
+    participants,
+    toggleMute, 
+    toggleVideo,
+    toggleHandRaise,
+    toggleScreenShare,
+    toggleSidebar 
+  } = useMeetingStore();
 
   return (
     <div className={cn(
@@ -49,14 +52,14 @@ export const InMeetingControls: React.FC<InMeetingControlsProps> = ({
           <ControlButton
             icon={isMuted ? MicOff : Mic}
             label={isMuted ? "Unmute" : "Mute"}
-            onClick={onToggleMute}
+            onClick={toggleMute}
             className={isMuted ? "text-red-400 bg-red-400/10 hover:bg-red-400/20" : ""}
           />
           <ControlButton
-            icon={isCameraOff ? VideoOff : Video}
-            label={isCameraOff ? "Start Video" : "Stop Video"}
-            onClick={onToggleCamera}
-            className={isCameraOff ? "text-red-400 bg-red-400/10 hover:bg-red-400/20" : ""}
+            icon={isVideoOff ? VideoOff : Video}
+            label={isVideoOff ? "Start Video" : "Stop Video"}
+            onClick={toggleVideo}
+            className={isVideoOff ? "text-red-400 bg-red-400/10 hover:bg-red-400/20" : ""}
           />
         </div>
 
@@ -67,12 +70,13 @@ export const InMeetingControls: React.FC<InMeetingControlsProps> = ({
           <ControlButton
             icon={ScreenShare}
             label="Share Screen"
-            onClick={() => {}}
+            onClick={toggleScreenShare}
+            className={isScreenSharing ? "text-primary-400 bg-primary-400/10 hover:bg-primary-400/20" : ""}
           />
           <ControlButton
             icon={Hand}
             label="Raise Hand"
-            onClick={() => setIsHandRaised(!isHandRaised)}
+            onClick={toggleHandRaise}
             className={isHandRaised ? "text-primary-400 bg-primary-400/10 hover:bg-primary-400/20" : ""}
           />
           <ControlButton
@@ -89,13 +93,13 @@ export const InMeetingControls: React.FC<InMeetingControlsProps> = ({
           <ControlButton
             icon={Users}
             label="Participants"
-            badge={4}
-            onClick={() => {}}
+            badge={participants.length}
+            onClick={() => toggleSidebar("participants")}
           />
           <ControlButton
             icon={MessageSquare}
             label="Chat"
-            onClick={() => {}}
+            onClick={() => toggleSidebar("chat")}
           />
           <ControlButton
             icon={MoreHorizontal}
@@ -144,7 +148,7 @@ const ControlButton: React.FC<ControlButtonProps> = ({
         )}
       >
         <Icon size={20} />
-        {badge && (
+        {badge !== undefined && (
           <span className="absolute top-2 right-2 w-4 h-4 bg-primary-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border border-neutral-900">
             {badge}
           </span>

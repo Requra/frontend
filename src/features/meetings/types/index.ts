@@ -9,7 +9,9 @@ export interface Participant {
   initials: string;
   isOnline: boolean;
   isMuted?: boolean;
+  isHandRaised?: boolean;
   isHost?: boolean;
+  isSpeaking?: boolean;
 }
 
 export interface TranscriptionEntry {
@@ -19,6 +21,14 @@ export interface TranscriptionEntry {
   participantRole: string;
   timestamp: string;
   text: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  senderId: string;
+  senderName: string;
+  text: string;
+  timestamp: string;
 }
 
 export interface Meeting {
