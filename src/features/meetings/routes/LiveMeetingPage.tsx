@@ -13,6 +13,7 @@ import { paths } from "@/routes/paths";
 import { cn } from "@/lib/utils";
 import type { Participant } from "../types";
 import { MeetingChatPanel } from "../components/MeetingChatPanel";
+import { InviteMembersModal } from "../components/InviteMembersModal";
 
 // Initial Mock Participants 
 const MOCK_PARTICIPANTS: Participant[] = [
@@ -33,7 +34,8 @@ export const LiveMeetingPage = () => {
     participants,
     setParticipants,
     startSimulation,
-    stopSimulation 
+    stopSimulation,
+    generateMeetingLink 
   } = useMeetingStore();
 
   const { data: project, isLoading } = useQuery({
@@ -43,10 +45,13 @@ export const LiveMeetingPage = () => {
   });
 
   useEffect(() => {
+    if (projectId) {
+      generateMeetingLink(projectId);
+    }
     setParticipants(MOCK_PARTICIPANTS);
     startSimulation();
     return () => stopSimulation();
-  }, [setParticipants, startSimulation, stopSimulation]);
+  }, [projectId, generateMeetingLink, setParticipants, startSimulation, stopSimulation]);
 
   if (isLoading) {
     return (
@@ -61,13 +66,14 @@ export const LiveMeetingPage = () => {
   return (
     <div className={cn(
       "fixed inset-0 flex flex-col z-50 overflow-hidden transition-colors duration-500",
-      viewMode === "grid" ? "bg-neutral-950" : "bg-white"
+      viewMode === "grid" ? "bg-neutral-950" : "bg-white",
+      "selection:bg-primary-100"
     )}>
       <MeetingTopBar title={meetingTitle} />
 
       <div className="flex-1 flex flex-row overflow-hidden relative">
         <div className="flex-1 flex flex-col relative overflow-hidden">
-          <div className="flex-1 flex flex-col overflow-hidden motion-safe:animate-in motion-safe:fade-in motion-safe:duration-500">
+          <div className="flex-1 flex flex-col overflow-hidden motion-safe:animate-in motion-safe:fade-in motion-safe:duration-500 bg-linear-to-br from-neutral-50 to-white dark:from-neutral-950 dark:to-neutral-900">
             {viewMode === "grid" ? (
               <MeetingGridView participants={participants} />
             ) : (
@@ -89,6 +95,8 @@ export const LiveMeetingPage = () => {
           {activeSidePanel === "participants" && <ParticipantList participants={participants} />}
         </div>
       </div>
+      
+      <InviteMembersModal />
     </div>
   );
 };

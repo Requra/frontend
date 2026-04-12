@@ -71,12 +71,13 @@ function TabsTrigger({
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
       className={cn(
-        "group/tabs-trigger relative inline-flex items-center justify-center gap-2 px-1 pb-3 text-sm font-medium whitespace-nowrap transition-all outline-none cursor-pointer select-none",
+        "group/tabs-trigger relative inline-flex items-center justify-center gap-2 px-1 text-sm font-medium whitespace-nowrap transition-all outline-none cursor-pointer select-none group-data-[variant=default]/tabs-list:pb-3 group-data-[variant=pills]/tabs-list:py-1.5",
+        "text-neutral-500 hover:text-neutral-700",
         "text-neutral-500 hover:text-neutral-700",
         "data-[state=active]:text-primary-600",
-        // Underline for 'default' variant (line style)
-        "after:absolute after:-bottom-px after:left-0 after:right-0 after:h-0.5 after:bg-primary-600 after:opacity-0 after:transition-opacity",
-        "data-[state=active]:after:opacity-100",
+        // Underline only for 'default' variant
+        "group-data-[variant=default]/tabs-list:after:absolute group-data-[variant=default]/tabs-list:after:-bottom-px group-data-[variant=default]/tabs-list:after:left-0 group-data-[variant=default]/tabs-list:after:right-0 group-data-[variant=default]/tabs-list:after:h-0.5 group-data-[variant=default]/tabs-list:after:bg-primary-600 group-data-[variant=default]/tabs-list:after:opacity-0 group-data-[variant=default]/tabs-list:after:transition-opacity",
+        "group-data-[variant=default]/tabs-list:data-[state=active]:after:opacity-100",
         className,
       )}
       {...props}

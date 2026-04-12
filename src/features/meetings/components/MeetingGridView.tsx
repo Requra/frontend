@@ -1,6 +1,7 @@
 import type { Participant } from "../types";
 import { Mic, MicOff } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { JoinRequestToast } from "./JoinRequestToast";
 
 interface MeetingGridViewProps {
   participants: Participant[];
@@ -9,6 +10,7 @@ interface MeetingGridViewProps {
 export const MeetingGridView = ({ participants }: MeetingGridViewProps) => {
   return (
     <div className="flex-1 p-6 flex flex-col items-center justify-center bg-neutral-950">
+      <JoinRequestToast />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-6xl aspect-video md:aspect-auto h-full max-h-[80vh]">
         {participants.slice(0, 4).map((participant) => (
           <ParticipantCard key={participant.id} participant={participant} />

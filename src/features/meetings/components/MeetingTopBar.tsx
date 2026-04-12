@@ -1,6 +1,7 @@
 import { Users, Layout, ScrollText, Settings, ShieldCheck, Timer } from "lucide-react";
 import { useMeetingStore } from "../stores/useMeetingStore";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface MeetingTopBarProps {
   title: string;
@@ -11,6 +12,8 @@ export const MeetingTopBar = ({ title }: MeetingTopBarProps) => {
     viewMode, 
     duration, 
     participants, 
+    isRecording,
+    meetingLink,
     setViewMode,
     toggleSidebar,
     activeSidePanel
@@ -43,12 +46,31 @@ export const MeetingTopBar = ({ title }: MeetingTopBarProps) => {
               <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
               <span className="text-[10px] uppercase font-black tracking-widest text-green-500">Live</span>
             </div>
+            {isRecording && (
+              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-red-500/10 border border-red-500/20 rounded-lg">
+                <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.5)]" />
+                <span className="text-[10px] uppercase font-black tracking-widest text-red-500">REC</span>
+              </div>
+            )}
           </h1>
           <div className="flex items-center gap-4 mt-1">
             <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-neutral-500">
                <ShieldCheck size={12} className="text-primary-500" />
                End-to-End Encrypted
             </div>
+            <button 
+              onClick={() => {
+                navigator.clipboard.writeText(meetingLink || window.location.href);
+                toast.success("Meeting link copied to clipboard", {
+                  description: "You can now share it with others.",
+                  duration: 2500,
+                  position: "top-center"
+                });
+              }}
+              className="text-[10px] font-black uppercase tracking-widest text-primary-500 hover:text-primary-400 underline underline-offset-4 decoration-primary-500/30 transition-colors"
+            >
+              Meeting Info
+            </button>
           </div>
         </div>
       </div>

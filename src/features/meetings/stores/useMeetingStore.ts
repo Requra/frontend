@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Participant, TranscriptionEntry, ChatMessage } from "../types";
+import type { Participant, TranscriptionEntry, ChatMessage, Invitation } from "../types";
 
 interface MeetingState {
   viewMode: "grid" | "transcript";
@@ -7,11 +7,16 @@ interface MeetingState {
   isVideoOff: boolean;
   isHandRaised: boolean;
   isScreenSharing: boolean;
+  isRecording: boolean;
   duration: number;
   participants: Participant[];
+  joinRequests: Participant[];
   transcript: TranscriptionEntry[];
   messages: ChatMessage[];
   activeSidePanel: "chat" | "participants" | null;
+  isInviteModalOpen: boolean;
+  pendingInvites: Invitation[];
+  meetingLink: string;
   
   // Actions
   setViewMode: (mode: "grid" | "transcript") => void;
@@ -19,14 +24,22 @@ interface MeetingState {
   toggleVideo: () => void;
   toggleHandRaise: () => void;
   toggleScreenShare: () => void;
+  toggleRecording: () => void;
   toggleSidebar: (panel: "chat" | "participants" | null) => void;
+  setInviteModalOpen: (open: boolean) => void;
   sendMessage: (text: string) => void;
   setParticipants: (participants: Participant[]) => void;
   addParticipant: (participant: Participant) => void;
+  addJoinRequest: (participant: Participant) => void;
+  onAdmitParticipant: (id: string) => void;
+  onDenyParticipant: (id: string) => void;
+  sendInvite: (invite: Omit<Invitation, "id" | "invitedAt" | "status">) => void;
+  generateMeetingLink: (meetingId: string) => void;
   
   // Simulation intervals
   simulationInterval: any;
   timerInterval: any;
+  inviteSimulationInterval: any;
   startSimulation: () => void;
   stopSimulation: () => void;
 }
@@ -44,23 +57,32 @@ export const useMeetingStore = create<MeetingState>((set, get) => ({
   isVideoOff: false,
   isHandRaised: false,
   isScreenSharing: false,
+  isRecording: false,
   duration: 0,
   participants: INITIAL_PARTICIPANTS,
+  joinRequests: [],
   transcript: [],
   messages: [],
   activeSidePanel: null,
+  isInviteModalOpen: false,
+  pendingInvites: [],
+  meetingLink: "",
   simulationInterval: null,
   timerInterval: null,
+  inviteSimulationInterval: null,
 
   setViewMode: (viewMode) => set({ viewMode }),
   toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
   toggleVideo: () => set((state) => ({ isVideoOff: !state.isVideoOff })),
   toggleHandRaise: () => set((state) => ({ isHandRaised: !state.isHandRaised })),
   toggleScreenShare: () => set((state) => ({ isScreenSharing: !state.isScreenSharing })),
+  toggleRecording: () => set((state) => ({ isRecording: !state.isRecording })),
   
   toggleSidebar: (panel) => set((state) => ({ 
     activeSidePanel: state.activeSidePanel === panel ? null : panel 
   })),
+
+  setInviteModalOpen: (isInviteModalOpen) => set({ isInviteModalOpen }),
 
   sendMessage: (text) => set((state) => ({
     messages: [...state.messages, {
@@ -78,8 +100,38 @@ export const useMeetingStore = create<MeetingState>((set, get) => ({
     participants: [...state.participants, participant]
   })),
 
+  addJoinRequest: (participant) => set((state) => ({
+    joinRequests: [...state.joinRequests, participant]
+  })),
+
+  onAdmitParticipant: (id) => set((state) => {
+    const participant = state.joinRequests.find(p => p.id === id);
+    if (!participant) return state;
+    return {
+      joinRequests: state.joinRequests.filter(p => p.id !== id),
+      participants: [...state.participants, { ...participant, isOnline: true, status: "online" }]
+    };
+  }),
+
+  onDenyParticipant: (id) => set((state) => ({
+    joinRequests: state.joinRequests.filter(p => p.id !== id)
+  })),
+
+  sendInvite: (inviteData) => set((state) => ({
+    pendingInvites: [...state.pendingInvites, {
+      ...inviteData,
+      id: `inv-${Date.now()}`,
+      status: "pending",
+      invitedAt: new Date().toISOString()
+    }]
+  })),
+
+  generateMeetingLink: (meetingId) => {
+    const baseUrl = window.location.origin;
+    set({ meetingLink: `${baseUrl}/meetings/${meetingId}/join` });
+  },
+
   startSimulation: () => {
-    // Clear existing to avoid leaks
     const current = get();
     if (current.simulationInterval) clearInterval(current.simulationInterval);
     if (current.timerInterval) clearInterval(current.timerInterval);
@@ -122,13 +174,33 @@ export const useMeetingStore = create<MeetingState>((set, get) => ({
       set(state => ({ duration: state.duration + 1 }));
     }, 1000);
 
-    set({ simulationInterval, timerInterval });
+    const inviteSimulationInterval = setInterval(() => {
+      const state = get();
+      if (state.joinRequests.length > 0) return; // Only one request at a time for demo
+
+      const guests = [
+        { id: "g-1", name: "Oliver Smith", role: "Frontend Dev", initials: "OS" },
+        { id: "g-2", name: "Emma Watson", role: "Designer", initials: "EW" },
+        { id: "g-3", name: "Noah Brown", role: "Architect", initials: "NB" },
+      ];
+
+      const guest = guests[Math.floor(Math.random() * guests.length)];
+      get().addJoinRequest({
+        ...guest,
+        isOnline: false,
+        isMuted: true,
+        status: "online"
+      });
+    }, 45000); // Trigger a request every 45s for realism
+
+    set({ simulationInterval, timerInterval, inviteSimulationInterval });
   },
 
   stopSimulation: () => {
-    const { simulationInterval, timerInterval } = get();
+    const { simulationInterval, timerInterval, inviteSimulationInterval } = get();
     if (simulationInterval) clearInterval(simulationInterval);
     if (timerInterval) clearInterval(timerInterval);
-    set({ simulationInterval: null, timerInterval: null });
+    if (inviteSimulationInterval) clearInterval(inviteSimulationInterval);
+    set({ simulationInterval: null, timerInterval: null, inviteSimulationInterval: null });
   },
 }));

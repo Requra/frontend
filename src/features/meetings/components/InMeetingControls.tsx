@@ -10,7 +10,9 @@ import {
   Users, 
   MessageSquare, 
   MoreHorizontal,
-  ScreenShare
+  ScreenShare,
+  UserPlus,
+  Circle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
@@ -31,12 +33,15 @@ export const InMeetingControls: React.FC<InMeetingControlsProps> = ({
     isVideoOff, 
     isHandRaised,
     isScreenSharing,
+    isRecording,
     participants,
     toggleMute, 
     toggleVideo,
     toggleHandRaise,
     toggleScreenShare,
-    toggleSidebar 
+    toggleRecording,
+    toggleSidebar,
+    setInviteModalOpen
   } = useMeetingStore();
 
   return (
@@ -100,6 +105,20 @@ export const InMeetingControls: React.FC<InMeetingControlsProps> = ({
             icon={MessageSquare}
             label="Chat"
             onClick={() => toggleSidebar("chat")}
+          />
+          <ControlButton
+            icon={UserPlus}
+            label="Invite People"
+            onClick={() => setInviteModalOpen(true)}
+            className="text-emerald-400 bg-emerald-400/10 hover:bg-emerald-400/20"
+          />
+          <ControlButton
+            icon={Circle}
+            label={isRecording ? "Stop Recording" : "Start Recording"}
+            onClick={toggleRecording}
+            className={cn(
+              isRecording ? "text-red-400 bg-red-400/20 hover:bg-red-400/30 ring-1 ring-red-400/50" : ""
+            )}
           />
           <ControlButton
             icon={MoreHorizontal}

@@ -14,6 +14,17 @@ export interface Participant {
   isSpeaking?: boolean;
 }
 
+export type MeetingRole = "host" | "participant" | "guest";
+
+export interface Invitation {
+  id: string;
+  meetingId: string;
+  email: string;
+  role: MeetingRole;
+  status: "pending" | "accepted" | "declined";
+  invitedAt: string;
+}
+
 export interface TranscriptionEntry {
   id: string;
   participantId: string;
