@@ -4,13 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { paths } from "@/routes/paths";
 
 interface ProjectCardFooterProps {
-  userName: string;
+  clientName: string;
   userAvatar?: string;
   id: string;
 }
 
 export function ProjectCardFooter({
-  userName,
+  clientName,
   userAvatar,
   id,
 }: ProjectCardFooterProps) {
@@ -22,7 +22,7 @@ export function ProjectCardFooter({
           {userAvatar ? (
             <img
               src={userAvatar}
-              alt={userName}
+              alt={clientName}
               className="h-full w-full object-cover"
             />
           ) : (
@@ -30,7 +30,7 @@ export function ProjectCardFooter({
           )}
         </div>
         <span className="text-xs font-medium text-neutral-500 truncate max-w-[100px]">
-          {userName}
+          {clientName}
         </span>
       </div>
       <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -38,7 +38,10 @@ export function ProjectCardFooter({
           variant="secondary"
           size="sm"
           className="h-8 px-3 text-xs bg-primary-50"
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(paths.app.projects.edit(id));
+          }}
         >
           Edit
         </Button>
@@ -47,11 +50,13 @@ export function ProjectCardFooter({
           size="sm"
           className="h-8 px-3 text-xs shadow-sm shadow-primary-500/20"
           onClick={(e) => {
-            (e.stopPropagation(), navigate(paths.app.projects.details(id)));
+            e.stopPropagation();
+            navigate(paths.app.projects.details(id));
           }}
         >
           View Details
         </Button>
+
       </div>
     </div>
   );

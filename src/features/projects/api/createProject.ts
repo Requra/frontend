@@ -1,37 +1,41 @@
+import { apiClient } from "@/services/api";
+import { toast } from "sonner";
+import type { ApiResponse } from "@/types/api";
+import type { Project } from "../types";
 import type { CreateProjectFormData } from "../schemas/createProjectSchema";
 
-// Simulates network latency
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-export interface ProjectResponse {
-  id: string;
-  projectName: string;
-  clientName: string;
-  projectType: string;
-  description?: string;
-  teamMembers: string[];
-  createdAt: string;
-}
-
+/**
+ * Service to create a new project.
+ */
 export async function createProjectApi(
-  data: CreateProjectFormData
-): Promise<ProjectResponse> {
-  // Simulate network delay
-  await delay(1500);
+  formData: CreateProjectFormData
+): Promise<Project> {
+  try {
+    // Map form data to backend-expected structure
+    const requestBody = {
+      name: formData.projectName,
+      description: formData.description || "",
+      clientName: formData.clientName,
+      teamMembers: formData.teamMembers.map((email) => ({ email })),
+      // Note: status is likely set by backend to 'InProgress' by default
+    };
 
-  // Simulate random server error (10% chance)
-  if (Math.random() < 0.1) {
-    throw new Error("Server error: Unable to create project. Please try again.");
+    const response = await apiClient.post<ApiResponse<Project>>(
+      "/api/projects",
+      requestBody
+    );
+
+    if (!response.data.isSuccess || !response.data.data) {
+      const message = response.data.message || "Failed to create project";
+      toast.error(message);
+      throw new Error(message);
+    }
+
+    return response.data.data;
+  } catch (error: any) {
+    if (!error.message || error.message === "Failed to create project") {
+       toast.error("Network error: Unable to create project.");
+    }
+    throw error;
   }
-
-  // Return mock response
-  return {
-    id: crypto.randomUUID(),
-    projectName: data.projectName,
-    clientName: data.clientName,
-    projectType: data.projectType,
-    description: data.description || undefined,
-    teamMembers: data.teamMembers || [],
-    createdAt: new Date().toISOString(),
-  };
 }

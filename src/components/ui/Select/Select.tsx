@@ -7,7 +7,7 @@ export interface SelectProps extends React.ComponentProps<"select"> {
   error?: string | React.ReactNode;
   wrapperClassName?: string;
   placeholder?: string;
-  options: { value: string; label: string }[];
+  options: { value: string | number; label: string }[];
 }
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps>(

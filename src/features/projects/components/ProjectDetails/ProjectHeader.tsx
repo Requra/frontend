@@ -6,12 +6,48 @@ import {
   ArrowLeft,
   Clock,
   ChevronRight,
+  Edit3,
+  Trash2,
+  PhoneOff,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { paths } from "@/routes/paths";
+import { getProjectByIdApi } from "../../api/getProjects";
+import { deleteProjectApi } from "../../api/deleteProject";
+import { ProjectStatus } from "../../types/enums";
+import { STATUS_STYLES, STATUS_LABELS } from "../ProjectCard/types";
+import { useState } from "react";
+import { toast } from "sonner";
+import { ConfirmationModal } from "../ConfirmationModal";
 
 export const ProjectHeader = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { projectId } = useParams<{ projectId: string }>();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const { mutate: deleteProject, isPending: isDeleting } = useMutation({
+    mutationFn: deleteProjectApi,
+    onSuccess: () => {
+      toast.success("Project deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      navigate(paths.app.projects.root);
+    },
+    onError: (error: any) => {
+      toast.error(error?.message || "Failed to delete project");
+    },
+  });
+
+
+  const { data: project } = useQuery({
+    queryKey: ["project", projectId],
+    queryFn: () => getProjectByIdApi(projectId!),
+    enabled: !!projectId,
+  });
+
+  const projectName = project?.name || "Loading...";
+  const status = (project?.status ?? ProjectStatus.InProgress) as ProjectStatus;
 
   return (
     <div className="flex flex-col gap-5">
@@ -25,8 +61,8 @@ export const ProjectHeader = () => {
           Projects
         </button>
         <ChevronRight className="w-3.5 h-3.5 text-neutral-300" />
-        <span className="text-neutral-700 font-semibold">
-          CRM System Project
+        <span className="text-neutral-700 font-semibold truncate max-w-[200px]">
+          {projectName}
         </span>
       </div>
 
@@ -34,24 +70,56 @@ export const ProjectHeader = () => {
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-extrabold tracking-tight text-neutral-900">
-            CRM System Project
+            {projectName}
           </h1>
           <div className="flex items-center gap-3">
-            <Badge variant="success" size="default">
-              <CheckCircle className="w-3 h-3 mr-1" />
-              COMPLETED
+            <Badge 
+              variant={status === ProjectStatus.Completed ? "success" : "extracted"} 
+              size="default"
+              className={STATUS_STYLES[status]}
+            >
+              {status === ProjectStatus.Completed && <CheckCircle className="w-3 h-3 mr-1" />}
+              {STATUS_LABELS[status]}
             </Badge>
             <span className="flex items-center gap-1.5 text-xs font-medium text-neutral-400">
               <Clock className="w-3 h-3" />
-              Updated 1m ago
+              Updated recently
             </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
+          <Button
+            variant="ghost-neutral"
+            className="h-10 px-4 rounded-xl text-danger-600 hover:bg-danger-50 hover:text-danger-700 font-semibold transition-all text-sm border-none shadow-none"
+            onClick={() => setIsDeleteModalOpen(true)}
+          >
+            <Trash2 className="mr-2 h-3.5 w-3.5" />
+            Delete Project
+          </Button>
+
           <Button
             variant="outline"
-            className="h-10 px-5 rounded-xl border-neutral-200 text-neutral-600 hover:bg-neutral-50 hover:border-neutral-300 shadow-sm font-semibold transition-all text-sm"
+            className="h-10 px-4 rounded-xl border-neutral-200 text-neutral-600 hover:bg-neutral-50 hover:border-neutral-300 shadow-sm font-semibold transition-all text-sm"
+            onClick={() => navigate(paths.app.projects.edit(projectId!))}
+          >
+            <Edit3 className="mr-2 h-3.5 w-3.5" />
+            Edit Project
+          </Button>
+          <Button
+            variant="outline"
+            className="h-10 px-4 rounded-xl border-primary-100 text-primary-600 hover:bg-primary-50 hover:border-primary-200 shadow-sm font-bold transition-all text-sm group"
+            onClick={() => navigate(paths.app.projects.meetings.live(projectId!))}
+          >
+            <div className="relative mr-2">
+              <PhoneOff className="h-3.5 w-3.5 rotate-135 group-hover:scale-110 transition-transform" />
+              <span className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
+            </div>
+            Start Meeting
+          </Button>
+          <Button
+            variant="outline"
+            className="h-10 px-4 rounded-xl border-neutral-200 text-neutral-600 hover:bg-neutral-50 hover:border-neutral-300 shadow-sm font-semibold transition-all text-sm"
           >
             <Share2 className="mr-2 h-3.5 w-3.5" />
             Share
@@ -65,6 +133,20 @@ export const ProjectHeader = () => {
           </Button>
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={() => deleteProject(projectId!)}
+        title="Delete Project?"
+        description={`Are you sure you want to delete "${projectName}"? This action cannot be undone and all associated requirements and stories will be lost.`}
+        confirmLabel="Delete Project"
+        cancelLabel="Keep Project"
+        variant="destructive"
+        icon={Trash2}
+        isLoading={isDeleting}
+      />
     </div>
   );
 };
+

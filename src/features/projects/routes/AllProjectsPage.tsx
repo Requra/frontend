@@ -20,12 +20,13 @@ import { ProjectCard } from "../components/ProjectCard";
 import { AddProjectCard } from "../components/AddProjectCard";
 import { ProjectEmptyState } from "../components/ProjectEmptyState";
 import { TABS_CONFIG } from "../constants";
-import type { ProjectStatus } from "../components/ProjectCard/types";
+import { ProjectStatus } from "../types/enums";
 import { useQuery } from "@tanstack/react-query";
 import { getProjectsApi } from "../api/getProjects";
+import type { Project } from "../types";
 import { ProjectCardSkeleton } from "../components/ProjectCardSkeleton";
 import { Pagination } from "@/components/ui/Pagination/Pagination";
-import { MOCK_PROJECTS } from "../constants";
+
 
 type ViewMode = "grid" | "list";
 type SortOption = "newest" | "oldest" | "az";
@@ -40,7 +41,7 @@ export const AllProjectsPage = () => {
   const [sortBy, setSortBy] = useState<SortOption>("newest");
 
   const currentTabConfig = TABS_CONFIG.find((t) => t.value === activeTab);
-  const currentStatus = currentTabConfig?.status || "IN PROGRESS";
+  const currentStatus = currentTabConfig?.status ?? ProjectStatus.InProgress;
 
   const handleSearchChange = (val: string) => {
     setInputSearch(val);
@@ -70,7 +71,8 @@ export const AllProjectsPage = () => {
   const handleAddProject = () => navigate(paths.app.newProject);
 
   const getStatusCount = (status: ProjectStatus) =>
-    MOCK_PROJECTS.filter((p) => p.status === status).length;
+    data?.statusCounts[status] || 0;
+
 
   const getGridClassname = () =>
     viewMode === "grid"
@@ -202,7 +204,7 @@ export const AllProjectsPage = () => {
               // Data State + Pagination
               <div className="flex flex-col gap-8">
                 <div className={getGridClassname()}>
-                  {data?.data.map((project) => (
+                  {data?.data.map((project: Project) => (
                     <ProjectCard key={project.id} {...project} searchQuery={searchQuery} />
                   ))}
                   

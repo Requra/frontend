@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { ArrowRight } from "lucide-react";
 
@@ -14,8 +14,9 @@ import { paths } from "@/routes/paths";
 
 export const AddSourcesPage = () => {
   const navigate = useNavigate();
+  const { projectId } = useParams<{ projectId: string }>();
   const { files, completedFiles, isUploading, handleFilesSelected, handleRemove } =
-    useFileUpload();
+    useFileUpload(projectId);
 
   return (
     <div className="flex flex-col items-center w-full py-8 border border-neutral-200 rounded-lg bg-white shadow-sm my-8 h-fit">
