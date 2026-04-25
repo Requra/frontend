@@ -11,6 +11,7 @@ import { authRoutes, publicAuthRoutes } from "@/features/auth/routes/index";
 import { dashboardRoutes } from "@/features/dashboard/routes/index";
 import { projectsRoutes, immersiveMeetingRoutes } from "@/features/projects/routes/index";
 import { landingRoutes } from "@/features/landing/routes/index";
+import { profileRoutes } from "@/features/profile/routes/index";
 import { miscellaneousRoutes } from "@/features/misc/routes/index";
 import type { AppRoute } from "@/types/routes";
 import { Outlet } from "react-router-dom";
@@ -56,7 +57,7 @@ export const router = createBrowserRouter([
             <DashboardLayout />
           </ProtectedRoute>
         ),
-        children: withSuspense([...dashboardRoutes, ...projectsRoutes]),
+        children: withSuspense([...dashboardRoutes, ...projectsRoutes, ...profileRoutes]),
       },
       {
         element: (

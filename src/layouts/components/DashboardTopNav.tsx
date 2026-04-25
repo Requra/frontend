@@ -1,4 +1,11 @@
-import { Bell, BellOff, ChevronDown, LogOut, Settings, User as UserIcon } from "lucide-react";
+import {
+  Bell,
+  BellOff,
+  ChevronDown,
+  LogOut,
+  Settings,
+  User as UserIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/Button/Button";
 import { SearchBar } from "@/components/ui/SearchBar/SearchBar";
 import { useAuthStore } from "@/stores/auth";
@@ -11,6 +18,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu/DropdownMenu";
 import { UserRole } from "@/features/auth/types/enums";
+import { paths } from "@/routes/paths";
+import { Link } from "react-router-dom";
 
 interface DashboardTopNavProps {
   isNotificationsOpen: boolean;
@@ -40,9 +49,10 @@ export const DashboardTopNav = ({
     [UserRole.BussinessAnalyst]: "Analyst",
     [UserRole.ProjectManager]: "Project Manager",
   };
-  const primaryRole = typeof user?.roles?.[0] === 'number' 
-    ? roleNameMap[user.roles[0]] || "Member"
-    : "Member";
+  const primaryRole =
+    typeof user?.roles?.[0] === "number"
+      ? roleNameMap[user.roles[0]] || "Member"
+      : "Member";
 
   // Quick helper to abbreviate roles nicely, e.g., "Project Admin" -> "PA"
   const getRoleAbbreviation = (roleStr: string) => {
@@ -62,7 +72,10 @@ export const DashboardTopNav = ({
     >
       {/* Left Side: Greeting & Search */}
       <div className="flex items-center gap-8 flex-1">
-        <SearchBar className="max-w-[400px] w-full" placeholder="Search projects, files, or people..." />
+        <SearchBar
+          className="max-w-[400px] w-full"
+          placeholder="Search projects, files, or people..."
+        />
       </div>
 
       {/* Right Side */}
@@ -120,49 +133,67 @@ export const DashboardTopNav = ({
                 className={`size-8 border-2 ${isOnGradient ? "border-transparent bg-white text-primary-700" : "border-white bg-primary-100 text-primary-700"}`}
               />
               <div className="text-sm font-medium hidden sm:flex items-center gap-2">
-                <span className="truncate max-w-[100px] xl:max-w-[150px] font-semibold" title={name}>
+                <span
+                  className="truncate max-w-[100px] xl:max-w-[150px] font-semibold"
+                  title={name}
+                >
                   {firstName}
                 </span>
                 <span
                   title={primaryRole}
                   className={`font-semibold text-[10px] tracking-wider uppercase px-1.5 py-0.5 rounded-md shrink-0 ${
-                    isOnGradient ? "bg-white/20 text-white" : "bg-primary-50 text-primary-700"
+                    isOnGradient
+                      ? "bg-white/20 text-white"
+                      : "bg-primary-50 text-primary-700"
                   }`}
                 >
                   {roleAbbreviation}
                 </span>
               </div>
-              <ChevronDown className={`size-4 opacity-70 hidden sm:block ${isOnGradient ? "text-white" : "text-neutral-500"}`} />
+              <ChevronDown
+                className={`size-4 opacity-70 hidden sm:block ${isOnGradient ? "text-white" : "text-neutral-500"}`}
+              />
             </div>
           </DropdownMenuTrigger>
-          
-          <DropdownMenuContent align="end" className="w-[240px] mt-2 rounded-2xl p-2 border-neutral-100 shadow-2xl">
+
+          <DropdownMenuContent
+            align="end"
+            className="w-[240px] mt-2 rounded-2xl p-2 border-neutral-100 shadow-2xl"
+          >
             {/* User Profile Header */}
             <div className="px-2 py-3 border-b border-neutral-100 mb-2">
               <p className="font-semibold text-neutral-900 truncate">{name}</p>
-              <p className="font-medium text-xs text-neutral-500 truncate">{primaryRole}</p>
+              <p className="font-medium text-xs text-neutral-500 truncate">
+                {primaryRole}
+              </p>
             </div>
-            
+
             {/* Menu Items */}
             <div className="space-y-1">
-              <DropdownMenuItem className="py-2.5">
-                <UserIcon className="size-4 opacity-70" />
-                <span>My Profile</span>
-              </DropdownMenuItem>
+              <Link to={paths.app.profile}>
+                <DropdownMenuItem className="py-2.5">
+                  <UserIcon className="size-4 opacity-70" />
+                  <span>My Profile</span>
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuItem className="py-2.5">
                 <Settings className="size-4 opacity-70" />
                 <span>Preferences</span>
               </DropdownMenuItem>
-              
+
               <div className="h-px bg-neutral-100 my-2 mx-1" />
-              
-              <DropdownMenuItem 
+
+              <DropdownMenuItem
                 onClick={() => logoutMutation.mutate()}
                 disabled={logoutMutation.isPending}
                 className="py-2.5 text-red-600 focus:text-red-700 focus:bg-red-50"
               >
-                <LogOut className={`size-4 opacity-70 ${logoutMutation.isPending ? "animate-pulse" : ""}`} />
-                <span className="font-semibold">{logoutMutation.isPending ? "Logging out..." : "Log out"}</span>
+                <LogOut
+                  className={`size-4 opacity-70 ${logoutMutation.isPending ? "animate-pulse" : ""}`}
+                />
+                <span className="font-semibold">
+                  {logoutMutation.isPending ? "Logging out..." : "Log out"}
+                </span>
               </DropdownMenuItem>
             </div>
           </DropdownMenuContent>
