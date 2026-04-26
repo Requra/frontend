@@ -8,11 +8,14 @@ import { SettingsItem } from "../components/SettingsItem";
 import { PreferencesSection } from "../components/PreferencesSection";
 import { LanguageSelector } from "../components/LanguageSelector";
 import { ProfileSkeleton } from "../components/ProfileSkeleton";
+import { useProjectStore } from "@/stores/projects";
 
 export const ProfilePage = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [settings, setSettings] = useState<UserSettings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const { stats: projectStats, fetchProjects } = useProjectStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,7 +24,14 @@ export const ProfilePage = () => {
         const [profileData, settingsData] = await Promise.all([
           userService.getUserProfile(),
           userService.getUserSettings(),
+          fetchProjects(),
         ]);
+        
+        if (profileData) {
+          profileData.stats.projects = projectStats.total;
+          profileData.stats.completed = projectStats.completed;
+        }
+        
         setProfile(profileData);
         setSettings(settingsData);
       } catch (error) {
@@ -32,7 +42,7 @@ export const ProfilePage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [fetchProjects, projectStats.total, projectStats.completed]);
 
   const handleTogglePush = () => {
     if (settings) {
