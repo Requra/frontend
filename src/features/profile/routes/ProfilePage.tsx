@@ -3,7 +3,7 @@ import { Mail, Lock, User as UserIcon } from "lucide-react";
 import { userService } from "../api/userService";
 import type { UserProfile, UserSettings } from "../types";
 import { ProfileHeader } from "../components/ProfileHeader";
-import { UserInfoCard } from "../components/UserInfoCard";
+import UserInfoCard from "../components/UserInfoCard";
 import { SettingsItem } from "../components/SettingsItem";
 import { PreferencesSection } from "../components/PreferencesSection";
 import { LanguageSelector } from "../components/LanguageSelector";
@@ -88,8 +88,7 @@ export const ProfilePage = () => {
             {profile && (
               <UserInfoCard
                 profile={profile}
-                onEdit={() => console.log("Edit clicked")}
-                onCancel={() => console.log("Cancel clicked")}
+                onUpdate={(updated) => setProfile(updated)}
               />
             )}
           </div>

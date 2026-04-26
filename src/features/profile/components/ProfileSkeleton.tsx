@@ -1,11 +1,10 @@
-import React from "react";
 import { Card } from "@/components/ui/Card/Card";
 
-export const ProfileSkeleton: React.FC = () => {
+export function ProfileSkeleton() {
   return (
     <div className="w-full animate-pulse">
       <div className="h-10 w-48 bg-white/20 rounded-lg mb-8" />
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column Skeleton */}
         <Card className="lg:col-span-5 rounded-[32px] p-8 space-y-8">

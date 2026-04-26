@@ -10,19 +10,19 @@ interface SettingsItemProps {
   className?: string;
 }
 
-export const SettingsItem: React.FC<SettingsItemProps> = ({
+export function SettingsItem({
   icon,
   label,
   value,
   onClick,
   className = "",
-}) => {
+}: SettingsItemProps) {
   return (
     <button
       onClick={onClick}
       className={cn(
         "w-full flex items-center justify-between p-4 bg-white hover:bg-neutral-50 transition-all duration-200 rounded-2xl group",
-        className
+        className,
       )}
     >
       <div className="flex items-center gap-4">
@@ -38,7 +38,10 @@ export const SettingsItem: React.FC<SettingsItemProps> = ({
           )}
         </div>
       </div>
-      <ChevronRight size={20} className="text-neutral-300 group-hover:text-primary-400 transition-colors" />
+      <ChevronRight
+        size={20}
+        className="text-neutral-300 group-hover:text-primary-400 transition-colors"
+      />
     </button>
   );
-};
+}

@@ -1,4 +1,6 @@
 import type { UserProfile, UserSettings } from "../types";
+// import { apiClient } from "@/services/api";
+// import type { ApiResponse } from "@/types/api";
 
 /**
  * Mock API service for user-related operations.
@@ -40,9 +42,20 @@ export const userService = {
   },
 
   updateProfile: async (data: Partial<UserProfile>): Promise<UserProfile> => {
-    await delay(1200);
-    console.log("Updating profile with:", data);
-    return { ...MOCK_PROFILE, ...data };
+    try {
+      // Simulate PUT /api/profile
+      console.log("Calling PUT /api/profile with:", data);
+      await delay(1200);
+      
+      // In a real app:
+      // const response = await apiClient.put<ApiResponse<UserProfile>>("/api/profile", data);
+      // return response.data.data;
+
+      return { ...MOCK_PROFILE, ...data };
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      throw error;
+    }
   },
 
   updateSettings: async (data: Partial<UserSettings>): Promise<UserSettings> => {

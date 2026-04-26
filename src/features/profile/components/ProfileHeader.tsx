@@ -1,6 +1,4 @@
-import React from "react";
-
-export const ProfileHeader: React.FC = () => {
+export function ProfileHeader() {
   return (
     <div className="text-white">
       <h1 className="text-4xl font-bold tracking-tight drop-shadow-sm">
@@ -8,4 +6,4 @@ export const ProfileHeader: React.FC = () => {
       </h1>
     </div>
   );
-};
+}
