@@ -5,10 +5,12 @@ import type { UserProfile, UserSettings } from "../types";
 import { ProfileHeader } from "../components/ProfileHeader";
 import UserInfoCard from "../components/UserInfoCard";
 import { SettingsItem } from "../components/SettingsItem";
-import { PreferencesSection } from "../components/PreferencesSection";
+import PreferencesSection from "../components/PreferencesSection";
 import { LanguageSelector } from "../components/LanguageSelector";
 import { ProfileSkeleton } from "../components/ProfileSkeleton";
 import { ChangePasswordModal } from "../components/ChangePasswordModal";
+import DangerZone from "../components/DangerZone";
+import { DeleteAccountModal } from "../components/DeleteAccountModal";
 import { useProjectStore } from "@/stores/projects";
 import { BackgroundGradient } from "@/components/ui/BackgroundGradient/BackgroundGradient";
 
@@ -42,6 +44,7 @@ export const ProfilePage = () => {
   const [settings, setSettings] = useState<UserSettings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const { stats: projectStats, fetchProjects } = useProjectStore();
 
@@ -131,7 +134,10 @@ export const ProfilePage = () => {
           </motion.div>
 
           {/* Right Column: Settings & Preferences */}
-          <motion.div variants={itemVariants} className="lg:col-span-7 space-y-8">
+          <motion.div
+            variants={itemVariants}
+            className="lg:col-span-7 space-y-8"
+          >
             {/* Account Settings */}
             <div className="space-y-4">
               <h3 className="text-heading-xs font-bold text-white px-1">
@@ -183,6 +189,11 @@ export const ProfilePage = () => {
                 />
               </div>
             )}
+
+            {/* Danger Zone */}
+            <div className="pt-4">
+              <DangerZone onDeleteClick={() => setIsDeleteModalOpen(true)} />
+            </div>
           </motion.div>
         </div>
       </div>
@@ -190,6 +201,12 @@ export const ProfilePage = () => {
       <ChangePasswordModal
         isOpen={isPasswordModalOpen}
         onClose={() => setIsPasswordModalOpen(false)}
+      />
+
+      <DeleteAccountModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        userEmail={profile?.email}
       />
     </motion.div>
   );

@@ -1,4 +1,3 @@
-import React from "react";
 import { Camera, Check, X } from "lucide-react";
 import { Avatar } from "@/components/ui/Avatar/Avatar";
 import { cn } from "@/lib/utils";

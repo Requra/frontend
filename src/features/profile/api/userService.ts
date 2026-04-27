@@ -95,4 +95,16 @@ export const userService = {
       throw error;
     }
   },
+
+  deleteAccount: async (): Promise<void> => {
+    try {
+      console.log("Calling DELETE /api/account");
+      await delay(1500);
+      // Real implementation:
+      // await apiClient.delete("/api/account");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      throw error;
+    }
+  },
 };
