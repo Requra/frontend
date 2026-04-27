@@ -83,4 +83,16 @@ export const userService = {
       throw error;
     }
   },
+
+  changePassword: async (data: any): Promise<void> => {
+    try {
+      console.log("Calling PUT /api/profile/change-password with:", data);
+      await delay(1500);
+      // Real implementation:
+      // await apiClient.put("/api/profile/change-password", data);
+    } catch (error) {
+      console.error("Error changing password:", error);
+      throw error;
+    }
+  },
 };

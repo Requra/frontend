@@ -15,6 +15,7 @@ interface UserInfoCardProps {
 }
 
 export function UserInfoCard({ profile, onUpdate }: UserInfoCardProps) {
+
   const {
     isEditing,
     isSaving,

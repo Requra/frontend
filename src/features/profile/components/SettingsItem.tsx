@@ -21,7 +21,7 @@ export function SettingsItem({
     <button
       onClick={onClick}
       className={cn(
-        "w-full flex items-center justify-between p-4 bg-white hover:bg-neutral-50 transition-all duration-200 rounded-2xl group",
+        "w-full flex items-center justify-between p-4 bg-white hover:bg-neutral-50 transition-all duration-200 rounded-2xl group cursor-pointer",
         className,
       )}
     >

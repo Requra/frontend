@@ -8,6 +8,7 @@ import { SettingsItem } from "../components/SettingsItem";
 import { PreferencesSection } from "../components/PreferencesSection";
 import { LanguageSelector } from "../components/LanguageSelector";
 import { ProfileSkeleton } from "../components/ProfileSkeleton";
+import { ChangePasswordModal } from "../components/ChangePasswordModal";
 import { useProjectStore } from "@/stores/projects";
 import { BackgroundGradient } from "@/components/ui/BackgroundGradient/BackgroundGradient";
 
@@ -15,6 +16,7 @@ export const ProfilePage = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [settings, setSettings] = useState<UserSettings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
   const { stats: projectStats, fetchProjects } = useProjectStore();
 
@@ -27,12 +29,12 @@ export const ProfilePage = () => {
           userService.getUserSettings(),
           fetchProjects(),
         ]);
-        
+
         if (profileData) {
           profileData.stats.projects = projectStats.total;
           profileData.stats.completed = projectStats.completed;
         }
-        
+
         setProfile(profileData);
         setSettings(settingsData);
       } catch (error) {
@@ -47,7 +49,10 @@ export const ProfilePage = () => {
 
   const handleTogglePush = () => {
     if (settings) {
-      setSettings({ ...settings, pushNotifications: !settings.pushNotifications });
+      setSettings({
+        ...settings,
+        pushNotifications: !settings.pushNotifications,
+      });
     }
   };
 
@@ -105,7 +110,7 @@ export const ProfilePage = () => {
               <SettingsItem
                 icon={<Lock size={20} />}
                 label="Change Password"
-                onClick={() => console.log("Change password clicked")}
+                onClick={() => setIsPasswordModalOpen(true)}
               />
               <SettingsItem
                 icon={<UserIcon size={20} />}
@@ -133,8 +138,12 @@ export const ProfilePage = () => {
             )}
           </div>
         </div>
+
+        <ChangePasswordModal
+          isOpen={isPasswordModalOpen}
+          onClose={() => setIsPasswordModalOpen(false)}
+        />
       </div>
     </div>
   );
 };
-
