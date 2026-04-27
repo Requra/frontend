@@ -63,4 +63,24 @@ export const userService = {
     console.log("Updating settings with:", data);
     return { ...MOCK_SETTINGS, ...data };
   },
+
+  updateAvatar: async (file: File): Promise<{ avatar: string }> => {
+    try {
+      // Simulate POST /api/profile/avatar
+      console.log("Calling POST /api/profile/avatar with file:", file.name);
+      await delay(1500);
+
+      // In a real app:
+      // const formData = new FormData();
+      // formData.append('avatar', file);
+      // const response = await apiClient.post<ApiResponse<{avatar: string}>>("/api/profile/avatar", formData);
+      // return response.data.data;
+
+      // Mock successful response with local preview URL
+      return { avatar: URL.createObjectURL(file) };
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
+      throw error;
+    }
+  },
 };

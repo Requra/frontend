@@ -6,6 +6,7 @@ interface ProfileFieldProps {
   children: React.ReactNode;
   showDivider?: boolean;
   className?: string;
+  variant?: "horizontal" | "vertical";
 }
 
 export function ProfileField({
@@ -13,7 +14,19 @@ export function ProfileField({
   children,
   showDivider = true,
   className,
+  variant = "horizontal",
 }: ProfileFieldProps) {
+  if (variant === "vertical") {
+    return (
+      <div className={cn("space-y-2.5", className)}>
+        <label className="text-body-md text-neutral-600 font-bold ml-1">
+          {label}
+        </label>
+        <div className="w-full">{children}</div>
+      </div>
+    );
+  }
+
   return (
     <div className={cn("space-y-4", className)}>
       <div className="flex justify-between items-center min-h-[48px] py-1">
