@@ -37,7 +37,10 @@ export function UserInfoCard({ profile, onUpdate }: UserInfoCardProps) {
   } = useUserInfoCard(profile, onUpdate);
 
   return (
-    <Card className="rounded-[32px] p-8 shadow-xl shadow-neutral-100/50 border border-neutral-50 relative overflow-hidden transition-all duration-300">
+    <Card className="rounded-[32px] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border-white/60 bg-white/70 backdrop-blur-xl relative overflow-hidden transition-all duration-500 hover:shadow-[0_24px_60px_rgba(124,58,237,0.08)]">
+      {/* Subtle Background Accent */}
+      <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary-100/30 rounded-full blur-3xl pointer-events-none" />
+      
       {/* Header with Avatar */}
       <div className="flex items-start justify-between mb-8">
         <AvatarSection

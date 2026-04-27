@@ -12,6 +12,31 @@ import { ChangePasswordModal } from "../components/ChangePasswordModal";
 import { useProjectStore } from "@/stores/projects";
 import { BackgroundGradient } from "@/components/ui/BackgroundGradient/BackgroundGradient";
 
+import { motion, type Variants } from "framer-motion";
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 export const ProfilePage = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [settings, setSettings] = useState<UserSettings | null>(null);
@@ -80,70 +105,92 @@ export const ProfilePage = () => {
   }
 
   return (
-    <div className="relative min-h-screen">
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+      className="relative min-h-screen"
+    >
       {/* SVG Gradient Background */}
       <BackgroundGradient />
 
-      <div className="relative z-10 flex flex-col gap-8">
-        <ProfileHeader />
+      <div className="relative z-10 flex flex-col gap-8 pb-12">
+        <motion.div variants={itemVariants}>
+          <ProfileHeader />
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: User Card */}
-          <div className="lg:col-span-5">
+          <motion.div variants={itemVariants} className="lg:col-span-5">
             {profile && (
               <UserInfoCard
                 profile={profile}
                 onUpdate={(updated) => setProfile(updated)}
               />
             )}
-          </div>
+          </motion.div>
 
           {/* Right Column: Settings & Preferences */}
-          <div className="lg:col-span-7 space-y-8">
+          <motion.div variants={itemVariants} className="lg:col-span-7 space-y-8">
             {/* Account Settings */}
-            <div className="space-y-3">
-              <SettingsItem
-                icon={<Mail size={20} />}
-                label="Email"
-                value={profile?.email}
-              />
-              <SettingsItem
-                icon={<Lock size={20} />}
-                label="Change Password"
-                onClick={() => setIsPasswordModalOpen(true)}
-              />
-              <SettingsItem
-                icon={<UserIcon size={20} />}
-                label="Role"
-                value={profile?.role}
-              />
+            <div className="space-y-4">
+              <h3 className="text-heading-xs font-bold text-white px-1">
+                Account Settings
+              </h3>
+              <div className="space-y-3">
+                <SettingsItem
+                  icon={<Mail size={20} />}
+                  label="Email"
+                  value={profile?.email}
+                />
+                <SettingsItem
+                  icon={<Lock size={20} />}
+                  label="Change Password"
+                  onClick={() => setIsPasswordModalOpen(true)}
+                />
+                <SettingsItem
+                  icon={<UserIcon size={20} />}
+                  label="Role"
+                  value={profile?.role}
+                />
+              </div>
             </div>
 
             {/* Preferences */}
             {settings && (
-              <PreferencesSection
-                pushNotifications={settings.pushNotifications}
-                emailDigests={settings.emailDigests}
-                onTogglePush={handleTogglePush}
-                onToggleDigests={handleToggleDigests}
-              />
+              <div className="space-y-4">
+                <h3 className="text-heading-xs font-bold text-neutral-900 px-1">
+                  Preferences
+                </h3>
+                <PreferencesSection
+                  pushNotifications={settings.pushNotifications}
+                  emailDigests={settings.emailDigests}
+                  onTogglePush={handleTogglePush}
+                  onToggleDigests={handleToggleDigests}
+                />
+              </div>
             )}
 
             {/* Language Selection */}
             {settings && (
-              <LanguageSelector
-                currentLanguage={settings.language}
-                onLanguageChange={handleLanguageChange}
-              />
+              <div className="space-y-4">
+                <h3 className="text-heading-xs font-bold text-neutral-900 px-1">
+                  Language Selection
+                </h3>
+                <LanguageSelector
+                  currentLanguage={settings.language}
+                  onLanguageChange={handleLanguageChange}
+                />
+              </div>
             )}
-          </div>
+          </motion.div>
         </div>
-
-        <ChangePasswordModal
-          isOpen={isPasswordModalOpen}
-          onClose={() => setIsPasswordModalOpen(false)}
-        />
       </div>
-    </div>
+
+      <ChangePasswordModal
+        isOpen={isPasswordModalOpen}
+        onClose={() => setIsPasswordModalOpen(false)}
+      />
+    </motion.div>
   );
 };
