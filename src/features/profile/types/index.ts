@@ -5,10 +5,15 @@ export interface UserStats {
 }
 
 export interface UserProfile {
+  id: string;
   name: string;
   email: string;
-  phone: string;
-  location: string;
+  jobTitle: string;
+  avatarUrl: string;
+  createdAt: string;
+  // Existing fields for UI compatibility
+  phone?: string;
+  location?: string;
   role: string;
   avatar: string;
   stats: UserStats;
