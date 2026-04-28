@@ -1,5 +1,4 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
 import type { UserProfile } from "../types";
 import { Card } from "@/components/ui/Card/Card";
 import { cn } from "@/lib/utils";
@@ -37,7 +36,7 @@ export function UserInfoCard({ profile, onUpdate }: UserInfoCardProps) {
   } = useUserInfoCard(profile, onUpdate);
 
   return (
-    <Card className="rounded-[32px] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border-white/60 bg-white/70 backdrop-blur-xl relative overflow-hidden transition-all duration-500 hover:shadow-[0_24px_60px_rgba(124,58,237,0.08)]">
+    <Card className="rounded-[32px] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-neutral-100 bg-white relative overflow-hidden transition-all duration-500 hover:shadow-[0_24px_60px_rgba(124,58,237,0.08)]">
       {/* Subtle Background Accent */}
       <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary-100/30 rounded-full blur-3xl pointer-events-none" />
       
@@ -55,11 +54,7 @@ export function UserInfoCard({ profile, onUpdate }: UserInfoCardProps) {
           onAvatarConfirm={handleAvatarConfirm}
           onCancelPreview={handleCancelPreview}
         />
-        {!isEditing && (
-          <button className="text-neutral-300 hover:text-neutral-500 transition-colors">
-            <X size={24} />
-          </button>
-        )}
+  
       </div>
 
       {/* Info Fields */}

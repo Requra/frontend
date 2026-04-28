@@ -34,7 +34,7 @@ export function ProfileField({
         </span>
         <div className="w-2/3 flex justify-end">{children}</div>
       </div>
-      {showDivider && <div className="h-px bg-neutral-50 w-full" />}
+      {showDivider && <div className="h-px bg-neutral-100/80 w-full" />}
     </div>
   );
 }

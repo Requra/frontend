@@ -40,18 +40,9 @@ export const AvatarSection = ({
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.98 }}
       >
-        {/* Animated Ring */}
-        <motion.div 
-          className="absolute -inset-1 rounded-full bg-linear-to-tr from-primary-500 to-primary-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          animate={{ 
-            rotate: [0, 360],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
+        {/* Gradient Ring — fades in on hover, no infinite loops */}
+        <div className="absolute -inset-1 rounded-full bg-linear-to-tr from-primary-500 to-primary-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
 
         <Avatar
           src={previewUrl || profile.avatar}

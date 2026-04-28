@@ -24,7 +24,7 @@ function PreferenceToggle({
   return (
     <motion.div
       whileHover={{ scale: 1.01 }}
-      className="flex items-center justify-between p-4 bg-white/50 border border-white/60 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300"
+      className="flex items-center justify-between p-4 bg-white border border-neutral-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300"
     >
       <div className="flex items-center gap-4">
         <div className={cn("p-2.5 rounded-xl shadow-inner", iconBg, iconColor)}>

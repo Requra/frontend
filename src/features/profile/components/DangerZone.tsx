@@ -14,7 +14,7 @@ export default function DangerZone({ onDeleteClick }: DangerZoneProps) {
       </h3>
       <motion.div
         whileHover={{ scale: 1.01 }}
-        className="p-6 bg-danger-50/10 border border-danger-200/50 rounded-[32px] backdrop-blur-sm"
+        className="p-6 bg-white border border-danger-200/50 rounded-[32px]"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="flex items-start gap-4">

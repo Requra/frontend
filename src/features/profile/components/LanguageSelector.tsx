@@ -22,8 +22,8 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           className={cn(
             "relative group flex items-center justify-center h-14 rounded-2xl transition-all duration-300 overflow-hidden border cursor-pointer",
             currentLanguage === lang.id
-              ? "border-primary-500 bg-primary-50/30 text-primary-700 shadow-md shadow-primary-500/5"
-              : "border-white/60 bg-white/50 text-neutral-500 hover:border-primary-200 hover:bg-white shadow-sm"
+              ? "border-primary-500 bg-primary-50 text-primary-700 shadow-md shadow-primary-500/5"
+              : "border-neutral-100 bg-white text-neutral-500 hover:border-primary-200 shadow-sm"
           )}
         >
           {currentLanguage === lang.id && (

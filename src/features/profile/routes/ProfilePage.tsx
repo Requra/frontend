@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Mail, Lock, User as UserIcon } from "lucide-react";
+import { motion } from "framer-motion";
 import { userService } from "../api/userService";
 import type { UserProfile, UserSettings } from "../types";
 import { ProfileHeader } from "../components/ProfileHeader";
@@ -13,31 +14,7 @@ import DangerZone from "../components/DangerZone";
 import { DeleteAccountModal } from "../components/DeleteAccountModal";
 import { useProjectStore } from "@/stores/projects";
 import { BackgroundGradient } from "@/components/ui/BackgroundGradient/BackgroundGradient";
-
-import { motion, type Variants } from "framer-motion";
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
-};
+import { staggerContainer, fadeInUp } from "../constants/motionPresets";
 
 export const ProfilePage = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -111,20 +88,20 @@ export const ProfilePage = () => {
     <motion.div
       initial="hidden"
       animate="visible"
-      variants={containerVariants}
+      variants={staggerContainer}
       className="relative min-h-screen"
     >
       {/* SVG Gradient Background */}
       <BackgroundGradient />
 
       <div className="relative z-10 flex flex-col gap-8 pb-12">
-        <motion.div variants={itemVariants}>
+        <motion.div variants={fadeInUp}>
           <ProfileHeader />
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: User Card */}
-          <motion.div variants={itemVariants} className="lg:col-span-5">
+          <motion.div variants={fadeInUp} className="lg:col-span-5">
             {profile && (
               <UserInfoCard
                 profile={profile}
@@ -135,12 +112,12 @@ export const ProfilePage = () => {
 
           {/* Right Column: Settings & Preferences */}
           <motion.div
-            variants={itemVariants}
+            variants={fadeInUp}
             className="lg:col-span-7 space-y-8"
           >
             {/* Account Settings */}
             <div className="space-y-4">
-              <h3 className="text-heading-xs font-bold text-white px-1">
+              <h3 className="text-heading-xs font-bold text-neutral-900 px-1">
                 Account Settings
               </h3>
               <div className="space-y-3">
