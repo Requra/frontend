@@ -116,7 +116,7 @@ export const ProfilePage = () => {
             className="lg:col-span-7 space-y-8"
           >
             {/* Account Settings */}
-            <div className="space-y-4">
+            <div className="space-y-4 bg-white p-6 rounded-2xl border border-gray-200">
               <h3 className="text-heading-xs font-bold text-neutral-900 px-1">
                 Account Settings
               </h3>
@@ -141,7 +141,7 @@ export const ProfilePage = () => {
 
             {/* Preferences */}
             {settings && (
-              <div className="space-y-4">
+              <div className="space-y-4 bg-white p-6 rounded-2xl border border-gray-200">
                 <h3 className="text-heading-xs font-bold text-neutral-900 px-1">
                   Preferences
                 </h3>
@@ -156,7 +156,7 @@ export const ProfilePage = () => {
 
             {/* Language Selection */}
             {settings && (
-              <div className="space-y-4">
+              <div className="space-y-4 bg-white p-6 rounded-2xl border border-gray-200">
                 <h3 className="text-heading-xs font-bold text-neutral-900 px-1">
                   Language Selection
                 </h3>
