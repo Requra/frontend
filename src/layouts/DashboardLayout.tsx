@@ -9,6 +9,7 @@ export const DashboardLayout = () => {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const location = useLocation();
   const isDashboard = location.pathname === paths.app.dashboard;
+  const isProfile = location.pathname === paths.app.profile;
 
   const toggleNotifications = useCallback(
     () => setIsNotificationsOpen((prev) => !prev),
@@ -39,7 +40,7 @@ export const DashboardLayout = () => {
           <DashboardTopNav
             isNotificationsOpen={isNotificationsOpen}
             toggleNotifications={toggleNotifications}
-            variant={isDashboard ? "onGradient" : "light"}
+            variant={isDashboard || isProfile ? "onGradient" : "light"}
           />
         </div>
 

@@ -158,6 +158,11 @@
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
 @utility scrollbar-custom {
   scrollbar-width: thin;
   scrollbar-color: var(--color-neutral-200) transparent;
