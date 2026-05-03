@@ -33,6 +33,7 @@ export const registerUser = async (
       email: data.email,
       password: data.password,
       confirmPassword: data.confirm_password,
+      role: data.role,
     },
   );
 
@@ -99,4 +100,19 @@ export const resendOtp = async (
 
 export const logoutUser = async (): Promise<void> => {
   await apiClient.post("/api/Auth/logout");
+};
+
+/**
+ * Login with Google
+ * @param idToken The ID token received from Google
+ * @param platform The platform (web, android, ios)
+ */
+export const googleLogin = async (
+  idToken: string,
+  platform: string = "web"
+): Promise<ApiLoginResponse> => {
+  const response = await apiClient.post<ApiLoginResponse>(
+    `/api/Auth/google-login?idToken=${idToken}&platform=${platform}`
+  );
+  return response.data;
 };

@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useAuthStore } from "@/stores/auth";
 
-const API_BASE_URL =
-  import.meta.env.API_DOG_URL ||
-  "http://127.0.0.1:3658/m1/1212435-1208182-default";
+const PRIMARY_API_URL = import.meta.env.VITE_API_URL;
+const FALLBACK_API_URL = import.meta.env.VITE_API_DOG_URL;
+const API_BASE_URL = PRIMARY_API_URL || FALLBACK_API_URL;
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -44,13 +44,28 @@ apiClient.interceptors.request.use(
 );
 
 // ---------------------------------------------------------------------------
-// RESPONSE interceptor — handle 401 globally with silent refresh fallback
+// RESPONSE interceptor — handle 404 fallback and 401 refresh
 // ---------------------------------------------------------------------------
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
+    // 1. Handle 404 Fallback (Auto-switch to Dog API if main API fails)
+    if (
+      error.response?.status === 404 && 
+      FALLBACK_API_URL && 
+      !originalRequest._isFallback &&
+      originalRequest.baseURL !== FALLBACK_API_URL
+    ) {
+      originalRequest._isFallback = true;
+      originalRequest.baseURL = FALLBACK_API_URL;
+      
+      console.log(`[API] Endpoint not found on primary server. Retrying with fallback: ${originalRequest.url}`);
+      return apiClient(originalRequest);
+    }
+
+    // 2. Handle 401 Refresh
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         return new Promise(function (resolve, reject) {
@@ -69,18 +84,19 @@ apiClient.interceptors.response.use(
       isRefreshing = true;
 
       const currentRefreshToken = useAuthStore.getState().refreshToken;
+      const currentAccessToken = useAuthStore.getState().token;
 
-      if (!currentRefreshToken) {
+      if (!currentRefreshToken || !currentAccessToken) {
         useAuthStore.getState().logout();
         return Promise.reject(error);
       }
 
       try {
-        // Use a clean axios instance to avoid circular interceptors
         const response = await axios.post(
           `${API_BASE_URL}/api/Auth/token/refresh`,
           {
             refreshToken: currentRefreshToken,
+            accessToken: currentAccessToken,
           },
         );
 

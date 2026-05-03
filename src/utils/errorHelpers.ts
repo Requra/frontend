@@ -3,7 +3,9 @@ export const handleApiError = (error: any): string => {
   
   if (serverData) {
     if (serverData.errors && serverData.errors.length > 0) {
-      return serverData.errors[0];
+      return Array.isArray(serverData.errors) 
+        ? serverData.errors.join(". ") 
+        : serverData.errors;
     }
     if (serverData.message) {
       return serverData.message;

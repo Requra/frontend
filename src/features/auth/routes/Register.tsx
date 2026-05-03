@@ -9,6 +9,7 @@ import { type VerifyCodeCredentials } from "../schemas/verifyCodeSchema";
 import { paths } from "@/routes/paths";
 import { RegisterForm } from "../components/RegisterForm";
 import { VerifyCodeForm } from "../components/VerifyCodeForm";
+import { handleApiError } from "@/utils/errorHelpers";
 
 export const RegisterPage = () => {
   const navigate = useNavigate();
@@ -78,7 +79,11 @@ export const RegisterPage = () => {
         </div>
 
         {step === 1 ? (
-          <RegisterForm onSubmit={onRegisterSubmit} isLoading={registerMutation.isPending} />
+          <RegisterForm 
+            onSubmit={onRegisterSubmit} 
+            isLoading={registerMutation.isPending} 
+            serverError={registerMutation.error ? handleApiError(registerMutation.error) : null}
+          />
         ) : (
           <VerifyCodeForm 
             onSubmit={onVerifySubmit} 

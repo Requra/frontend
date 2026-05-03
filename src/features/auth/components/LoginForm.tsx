@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
-import { EyeIcon, MailIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon, MailIcon } from "lucide-react";
+import { useTogglePassword } from "@/hooks/useTogglePassword";
 import { loginSchema, type LoginCredentials } from "../schemas/loginSchema";
 import { Button } from "@/components/ui/Button/Button";
 import { Input } from "@/components/ui/Input/Input";
@@ -15,6 +16,8 @@ export interface LoginFormProps {
 }
 
 export const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
+  const passwordToggle = useTogglePassword();
+
   const {
     register,
     handleSubmit,
@@ -37,11 +40,23 @@ export const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
 
       <Input
         label="Password"
-        type="password"
+        type={passwordToggle.inputType}
         placeholder="••••••••"
         {...register("password")}
         error={errors.password?.message}
-        endIcon={<EyeIcon className="text-neutral-500" />}
+        endIcon={
+          <button
+            type="button"
+            onClick={passwordToggle.toggleVisibility}
+            className="focus:outline-none hover:text-primary-500 transition-colors"
+          >
+            {passwordToggle.isVisible ? (
+              <EyeOffIcon className="h-4 w-4" />
+            ) : (
+              <EyeIcon className="h-4 w-4" />
+            )}
+          </button>
+        }
       />
 
       <div className="flex items-center justify-between">
