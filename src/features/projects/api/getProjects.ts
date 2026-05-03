@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import type { ApiResponse } from "@/types/api";
 import type { Project } from "../types";
 import { ProjectStatus } from "../types/enums";
+import { useAuthStore } from "@/stores/auth";
 
 export interface GetProjectsParams {
   page?: number;
@@ -47,8 +48,13 @@ export async function getProjectsApi({
   searchQuery = "",
 }: GetProjectsParams = {}): Promise<GetProjectsResponse> {
   try {
+    const userId = useAuthStore.getState().user?.userId;
+    
     // Call real API: GET /api/projects
-    const response = await apiClient.get<ApiResponse<{ items: Project[]; totalCount: number }>>("/api/projects");
+    const response = await apiClient.get<ApiResponse<{ items: Project[]; totalCount: number }>>(
+      "/api/projects",
+      { params: { userId } }
+    );
     
     if (!response.data.isSuccess || !response.data.data) {
       const message = response.data.message || "Failed to fetch projects";
@@ -126,7 +132,11 @@ export async function getProjectsApi({
  */
 export async function getProjectByIdApi(id: string): Promise<Project> {
   try {
-    const response = await apiClient.get<ApiResponse<Project>>(`/api/projects/${id}`);
+    const userId = useAuthStore.getState().user?.userId;
+    const response = await apiClient.get<ApiResponse<Project>>(
+      `/api/projects/${id}`,
+      { params: { userId } }
+    );
 
     if (!response.data.isSuccess || !response.data.data) {
       const message = response.data.message || "Project not found";

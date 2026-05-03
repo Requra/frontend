@@ -1,5 +1,6 @@
 import { apiClient } from "@/services/api";
 import { toast } from "sonner";
+import { useAuthStore } from "@/stores/auth";
 import type { ApiResponse } from "@/types/api";
 import type { Project } from "../types";
 import type { CreateProjectFormData } from "../schemas/createProjectSchema";
@@ -11,13 +12,15 @@ export async function createProjectApi(
   formData: CreateProjectFormData
 ): Promise<Project> {
   try {
+    const userId = useAuthStore.getState().user?.userId;
+    
     // Map form data to backend-expected structure
     const requestBody = {
       name: formData.projectName,
       description: formData.description || "",
       clientName: formData.clientName,
       teamMembers: formData.teamMembers.map((email) => ({ email })),
-      // Note: status is likely set by backend to 'InProgress' by default
+      userId,
     };
 
     const response = await apiClient.post<ApiResponse<Project>>(
