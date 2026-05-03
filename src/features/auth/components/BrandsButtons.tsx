@@ -1,6 +1,30 @@
+import { useEffect } from "react";
 import { Button } from "@/components/ui/Button/Button";
+import { useGoogleLogin } from "../api/useGoogleLogin";
 
 const BrandsButtons = () => {
+  const googleLoginMutation = useGoogleLogin();
+
+  useEffect(() => {
+    // Initialize Google GSI
+    if (window.google) {
+      window.google.accounts.id.initialize({
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        callback: (response: any) => {
+          googleLoginMutation.mutate({
+            idToken: response.credential,
+            platform: "web",
+          });
+        },
+      });
+    }
+  }, [googleLoginMutation]);
+
+  const handleGoogleClick = () => {
+    if (window.google) {
+      window.google.accounts.id.prompt();
+    }
+  };
   return (
     <>
       <div className="relative">
@@ -16,7 +40,13 @@ const BrandsButtons = () => {
 
       <div className="flex items-center justify-center gap-3">
         {/* Google */}
-        <Button type="button" variant="outline" className="flex-1 h-[42px]">
+        <Button 
+          type="button" 
+          variant="outline" 
+          className="flex-1 h-[42px]"
+          onClick={handleGoogleClick}
+          isLoading={googleLoginMutation.isPending}
+        >
           <svg
             viewBox="0 0 533.5 544.3"
             xmlns="http://www.w3.org/2000/svg"
