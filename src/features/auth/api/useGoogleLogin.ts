@@ -14,9 +14,9 @@ export const useGoogleLogin = () => {
     mutationFn: ({ idToken, platform }: { idToken: string; platform?: string }) =>
       googleLogin(idToken, platform),
     onSuccess: (response) => {
-      if (response.data && response.data.token && response.data.refreshToken) {
+      if (response.data && response.data.token) {
         const { token, refreshToken, ...user } = response.data;
-        setAuth(user as any, token, refreshToken);
+        setAuth(user as any, token, refreshToken || "");
         toast.success("Logged in successfully with Google!");
         navigate(paths.app.dashboard || "/");
       }

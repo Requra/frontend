@@ -112,7 +112,11 @@ export const googleLogin = async (
   platform: string = "web"
 ): Promise<ApiLoginResponse> => {
   const response = await apiClient.post<ApiLoginResponse>(
-    `/api/Auth/google-login?idToken=${idToken}&platform=${platform}`
+    "/api/Auth/google-login",
+    {
+      idToken,
+      platform,
+    }
   );
   return response.data;
 };
