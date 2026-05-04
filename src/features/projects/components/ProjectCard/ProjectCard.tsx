@@ -16,7 +16,7 @@ export function ProjectCard({
   progress,
   featuresCount,
   unsolvedComments,
-  clientName,
+  clientEmail,
   userAvatar,
   className,
   searchQuery,
@@ -36,7 +36,7 @@ export function ProjectCard({
       <ProjectCardProgress status={status} progress={progress} />
       <ProjectCardStats status={status} featuresCount={featuresCount} unsolvedComments={unsolvedComments} />
       <div className="h-px w-full bg-neutral-50 mt-1" />
-      <ProjectCardFooter clientName={clientName} userAvatar={userAvatar} id={id} />
+      <ProjectCardFooter clientEmail={clientEmail} userAvatar={userAvatar} id={id} />
     </div>
   )
 }

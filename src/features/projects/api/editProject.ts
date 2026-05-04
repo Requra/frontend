@@ -17,23 +17,26 @@ export async function editProjectApi(
     const requestBody: any = {};
     if (formData.projectName) requestBody.name = formData.projectName;
     if (formData.description !== undefined) requestBody.description = formData.description;
-    if (formData.clientName) requestBody.clientName = formData.clientName;
+    if (formData.clientEmail) requestBody.clientEmail = formData.clientEmail;
+    if (formData.projectType) {
+      requestBody.ProjectType = formData.projectType.reduce((acc, val) => acc + val, 0).toString();
+    }
     if (formData.status !== undefined) requestBody.status = formData.status;
     if (formData.teamMembers) {
       requestBody.teamMembers = formData.teamMembers.map(email => ({ email }));
     }
 
-    const response = await apiClient.patch<ApiResponse<Project>>(
-      "/api/projects",
-      requestBody,
-      { params: { id } }
+    const response = await apiClient.put<ApiResponse<Project>>(
+      `/api/projects/${id}`,
+      requestBody
     );
 
 
     if (!response.data.isSuccess || !response.data.data) {
       const message = response.data.message || "Failed to update project";
-      toast.error(message);
-      throw new Error(message);
+      const error = new Error(message) as any;
+      error.statusCode = response.data.statusCode;
+      throw error;
     }
 
     return response.data.data;

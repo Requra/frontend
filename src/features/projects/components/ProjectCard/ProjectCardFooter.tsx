@@ -4,13 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { paths } from "@/routes/paths";
 
 interface ProjectCardFooterProps {
-  clientName: string;
+  clientEmail: string;
   userAvatar?: string;
   id: string;
 }
 
 export function ProjectCardFooter({
-  clientName,
+  clientEmail,
   userAvatar,
   id,
 }: ProjectCardFooterProps) {
@@ -22,7 +22,7 @@ export function ProjectCardFooter({
           {userAvatar ? (
             <img
               src={userAvatar}
-              alt={clientName}
+              alt={clientEmail}
               className="h-full w-full object-cover"
             />
           ) : (
@@ -30,7 +30,7 @@ export function ProjectCardFooter({
           )}
         </div>
         <span className="text-xs font-medium text-neutral-500 truncate max-w-[100px]">
-          {clientName}
+          {clientEmail}
         </span>
       </div>
       <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">

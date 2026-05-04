@@ -1,6 +1,5 @@
 import { apiClient } from "@/services/api";
 import { toast } from "sonner";
-import { useAuthStore } from "@/stores/auth";
 import type { ApiResponse } from "@/types/api";
 import type { Project } from "../types";
 import type { CreateProjectFormData } from "../schemas/createProjectSchema";
@@ -11,16 +10,16 @@ import type { CreateProjectFormData } from "../schemas/createProjectSchema";
 export async function createProjectApi(
   formData: CreateProjectFormData
 ): Promise<Project> {
-  try {
-    const userId = useAuthStore.getState().user?.userId;
-    
+  try {    
+    const projectTypeTotal = formData.projectType.reduce((acc, val) => acc + val, 0);
+
     // Map form data to backend-expected structure
     const requestBody = {
       name: formData.projectName,
-      description: formData.description || "",
-      clientName: formData.clientName,
+      description: formData.description,
+      ProjectType: projectTypeTotal.toString(),
+      clientEmail: formData.clientEmail,
       teamMembers: formData.teamMembers.map((email) => ({ email })),
-      userId,
     };
 
     const response = await apiClient.post<ApiResponse<Project>>(
@@ -30,8 +29,9 @@ export async function createProjectApi(
 
     if (!response.data.isSuccess || !response.data.data) {
       const message = response.data.message || "Failed to create project";
-      toast.error(message);
-      throw new Error(message);
+      const error = new Error(message) as any;
+      error.statusCode = response.data.statusCode;
+      throw error;
     }
 
     return response.data.data;

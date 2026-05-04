@@ -1,14 +1,10 @@
 import { z } from "zod";
-import { ProjectStatus } from "../types/enums";
+import { ProjectStatus, ProjectType } from "../types/enums";
 
 export const projectTypes = [
-  { value: "web", label: "Web Application" },
-  { value: "mobile", label: "Mobile Application" },
-  { value: "desktop", label: "Desktop Application" },
-  { value: "api", label: "API / Backend" },
-  { value: "saas", label: "SaaS Platform" },
-  { value: "ecommerce", label: "E-commerce" },
-  { value: "other", label: "Other" },
+  { value: ProjectType.Financial, label: "Financial" },
+  { value: ProjectType.Medical, label: "Medical" },
+  { value: ProjectType.Educational, label: "Educational" },
 ] as const;
 
 export const statusOptions = [
@@ -26,21 +22,20 @@ export const createProjectSchema = z.object({
     .min(1, "Project name is required")
     .min(3, "Project name must be at least 3 characters")
     .max(100, "Project name must be less than 100 characters"),
-  clientName: z
+  clientEmail: z
     .string()
-    .min(1, "Client / Stakeholder name is required")
-    .max(100, "Client name must be less than 100 characters"),
+    .min(1, "Client email is required")
+    .email("Invalid email address"),
   projectType: z
-    .string()
-    .min(1, "Please select a project type"),
+    .array(z.number())
+    .min(1, "Please select at least one project type"),
   status: z
     .preprocess((val) => (typeof val === "string" ? parseInt(val, 10) : val), z.nativeEnum(ProjectStatus))
     .default(ProjectStatus.InProgress),
   description: z
     .string()
-    .max(1000, "Description must be less than 1000 characters")
-    .optional()
-    .or(z.literal("")),
+    .min(1, "Description is required")
+    .max(1000, "Description must be less than 1000 characters"),
   teamMembers: z
     .array(z.string().email("Invalid email address"))
     .default([]),

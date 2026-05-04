@@ -20,10 +20,11 @@ export const CreateProjectPage = () => {
       const result = await createProjectApi(data);
       toast.success(`Project "${result.name}" created successfully!`);
       navigate(paths.app.projects.uploadByProject(result.id));
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Something went wrong",
-      );
+    } catch (error: any) {
+      if (error.statusCode !== 404) {
+        toast.error(error.message || "Something went wrong");
+      }
+      throw error; // Re-throw for the form to catch and set field errors
     } finally {
       setIsSubmitting(false);
     }

@@ -19,7 +19,8 @@ export interface Project {
   name: string; // Backend: 'name'
   description: string;
   status: ProjectStatus;
-  clientName: string;
+  clientEmail: string;
+  projectType: string;
   teamMembers?: { email: string; role: ProjectRole }[]; // Made optional
   createdAt: string;
   totalRequirements?: number;

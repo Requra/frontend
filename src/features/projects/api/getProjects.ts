@@ -71,6 +71,8 @@ export async function getProjectsApi({
       return {
         ...p,
         status: normalizedStatus,
+        clientEmail: (p.clientEmail || (p as any).client_email || (p as any).clientName || "")
+          .replace(/^Unknown$/i, ""),
         // Derived fields for UI components that aren't yet in the API
         featuresCount: p.totalRequirements ?? p.totalUserStories ?? 0, 
         unsolvedComments: p.totalComments ?? 0,
@@ -89,7 +91,7 @@ export async function getProjectsApi({
         return (
           p.name.toLowerCase().includes(q) ||
           p.description.toLowerCase().includes(q) ||
-          p.clientName.toLowerCase().includes(q)
+          p.clientEmail.toLowerCase().includes(q)
         );
       }
       return true;
@@ -144,16 +146,22 @@ export async function getProjectByIdApi(id: string): Promise<Project> {
       throw new Error(message);
     }
 
-    const project = response.data.data;
-    const normalizedStatus = normalizeStatus(project.status);
+    const rawProject = response.data.data;
+    const normalizedStatus = normalizeStatus(rawProject.status);
     
-    return {
-      ...project,
+    // Clean and normalize project data
+    const project: Project = {
+      ...rawProject,
       status: normalizedStatus,
+      // Map both camelCase and snake_case, and clear "Unknown" values
+      clientEmail: (rawProject.clientEmail || (rawProject as any).client_email || (rawProject as any).clientName || "")
+        .replace(/^Unknown$/i, ""),
       featuresCount: 0,
       unsolvedComments: 0,
       progress: normalizedStatus === ProjectStatus.Completed ? 100 : 45,
     };
+
+    return project;
   } catch (error: any) {
     if (!error.message || error.message === "Project not found") {
       toast.error("Network error: Unable to load project details.");

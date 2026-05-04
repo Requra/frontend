@@ -10,7 +10,7 @@ export interface ProjectCardProps {
   progress?: number
   featuresCount?: number
   unsolvedComments?: number
-  clientName: string
+  clientEmail: string
   userAvatar?: string
   className?: string
   searchQuery?: string

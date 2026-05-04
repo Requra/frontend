@@ -63,3 +63,11 @@ export const RequirementType = {
   Business_Rule: 2,
 } as const;
 export type RequirementType = (typeof RequirementType)[keyof typeof RequirementType];
+
+export const ProjectType = {
+  None: 0,
+  Financial: 1,
+  Medical: 2,
+  Educational: 4,
+} as const;
+export type ProjectType = (typeof ProjectType)[keyof typeof ProjectType];
