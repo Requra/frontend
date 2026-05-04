@@ -17,7 +17,11 @@ export async function editProjectApi(
     const requestBody: any = {};
     if (formData.projectName) requestBody.name = formData.projectName;
     if (formData.description !== undefined) requestBody.description = formData.description;
-    if (formData.clientEmail) requestBody.clientEmail = formData.clientEmail;
+    
+    // Documentation shows 'clientName' in request but 'clientEmail' in response.
+    // We send our email value as 'clientName' to match the request schema.
+    if (formData.clientEmail) requestBody.clientName = formData.clientEmail;
+    
     if (formData.projectType) {
       requestBody.ProjectType = formData.projectType.reduce((acc, val) => acc + val, 0).toString();
     }
@@ -26,7 +30,7 @@ export async function editProjectApi(
       requestBody.teamMembers = formData.teamMembers.map(email => ({ email }));
     }
 
-    const response = await apiClient.put<ApiResponse<Project>>(
+    const response = await apiClient.patch<ApiResponse<Project>>(
       `/api/projects/${id}`,
       requestBody
     );
